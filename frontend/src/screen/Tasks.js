@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
-import TodoListPersonal from '../components/TodoListPersonal'
+import TodoListPersonal from '../components/TodoPersonal/TodoListPersonal'
 import '../css/Tasks.css'
 
 function Tasks() {
