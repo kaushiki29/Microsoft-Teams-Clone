@@ -1,0 +1,18 @@
+@media screen and (max-width: 706px) {
+  .search {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) and (min-width: 480px) {
+  img {
+    width: 66px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .icon {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
