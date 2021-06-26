@@ -2,32 +2,30 @@ import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(() => ({
-    MuiAutocompleteEndAdornment: {
-        top: 0
-    }
-}))
-
-function TodoFormPersonal({ todos, setTodos, task, setTask, editTodo, setEditTodo }) {
-    const classes = useStyles();
-
+function TodoFormPersonal({ todos, setTodos, task, setTask, editTodo, setEditTodo, expectedTime, setExpectedTime }) {
     useEffect(() => {
         if (editTodo) {
             setTask(editTodo.task);
+            setExpectedTime(editTodo.expectedTime)
         }
         else {
             setTask("")
+            setExpectedTime()
         }
-    }, [setTask, editTodo])
+    }, [setTask, setExpectedTime, editTodo])
 
     const handleTask = (e) => {
         setTask(e.target.value);
     }
 
-    const updateTodo = (task, id, done) => {
+    const handleTime = (e) => {
+        // const t = new Date(e.target.value).getTime()
+        setExpectedTime(e.target.value);
+    }
+    const updateTodo = (task, expectedTime, id, done) => {
         const newTodo = todos.map((todo) => {
             if (todo.id === id) {
-                return { task, id, done }
+                return { task, expectedTime, id, done }
             }
             else {
                 return todo
@@ -39,11 +37,12 @@ function TodoFormPersonal({ todos, setTodos, task, setTask, editTodo, setEditTod
     const handleSubmit = () => {
         const id = (todos.length) ? todos[todos.length - 1].id + 1 : 0;
         if (!editTodo) {
-            setTodos([...todos, { id: id, task: task, done: false }]);
+            setTodos([...todos, { id: id, task: task, expectedTime: expectedTime, done: false }]);
             setTask("");
+            setExpectedTime(null)
         }
         else {
-            updateTodo(task, editTodo.id, editTodo.done)
+            updateTodo(task, expectedTime, editTodo.id, editTodo.done)
         }
     }
 
@@ -58,7 +57,20 @@ function TodoFormPersonal({ todos, setTodos, task, setTask, editTodo, setEditTod
                     multiline
                     onChange={handleTask}
                     name='task'
-                    style={{ marginBottom: "2%", width: 300 }}
+                    style={{ marginBottom: "1%", width: 300 }}
+                />
+                <TextField
+                    id="datetime-local"
+                    label="Deadline"
+                    type="datetime-local"
+                    variant="outlined"
+                    defaultValue=""
+                    placeholder="YYYY-MM-DD HH:MM"
+                    onChange={handleTime}
+                    style={{ width: 300, marginBottom: "1%" }}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
                 />
                 <button onClick={handleSubmit} className='todo-button'>
                     {!editTodo ? <div>Add to my List</div> : <div>Update my List</div>}

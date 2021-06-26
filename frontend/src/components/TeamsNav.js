@@ -99,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "rgb(245, 245, 245)",
         paddingLeft: "10%",
         paddingRight: "10%",
-        paddingTop: "60px",
+        marginTop: "13%",
         paddingBottom: "6%"
     },
     meetingStart: {
@@ -366,7 +366,7 @@ export default function TeamsNav(props) {
     }
     return (
         <div className={classes.root}>
-            <AppBar position="static" color="default" style={{ zIndex: "10", position: "fixed" }}>
+            <AppBar position="static" color="default" style={{ zIndex: "10", position: "fixed", marginTop: "56px", marginBottom: "2%" }}>
                 <Tabs
                     value={value}
                     onChange={handleChange}
@@ -401,7 +401,7 @@ export default function TeamsNav(props) {
             <TabPanel value={value} index={2} className={classes.tabPanel}>
                 <div style={{ display: "flex", flexDirection: "column", width: "100%", padding: "5%" }}>
                     <div style={{ backgroundColor: "white", borderRadius: "2%", paddingBottom: "4%" }}>
-                        <TodoList allUsers={allUsers} />
+                        <TodoList allUsers={allUsers} team_slug={props.team_slug} />
                     </div>
                 </div>
             </TabPanel>

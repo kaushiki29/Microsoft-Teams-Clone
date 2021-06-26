@@ -1,32 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import axios from 'axios';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import { api } from '../screen/Helper';
 
-const useStyles = makeStyles(() => ({
-  MuiAutocompleteEndAdornment: {
-    top: 0
-  }
-}))
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    minWidth: 120,
+    width: "300px",
+    marginBottom: "1%",
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
 
-function TodoForm({ allUsers, todos, setTodos, task, setTask, completed, setCompleted, assigned, setAssigned, editTodo, setEditTodo }) {
+function TodoForm({ allUsers, todos, setTodos, task, setTask, completed, setCompleted, assigned, setAssigned, expectedTime, setExpectedTime, team_slug, reloadTodos }) {
   const classes = useStyles();
-
-  useEffect(() => {
-    if (editTodo) {
-      setTask(editTodo.task);
-      setCompleted(editTodo.completed);
-      setAssigned(editTodo.assigned);
-    }
-    else {
-      setTask("")
-      setCompleted("")
-      setAssigned("")
-    }
-  }, [setTask, setCompleted, setAssigned, editTodo])
 
   const handleTask = (e) => {
     setTask(e.target.value);
+  }
+  const handleTime = (e) => {
+    // const t = new Date(e.target.value).getTime()
+    setExpectedTime(e.target.value);
   }
   const handleCompleted = e => {
     setCompleted(e.target.value)
@@ -34,64 +35,76 @@ function TodoForm({ allUsers, todos, setTodos, task, setTask, completed, setComp
   const handleAssigned = e => {
     setAssigned(e.target.value)
   }
-  const updateTodo = (task, completed, assigned, id, done) => {
-    const newTodo = todos.map((todo) => {
-      if (todo.id === id) {
-        return { task, completed, assigned, id, done }
-      }
-      else {
-        return todo
+
+  const handleSubmit = () => {
+    const token = localStorage.getItem("token");
+    const id = (todos.length) ? todos[todos.length - 1].id + 1 : 0;
+    setTodos([...todos, { id: id, task: task, completed: completed, assigned: assigned, expectedTime: expectedTime, done: false }]);
+    axios({
+      method: 'post',
+      data: {
+        team_slug: team_slug,
+        todo_item: task,
+        is_completed: false,
+        expected_completion_unix_time: new Date(expectedTime).getTime(),
+        email_assigned_to: assigned,
+        email_completed_by: completed
+      },
+      url: api + "teams/add_todos_teams",
+      headers: {
+        Authorization: "Token " + token
       }
     })
-    setTodos(newTodo);
-    setEditTodo("")
-  }
-  const handleSubmit = () => {
-    const id = (todos.length) ? todos[todos.length - 1].id + 1 : 0;
-    if (!editTodo) {
-      setTodos([...todos, { id: id, task: task, completed: completed, assigned: assigned, done: false }]);
-      setTask("");
-      setCompleted("")
-      setAssigned("")
-    }
-    else {
-      updateTodo(task, completed, assigned, editTodo.id, editTodo.done)
-    }
+      .then(res => {
+        console.log(res.data)
+        setTask("");
+        setCompleted("")
+        setAssigned("")
+        setExpectedTime("")
+        document.getElementById('datetime-local').value = "";
+        reloadTodos();
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
 
   return (
     <div className='todo-form'>
       <>
         <>
-          <div style={{ display: "flex", flexDirection: "row", width: "500px", paddingBottom: "2%" }}>
-            <Autocomplete
-              id="combo-box-demo"
-              className={classes.MuiAutocompleteEndAdornment}
-              options={allUsers}
-              getOptionLabel={(option) => option.name}
-              style={{ width: 300 }}
-              renderInput={(params) =>
-                <TextField
-                  {...params}
-                  label="Assigned To"
-                  value={assigned}
-                  onSelect={handleAssigned}
-                  variant="outlined" />}
-            />
-            <Autocomplete
-              id="combo-box-demo"
-              options={allUsers}
-              getOptionLabel={(option) => option.name}
-              style={{ width: 300 }}
-              renderInput={(params) =>
-                <TextField
-                  {...params}
-                  label="Completed By"
-                  value={completed}
-                  onSelect={handleCompleted}
-                  variant="outlined" />}
-            />
-          </div>
+          {/* <div style={{ display: "flex", flexDirection: "row", width: "500px", paddingBottom: "2%" }}> */}
+          <FormControl variant="outlined" className={classes.formControl}>
+            <InputLabel id="demo-simple-select-outlined-label">Assigned To</InputLabel>
+            <Select
+              labelId="demo-simple-select-outlined-label"
+              id="demo-simple-select-outlined"
+              value={assigned}
+              onChange={handleAssigned}
+              label="Assigned To"
+            >
+
+              {allUsers.map(i => {
+                return <MenuItem value={i.email}>{i.name}-{i.email}</MenuItem>
+              })}
+            </Select>
+          </FormControl>
+          <FormControl variant="outlined" className={classes.formControl}>
+            <InputLabel id="demo-simple-select-outlined-label">Completed By</InputLabel>
+            <Select
+              labelId="demo-simple-select-outlined-label"
+              id="demo-simple-select-outlined"
+              value={completed}
+              onChange={handleCompleted}
+              label="Completed By"
+            >
+
+              {allUsers.map(i => {
+                return <MenuItem value={i.email}>{i.name}-{i.email}</MenuItem>
+              })}
+            </Select>
+          </FormControl>
+          {/* </div> */}
         </>
         <TextField
           id="outlined-basic"
@@ -101,10 +114,23 @@ function TodoForm({ allUsers, todos, setTodos, task, setTask, completed, setComp
           multiline
           onChange={handleTask}
           name='task'
-          style={{ marginBottom: "2%", width: 300 }}
+          style={{ marginBottom: "1%", width: 300 }}
+        />
+        <TextField
+          id="datetime-local"
+          label="Deadline"
+          type="datetime-local"
+          variant="outlined"
+          defaultValue=""
+          placeholder="YYYY-MM-DD HH:MM"
+          onChange={handleTime}
+          style={{ width: 300, marginBottom: "1%" }}
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
         <button onClick={handleSubmit} className='todo-button'>
-          {!editTodo ? <div>Add to my List</div> : <div>Update my List</div>}
+          <div>Add to my List</div>
         </button>
       </>
     </div>

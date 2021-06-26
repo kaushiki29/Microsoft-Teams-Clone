@@ -41,6 +41,7 @@ function Todo({ todos, setTodos, editTodo, setEditTodo }) {
         >
             <div key={item.id}>
                 <div>Task: {item.task}</div>
+                <div>Deadline: {item.expectedTime}</div>
             </div>
 
             <div className='icons'>

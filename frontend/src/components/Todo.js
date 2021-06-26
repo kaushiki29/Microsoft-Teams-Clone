@@ -4,7 +4,10 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import DoneIcon from '@material-ui/icons/Done';
 import EditIcon from '@material-ui/icons/Edit';
 
-function Todo({ todos, setTodos, editTodo, setEditTodo }) {
+function Todo({ todos, setTodos }) {
+
+  var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+
   const handleDelete = ({ id }) => {
     setTodos(todos.filter((todo) => todo.id !== id));
   }
@@ -20,11 +23,6 @@ function Todo({ todos, setTodos, editTodo, setEditTodo }) {
     )
   }
 
-  const handleEdit = ({ id }) => {
-    const findTodo = todos.find((todo) => todo.id === id);
-    setEditTodo(findTodo)
-  }
-
   if (todos.length === 0) {
     return (
       <div style={{ textAlign: "center" }}>
@@ -34,17 +32,27 @@ function Todo({ todos, setTodos, editTodo, setEditTodo }) {
       </div>
     )
   }
-
+  const formatAMPM = (date) => {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+  }
+  // const date = new Date(item.expectedTime);
   return todos.map((item) => (
     <div
-      className={item.done ? 'todo-row complete' : 'todo-row'}
+      className={item.is_completed ? 'todo-row complete' : 'todo-row'}
       key={item.id}
     >
       <div key={item.id}>
-        <div>Assigned to: {item.assigned}</div>
-        <div>Task: {item.task}</div>
-        <div>Completed by: {item.completed}</div>
-
+        <div>Assigned to: {item.assigned_to}</div>
+        <div>Task: {item.todo_item}</div>
+        <div>Completed by: {item.completed_by}</div>
+        <div>Deadline: {formatAMPM(new Date(item.expected_time))}, {new Date(item.expected_time).getDate()} {month[new Date(item.expected_time).getMonth()]} {new Date(item.expected_time).getFullYear()}</div>
       </div>
 
       <div className='icons'>
@@ -55,10 +63,6 @@ function Todo({ todos, setTodos, editTodo, setEditTodo }) {
         <DoneIcon
           onClick={() => handleComplete(item)}
           className='delete-icon'
-        />
-        <EditIcon
-          onClick={() => handleEdit(item)}
-          className='edit-icon'
         />
       </div>
     </div>

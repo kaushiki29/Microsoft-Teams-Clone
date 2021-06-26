@@ -30,7 +30,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     height: "56px",
     zIndex: "1000",
-    position: 'sticky',
+    position: 'fixed',
+    width: "100%",
     top: "0",
   },
   icon: {
