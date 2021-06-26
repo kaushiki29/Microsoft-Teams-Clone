@@ -10,7 +10,7 @@ function TodoListPersonal(props) {
 
     return (
         <>
-            <h1>What's the Plan for Today?</h1>
+            <h1>What's the Plan ?</h1>
             <TodoFormPersonal
                 todos={todos}
                 setTodos={setTodos}

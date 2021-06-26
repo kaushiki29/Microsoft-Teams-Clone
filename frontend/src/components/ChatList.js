@@ -117,7 +117,7 @@ function ChatList() {
     setAllChats(allChatUsers)
   }, [])
   return (
-    <div style={{ paddingLeft: "2%", paddingRight: "2%", width: "250px", borderRight: "1px solid #ebe7fb" }}>
+    <div style={{ paddingLeft: "2%", paddingRight: "2%", width: "250px", borderRight: "1px solid #ebe7fb", marginTop: "56px", overflowX: "hidden", position: "fixed", zIndex: 1, }}>
       <div className="main__chatlist" >
         <Button variant="outlined" style={{ height: "33px" }}>+ New Conversation</Button>
       </div>

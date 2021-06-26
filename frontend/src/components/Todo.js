@@ -3,24 +3,54 @@ import TodoForm from './TodoForm';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import DoneIcon from '@material-ui/icons/Done';
 import EditIcon from '@material-ui/icons/Edit';
+import axios from 'axios';
+import { api } from '../screen/Helper';
 
-function Todo({ todos, setTodos }) {
+function Todo({ todos, setTodos, team_slug, reloadTodos }) {
 
   var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 
   const handleDelete = ({ id }) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    const token = localStorage.getItem("token");
+    axios({
+      method: 'post',
+      url: api + "teams/delete_todo",
+      data: {
+        team_slug: team_slug,
+        id: id
+      },
+      headers: {
+        Authorization: "Token " + token
+      }
+    })
+      .then(res => {
+        console.log(res.data);
+        reloadTodos();
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
 
-  const handleComplete = (item) => {
-    setTodos(
-      todos.map(todo => {
-        if (todo.id === item.id) {
-          return { ...todo, done: !todo.done }
-        }
-        return todo;
+  const handleComplete = ({ id }) => {
+    const token = localStorage.getItem("token");
+    axios({
+      method: 'post',
+      url: api + "teams/todo_completed",
+      data: {
+        id: id
+      },
+      headers: {
+        Authorization: "Token " + token
+      }
+    })
+      .then(res => {
+        console.log(res.data)
+        reloadTodos();
       })
-    )
+      .catch(err => {
+        console.log(err);
+      })
   }
 
   if (todos.length === 0) {
@@ -51,7 +81,7 @@ function Todo({ todos, setTodos }) {
       <div key={item.id}>
         <div>Assigned to: {item.assigned_to}</div>
         <div>Task: {item.todo_item}</div>
-        <div>Completed by: {item.completed_by}</div>
+        <div>Completed by: {item.completed_by ? item.completed_by : " "}</div>
         <div>Deadline: {formatAMPM(new Date(item.expected_time))}, {new Date(item.expected_time).getDate()} {month[new Date(item.expected_time).getMonth()]} {new Date(item.expected_time).getFullYear()}</div>
       </div>
 

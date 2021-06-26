@@ -7,8 +7,8 @@ import axios from 'axios';
 function TodoList(props) {
   const [todos, setTodos] = useState([])
   const [task, setTask] = useState("")
-  const [completed, setCompleted] = useState("")
   const [assigned, setAssigned] = useState("")
+  const [id, setId] = useState();
   const [expectedTime, setExpectedTime] = useState();
   const [val, setVal] = useState(1);
 
@@ -26,7 +26,7 @@ function TodoList(props) {
     })
       .then(res => {
         console.log(res.data)
-        setTodos(res.data.todos)
+        setTodos(res.data.pending_todos)
       })
       .catch(err => {
         console.log(err);
@@ -40,27 +40,29 @@ function TodoList(props) {
 
   return (
     <>
-      <h1>What's the Plan for Today?</h1>
+      <h1>What's the Plan ?</h1>
 
       <TodoForm
         todos={todos}
         setTodos={setTodos}
         task={task}
-        completed={completed}
         assigned={assigned}
         setTask={setTask}
-        setCompleted={setCompleted}
         setAssigned={setAssigned}
         expectedTime={expectedTime}
         setExpectedTime={setExpectedTime}
         allUsers={props.allUsers}
         team_slug={props.team_slug}
         reloadTodos={reloadTodos}
+        id={id}
+        setId={setId}
       />
 
       <Todo
         todos={todos}
+        team_slug={props.team_slug}
         setTodos={setTodos}
+        reloadTodos={reloadTodos}
       />
     </>
   );

@@ -130,19 +130,16 @@ def add_todos_teams(request):
     user=request.user
     todo_item = request.data.get('todo_item')
     email_assigned_to = request.data.get('email_assigned_to')
-    email_completed_by = request.data.get('email_completed_by')
     is_completed = request.data.get('is_completed')
     team_slug = request.data.get('team_slug')
     expected_completion_unix_time = request.data.get('expected_completion_unix_time')
     associated_team = Teams.objects.get(team_slug=team_slug)
 
     if User.objects.filter(email=email_assigned_to).exists():
-        if User.objects.filter(email=email_completed_by).exists():
             if Teams.objects.filter(admin=user):
                 todo = TeamTodo()
                 todo.created_by = user
                 todo.todo_item = todo_item
-                todo.completed_by = User.objects.get(email=email_completed_by)
                 todo.assigned_to = User.objects.get(email=email_assigned_to)
                 todo.expected_completion_unix_time = expected_completion_unix_time
                 todo.is_completed = is_completed
@@ -153,7 +150,6 @@ def add_todos_teams(request):
                     'id':todo.id,
                     'created_by':user.email,
                     'todo_item': todo_item,
-                    'completed_by':todo.completed_by.first_name,
                     'is_completed':is_completed,
                     'assigned_to':todo.assigned_to.first_name,
                     'team_slug': team_slug,
@@ -164,68 +160,10 @@ def add_todos_teams(request):
                     'error':True,
                     'message':'Your are not authorized to create the task'
                 })
-        else:
-            return Response({
-                'error':True,
-                'message':"User is not present"
-            })
     else:
         return Response({
             'error':True,
             'message':"User is not present"
-        })
-
-
-@api_view(["POST"])
-@permission_classes([IsAuthenticated])
-def update_todos_teams(request):
-    user=request.user
-    id=request.data.get('id')
-    todo_item = request.data.get('todo_item')
-    email_assigned_to = request.data.get('email_assigned_to')
-    email_completed_by = request.data.get('email_completed_by')
-    is_completed = request.data.get('is_completed')
-    team_slug = request.data.get('team_slug')
-    expected_completion_unix_time = request.data.get('expected_completion_unix_time')
-    associated_team = Teams.objects.get(team_slug=team_slug)
-
-    if User.objects.filter(email=email_assigned_to).exists() and User.objects.filter(email=email_completed_by).exists():
-        if TeamTodo.objects.filter(id=id).exists():
-            if Teams.objects.filter(admin=user):
-                todo = TeamTodo.objects.get(id=id)
-                todo.created_by = user
-                todo.todo_item = todo_item
-                todo.completed_by = User.objects.get(email=email_completed_by)
-                todo.assigned_to = User.objects.get(email=email_assigned_to)
-                todo.expected_completion_unix_time = expected_completion_unix_time
-                todo.is_completed = is_completed
-                todo.associated_team = associated_team
-                todo.save()
-
-                return Response({
-                    'id':todo.id,
-                    'created_by':user.email,
-                    'todo_item': todo_item,
-                    'completed_by':todo.completed_by.first_name,
-                    'is_completed':is_completed,
-                    'assigned_to':todo.assigned_to.first_name,
-                    'team_slug': team_slug,
-                    'expected_time':expected_completion_unix_time
-                })
-            else:
-                return Response({
-                    'error':True,
-                    'message':'Your are not authorized to update the task'
-                })
-        else:
-            return Response({
-                'error':True,
-                'message':"User doesn't exist"
-            })
-    else:
-        return Response({
-            'error':True,
-            'message':"User doesn't exist"
         })
 
 
@@ -237,21 +175,77 @@ def get_todos_teams(request):
     team_slug = request.data.get('team_slug')
     team = Teams.objects.get(team_slug=team_slug)
     todoList = TeamTodo.objects.filter(associated_team = team)
-    todos = []
+    pending_todos = []
+    completed_todos =[]
     for todo in todoList:
-        temp = {
-            'id':todo.id,
-            'todo_item':todo.todo_item,
-            'is_completed':todo.is_completed,
-            'completed_by':todo.completed_by.first_name+ " "+todo.completed_by.last_name,
-            'assigned_to':todo.assigned_to.first_name+" "+todo.assigned_to.last_name,
-            'expected_time':todo.expected_completion_unix_time
-        }
-        todos.append(temp)
+        if todo.completed_by is None:
+            temp = {
+                'id':todo.id,
+                'todo_item':todo.todo_item,
+                'is_completed':todo.is_completed,
+                'assigned_to':todo.assigned_to.first_name+" "+todo.assigned_to.last_name,
+                'expected_time':todo.expected_completion_unix_time
+            }
+            pending_todos.append(temp)
+        else:
+            temp = {
+                'id':todo.id,
+                'todo_item':todo.todo_item,
+                'is_completed':todo.is_completed,
+                'completed_by':todo.completed_by.first_name+" "+todo.completed_by.last_name,
+                'assigned_to':todo.assigned_to.first_name+" "+todo.assigned_to.last_name,
+                'expected_time':todo.expected_completion_unix_time
+            }
+            completed_todos.append(temp)
     return Response({
-        'todos':todos
+        'pending_todos':pending_todos,
+        'completed_todos': completed_todos
     })
     
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def delete_todo(request):
+    user=request.user
+    team_slug = request.data.get('team_slug')
+    team = Teams.objects.get(team_slug=team_slug)
+    id=request.data.get('id')
+    todo = TeamTodo.objects.get(id=id)
+    if team.admin==user:
+        todo.delete()
+        return Response({
+            'error':False,
+            'message':"Todo deleted successfully."
+        })
+    else:
+        return Response({
+            'error':True,
+            'message':"You are not authorized to delete the task"
+        })
+
+
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def todo_completed(request):
+    user=request.user
+    id= request.data.get('id')
+    if TeamTodo.objects.filter(id=id).exists():
+        todo = TeamTodo.objects.get(id=id)
+        todo.completed_by = user
+        todo.is_completed = True
+        return Response({
+            'completed_by':user.first_name+" "+user.last_name,
+            'is_completed':todo.is_completed,
+            'todo_item':todo.todo_item
+        })
+    else:
+        return Response({
+            'error':True,
+            'message':"Task has been deleted already."
+        })
 
 
 @api_view(["POST"])

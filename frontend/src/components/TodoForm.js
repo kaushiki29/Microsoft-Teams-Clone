@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function TodoForm({ allUsers, todos, setTodos, task, setTask, completed, setCompleted, assigned, setAssigned, expectedTime, setExpectedTime, team_slug, reloadTodos }) {
+function TodoForm({ allUsers, todos, setTodos, task, setTask, assigned, setAssigned, expectedTime, setExpectedTime, team_slug, reloadTodos, id, setId }) {
   const classes = useStyles();
 
   const handleTask = (e) => {
@@ -29,17 +29,13 @@ function TodoForm({ allUsers, todos, setTodos, task, setTask, completed, setComp
     // const t = new Date(e.target.value).getTime()
     setExpectedTime(e.target.value);
   }
-  const handleCompleted = e => {
-    setCompleted(e.target.value)
-  }
   const handleAssigned = e => {
     setAssigned(e.target.value)
   }
 
   const handleSubmit = () => {
     const token = localStorage.getItem("token");
-    const id = (todos.length) ? todos[todos.length - 1].id + 1 : 0;
-    setTodos([...todos, { id: id, task: task, completed: completed, assigned: assigned, expectedTime: expectedTime, done: false }]);
+    // const id = (todos.length) ? todos[todos.length - 1].id + 1 : 0;
     axios({
       method: 'post',
       data: {
@@ -48,7 +44,6 @@ function TodoForm({ allUsers, todos, setTodos, task, setTask, completed, setComp
         is_completed: false,
         expected_completion_unix_time: new Date(expectedTime).getTime(),
         email_assigned_to: assigned,
-        email_completed_by: completed
       },
       url: api + "teams/add_todos_teams",
       headers: {
@@ -57,8 +52,9 @@ function TodoForm({ allUsers, todos, setTodos, task, setTask, completed, setComp
     })
       .then(res => {
         console.log(res.data)
+        const td = res.data.todos;
+        setTodos([...todos, { id: td.id, task: td.todo_item, assigned: td.assigned_to, expectedTime: td.expected_time, done: td.is_completed }]);
         setTask("");
-        setCompleted("")
         setAssigned("")
         setExpectedTime("")
         document.getElementById('datetime-local').value = "";
@@ -82,21 +78,6 @@ function TodoForm({ allUsers, todos, setTodos, task, setTask, completed, setComp
               value={assigned}
               onChange={handleAssigned}
               label="Assigned To"
-            >
-
-              {allUsers.map(i => {
-                return <MenuItem value={i.email}>{i.name}-{i.email}</MenuItem>
-              })}
-            </Select>
-          </FormControl>
-          <FormControl variant="outlined" className={classes.formControl}>
-            <InputLabel id="demo-simple-select-outlined-label">Completed By</InputLabel>
-            <Select
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              value={completed}
-              onChange={handleCompleted}
-              label="Completed By"
             >
 
               {allUsers.map(i => {

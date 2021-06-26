@@ -44,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
         boxSizing: "border-box",
         display: "flex",
         borderRadius: "10px",
-        width: "100%",
         marginLeft: "68px",
         // justifyContent: "center",
         paddingLeft: 0,

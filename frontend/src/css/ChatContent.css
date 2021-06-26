@@ -2,6 +2,8 @@
   flex-grow: 1;
   padding: 20px 40px;
   max-width: 65%;
+  margin-top: 56px;
+  margin-left: 300px;
   border-right: 1px solid #ebe7fb;
 }
 .content__header {
@@ -103,6 +105,7 @@
 }
 .content__footer {
   padding-top: 30px;
+
 }
 .sendNewMessage {
   background-color: #fff;
