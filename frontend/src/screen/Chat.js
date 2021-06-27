@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import Navbar from '../components/Navbar'
 import ChatIcon from '@material-ui/icons/Chat';
 import CallIcon from '@material-ui/icons/Call';
@@ -7,6 +7,9 @@ import PeopleIcon from '@material-ui/icons/People';
 import ChatList from '../components/ChatList';
 import ChatContent from '../components/ChatContent';
 import Sidebar from '../components/Sidebar';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { api } from './Helper';
 
 const useStyles = makeStyles((theme) => ({
     sidebar: {
@@ -74,6 +77,64 @@ const useStyles = makeStyles((theme) => ({
 
 function Chat() {
     const classes = useStyles();
+    const token = localStorage.getItem('token');
+    const [chatuuid,setChatuuid] = useState();
+    const [chatItms,setChatItms] = useState([]);
+    const [otherUserName,setOtherUserName] = useState('');
+    const [allChatUsers,setAllChatUsers] = useState([]);
+    const {chat_uuid} = useParams();
+    useEffect(()=>{
+        fetchChatList();
+        
+        setChatuuid(chat_uuid);
+    },[]);
+
+    useEffect(()=>{
+        setChatItms([]);
+        fetchMsgs();
+    },[chatuuid]);
+
+    const fetchMsgs=()=>{
+        if(chatuuid && chatuuid!=='all-conversations'){
+            console.log(chatuuid)
+            axios({
+                method: 'post',
+                url: api + 'communication/get_thread_messages',
+                data: {'thread_id': chatuuid},
+                headers: {Authorization: 'Token '+ token}
+            })
+            .then(res=>{
+                console.log(res.data);
+                setChatItms(res.data.all_msgs);
+                setOtherUserName(res.data.name);
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+        }
+    }
+
+    const fetchChatList=()=>{
+        
+        axios({
+            method: 'post',
+            url: api + 'communication/get_all_threads',
+            headers: {Authorization: 'Token '+ token}
+        })
+        .then(res=>{
+            console.log(res.data);
+            setAllChatUsers(res.data.all_uuid);
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    }
+
+    const setCurrChatuuid=(uuid)=>{
+        console.log('user changes');
+        setChatuuid(uuid);
+        console.log(uuid);
+    }
     return (
         <div>
             <Navbar />
@@ -81,8 +142,10 @@ function Chat() {
                 <Sidebar />
             </div>
             <div className={classes.subComponent} >
-                <ChatList />
-                <ChatContent />
+                <ChatList allChatUsers={allChatUsers} setCurrChatuuid = {setCurrChatuuid} />
+                {otherUserName &&
+                    <ChatContent chatItms={chatItms} thread_id={chatuuid} setChatItms={setChatItms} name={otherUserName} />
+                }
             </div>
         </div>
     )

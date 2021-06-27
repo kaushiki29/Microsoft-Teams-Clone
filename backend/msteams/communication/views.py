@@ -207,7 +207,7 @@ def send_message(request):
 
     msg_text = request.data.get('msg_text')
     thread_id = request.data.get('thread_id')
-    thread_uuid = UserMailbox.objects.filter(thread_id__thread_id = thread_id).thread_id
+    thread_uuid = ChatUUID.objects.get(thread_id = thread_id)
     if user == thread_uuid.user_a:
         receiver = thread_uuid.user_b
     else:
@@ -262,6 +262,7 @@ def get_all_threads(request):
         uid = {
             'thread_id': i.thread_id,
             'other_user': other_user.username,
+            'other_user_name': other_user.get_full_name(),
             'has_unseen_messages': unseen_messages.exists(),
             'unseen_messages_count': unseen_messages.count()
         }
@@ -276,18 +277,26 @@ def get_all_threads(request):
 def get_thread_messages(request):
     user = request.user
     thread_id = request.data.get('thread_id')
-    thread_msgs = UserMailbox.objects.filter(thread_id = thread_id)
+    thread_msgs = UserMailbox.objects.filter(thread_id__thread_id = thread_id, mail_box_user = user)
+    chatuuid = ChatUUID.objects.get(thread_id = thread_id)
+    if chatuuid.user_a == user:
+        otheruser = chatuuid.user_b
+    else:
+        otheruser = chatuuid.user_a
     all_msgs = []
     for msg in thread_msgs:
         sender = msg.message.sender
         m = {
             'sender_name': sender.get_full_name(),
             'sent_time': msg.message.created_at,
+            'msg_text': msg.message.msg_text,
+            'type': 'other' if sender == otheruser else ""
         }
         all_msgs.append(m)
     
     return Response({
-        'all_msgs': all_msgs
+        'all_msgs': all_msgs,
+        'name': otheruser.get_full_name()
     })
 
 

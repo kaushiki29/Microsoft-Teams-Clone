@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 const Participant = ({ participant }) => {
   const [videoTracks, setVideoTracks] = useState([]);
   const [audioTracks, setAudioTracks] = useState([]);
-  const [removed,setRemoved] = useState(false);
+  const [removed, setRemoved] = useState(false);
   const videoRef = useRef();
   const audioRef = useRef();
 
@@ -23,7 +23,7 @@ const Participant = ({ participant }) => {
         setVideoTracks((videoTracks) => [track]);
       } else if (track.kind === "audio") {
         console.log("unmuted and enabled");
-        setAudioTracks((audioTracks) => [ track]);
+        setAudioTracks((audioTracks) => [track]);
       }
     };
 
@@ -38,17 +38,17 @@ const Participant = ({ participant }) => {
     };
 
 
-    const trackEnabled=(track)=>{
-        console.log("trackEnabled");
+    const trackEnabled = (track) => {
+      console.log("trackEnabled");
     }
 
-    const dis=()=>{
+    const dis = () => {
       console.log("disabled");
     }
 
     participant.on("trackSubscribed", trackSubscribed);
     participant.on("trackStarted", trackSubscribed); // for video on
-    participant.on("trackStopped",trackUnsubscribed);// for video off
+    participant.on("trackStopped", trackUnsubscribed);// for video off
     participant.on("trackUnsubscribed", trackUnsubscribed);
     participant.on("trackEnabled", trackUnsubscribed);
 
@@ -82,13 +82,13 @@ const Participant = ({ participant }) => {
   return (
     <div className="participant">
       <h3>{participant.identity.split('!!!')[0]}</h3>
-      <div style={{position: 'relative', width: 'fit-content'}}>
-        <div style={{display: 'flex', justifyContent: 'center', alignItems: "center", width: 200,position: 'absolute',margin: 'auto', bottom: 25, left: 'calc(50% - 100px)'}}>
-        <button style={{margineft: 20}}>Audio</button> 
-        <button style={{marginRight: 20}}>Video</button> 
+      <div style={{ position: 'relative', width: 'fit-content' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: "center", width: 200, position: 'absolute', margin: 'auto', bottom: 25, left: 'calc(50% - 100px)' }}>
+          <button style={{ marginLeft: 20 }}>Audio</button>
+          <button style={{ marginRight: 20 }}>Video</button>
         </div>
-        {!removed && <video ref={videoRef} autoPlay={true} />}
-        {removed && <div style={{width: 640,height: 480, display: 'flex',alignItems: 'center',justifyContent: 'center',backgroundColor: 'black'}}><h3 style={{color: 'white'}}>{participant.identity.split('!!!')[0]}</h3></div>}
+        {!removed && <video ref={videoRef} autoPlay={true} style={{ border: "aqua", borderStyle: "solid", borderWidth: "5px", borderRadius: "2%" }} />}
+        {removed && <div style={{ width: 640, height: 480, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'black' }}><h3 style={{ color: 'white' }}>{participant.identity.split('!!!')[0]}</h3></div>}
         <audio ref={audioRef} autoPlay={true} mute={true} />
       </div>
     </div>

@@ -26,6 +26,7 @@
 }
 .content__body {
   max-height: calc(113vh - calc(95vh / 2));
+  min-height: calc(113vh - calc(95vh / 2));
   overflow: auto;
 }
 .chat__item {

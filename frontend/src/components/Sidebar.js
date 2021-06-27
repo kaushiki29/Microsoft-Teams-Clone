@@ -80,7 +80,7 @@ function Sidebar() {
     }
 
     const handleChat = () => {
-        history.push('/chat')
+        history.push('/chat/all-conversations')
     }
 
     const handleTasks = () => {

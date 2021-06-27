@@ -95,8 +95,8 @@ export default class ChatList extends Component {
   render() {
     return (
       <div className="main__chatlist">
-        <Button variant="outlined" className="btn" style={{ height: "33px", width: "190px", marginBottom: "5%" }}>
-          <AddIcon style={{ paddingRight: "3%" }} />New Conversation
+        <Button variant="outlined" className="btn" style={{ height: "33px", marginBottom: "5%" }}>
+          <AddIcon style={{ paddingRight: "3%", }} />New Conversation
         </Button>
         <div className="chatlist__heading">
           <h2>Chats</h2>
@@ -105,15 +105,17 @@ export default class ChatList extends Component {
           </button>
         </div>
         <div className="chatlist__items">
-          {this.state.allChats.map((item, index) => {
+          {this.props.allChatUsers.map((item, index) => {
             return (
               <ChatListItems
-                name={item.name}
-                key={item.id}
+                name={item.other_user_name}
+                key={index}
+                thread_id = {item.thread_id}
                 animationDelay={index + 1}
                 active={item.active ? "active" : ""}
                 isOnline={item.isOnline ? "active" : ""}
-                image={item.image}
+                fun = {this.props.setCurrChatuuid}
+                // image={"https://www.paintingcontest.org/components/com_djclassifieds/assets/images/default_profile.png"}
               />
             );
           })}

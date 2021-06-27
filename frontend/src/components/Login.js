@@ -28,7 +28,7 @@ function Login() {
                 {localStorage.getItem("token") || token ? <Route path="/home" component={LandingPage} /> : <Redirect to="/login" />}
                 {localStorage.getItem("token") || token ? <Route path="/teams/:team_slug" component={TeamScreen} /> : <Redirect to="/login" />}
                 {/* <Route path="/videocall/:meeting_slug" component={JitsiCall} /> */}
-                <Route path="/chat" component={Chat} />
+                <Route path="/chat/:chat_uuid" component={Chat} />
                 <Route path="/tasks" component={Tasks} />
                 <Route path="/videocall/:meeting_slug" component={TwilioCall} />
                 <Route path="*">
