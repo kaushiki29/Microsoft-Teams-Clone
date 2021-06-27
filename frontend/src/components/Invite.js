@@ -63,6 +63,7 @@ function Invite(props) {
                             })
                         }
                         else {
+                            props.reloadValue();
                             setEmail({
                                 value: "",
                                 error: false,
@@ -98,7 +99,7 @@ function Invite(props) {
         }
     }
 
-    const handleInitChat=(username)=>{
+    const handleInitChat = (username) => {
         axios({
             method: 'post',
             data: {
@@ -109,13 +110,13 @@ function Invite(props) {
                 Authorization: "Token " + token
             }
         })
-        .then(res => {
-            console.log(res.data);
-            
-        })
-        .catch(err => {
-            console.log(err);
-        })
+            .then(res => {
+                console.log(res.data);
+
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 
     return (
@@ -139,7 +140,7 @@ function Invite(props) {
                         <div style={{ display: "flex", justifyContent: "space-between", fontSize: "20px" }}>
                             <div>{i.name}</div>
                             <div>{i.email}</div>
-                            <div style={{margin: 0,cursor: 'pointer'}} onClick={()=>{handleInitChat(i.email)}}>Message</div>
+                            <div style={{ margin: 0, cursor: 'pointer' }} onClick={() => { handleInitChat(i.email) }}>Message</div>
                         </div>
                     )
                 })}

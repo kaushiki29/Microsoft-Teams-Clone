@@ -133,7 +133,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TeamsNav(props) {
 
-
+    const [val, setVal] = useState(1)
     const classes = useStyles();
     const history = useHistory();
     const [value, setValue] = React.useState(0);
@@ -173,7 +173,10 @@ export default function TeamsNav(props) {
             .catch(err => {
                 console.log(err);
             })
-    }, [])
+    }, [val])
+    const reloadValue = () => {
+        setVal(val + 1)
+    }
     const [openScheduleModal, isScheduleModalOpen] = React.useState(false);
     const [openStartModal, isStartModalOpen] = useState(false);
 
@@ -406,7 +409,7 @@ export default function TeamsNav(props) {
                 </div>
             </TabPanel>
             <TabPanel value={value} index={3} className={classes.tabPanel}>
-                <Invite team_slug={props.team_slug} allUsers={allUsers} />
+                <Invite team_slug={props.team_slug} allUsers={allUsers} reloadValue={reloadValue} />
             </TabPanel>
             <div className={classes.footer}>
                 <Divider style={{ width: "80%" }} />
