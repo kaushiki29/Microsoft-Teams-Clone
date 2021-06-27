@@ -7,7 +7,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import ChatList from '../components/ChatList';
 import ChatContent from '../components/ChatContent';
 import Sidebar from '../components/Sidebar';
-import { useParams,useHistory } from 'react-router-dom';
+import {unmountComponentAtNode, useParams,useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { api } from './Helper';
 
@@ -142,10 +142,6 @@ function Chat() {
                     return i;
                 }
              });
-            //  if (obj!=""){
-            //      all_uuid = [obj,...all_uuid];
-            //  }
-            // console.log(all_uuid);
             setAllChatUsers(all_uuid);
         })
         .catch(err=>{
@@ -156,8 +152,10 @@ function Chat() {
     const setCurrChatuuid=(uuid)=>{
         // console.log('user changes');
         setChatuuid(uuid);
+        setOtherUserName("");
         history.push('/chat/'+uuid);
         // console.log(uuid);
+        
     }
     return (
         <div>
@@ -168,7 +166,7 @@ function Chat() {
             <div className={classes.subComponent} >
                 <ChatList allChatUsers={allChatUsers} setCurrChatuuid = {setCurrChatuuid} thread_id={chatuuid} />
                 {otherUserName &&
-                    <ChatContent chatItms={chatItms} thread_id={chatuuid} setChatItms={setChatItms} name={otherUserName} />
+                    <ChatContent chatItms={chatItms} thread_id={chatuuid} setChatItms={setChatItms} name={otherUserName}  />
                 }
             </div>
         </div>
