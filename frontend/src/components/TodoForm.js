@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function TodoForm({ allUsers, todos, setTodos, task, setTask, assigned, setAssigned, expectedTime, setExpectedTime, team_slug, reloadTodos, id, setId }) {
+function TodoForm({ allUsers, pendingTodos, setPendingTodos, task, setTask, assigned, setAssigned, expectedTime, setExpectedTime, team_slug, reloadTodos, id, setId }) {
   const classes = useStyles();
 
   const handleTask = (e) => {
@@ -52,8 +52,8 @@ function TodoForm({ allUsers, todos, setTodos, task, setTask, assigned, setAssig
     })
       .then(res => {
         console.log(res.data)
-        const td = res.data.todos;
-        setTodos([...todos, { id: td.id, task: td.todo_item, assigned: td.assigned_to, expectedTime: td.expected_time, done: td.is_completed }]);
+        const td = res.data;
+        setPendingTodos([...pendingTodos, { id: td.id, task: td.todo_item, assigned: td.assigned_to, expectedTime: td.expected_time, done: td.is_completed }]);
         setTask("");
         setAssigned("")
         setExpectedTime("")

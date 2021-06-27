@@ -6,7 +6,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import axios from 'axios';
 import { api } from '../screen/Helper';
 
-function Todo({ todos, setTodos, team_slug, reloadTodos }) {
+function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completedTodos, setCompletedTodos }) {
 
   var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 
@@ -53,7 +53,7 @@ function Todo({ todos, setTodos, team_slug, reloadTodos }) {
       })
   }
 
-  if (todos.length === 0) {
+  if (pendingTodos.length === 0 && completedTodos.length === 0) {
     return (
       <div style={{ textAlign: "center" }}>
         <img
@@ -73,30 +73,80 @@ function Todo({ todos, setTodos, team_slug, reloadTodos }) {
     return strTime;
   }
   // const date = new Date(item.expectedTime);
-  return todos.map((item) => (
-    <div
-      className={item.is_completed ? 'todo-row complete' : 'todo-row'}
-      key={item.id}
-    >
-      <div key={item.id}>
-        <div>Assigned to: {item.assigned_to}</div>
-        <div>Task: {item.todo_item}</div>
-        <div>Completed by: {item.completed_by ? item.completed_by : " "}</div>
-        <div>Deadline: {formatAMPM(new Date(item.expected_time))}, {new Date(item.expected_time).getDate()} {month[new Date(item.expected_time).getMonth()]} {new Date(item.expected_time).getFullYear()}</div>
-      </div>
+  // return pendingTodos.map((item) => (
+  //   <div
+  //     className={item.is_completed ? 'todo-row complete' : 'todo-row'}
+  //     key={item.id}
+  //   >
+  //     <div key={item.id}>
+  //       <div>Assigned to: {item.assigned_to}</div>
+  //       <div>Task: {item.todo_item}</div>
+  //       <div>Completed by: {item.completed_by ? item.completed_by : " "}</div>
+  //       <div>Deadline: {formatAMPM(new Date(item.expected_time))}, {new Date(item.expected_time).getDate()} {month[new Date(item.expected_time).getMonth()]} {new Date(item.expected_time).getFullYear()}</div>
+  //     </div>
 
-      <div className='icons'>
-        <HighlightOffIcon
-          onClick={() => handleDelete(item)}
-          className='delete-icon'
-        />
-        <DoneIcon
-          onClick={() => handleComplete(item)}
-          className='delete-icon'
-        />
-      </div>
+  //     <div className='icons'>
+  //       <HighlightOffIcon
+  //         onClick={() => handleDelete(item)}
+  //         className='delete-icon'
+  //       />
+  //       <DoneIcon
+  //         onClick={() => handleComplete(item)}
+  //         className='delete-icon'
+  //       />
+  //     </div>
+  //   </div>
+  // ));
+
+  return (
+    <div>
+      <div style={{ textAlign: "center", fontSize: "20px", fontWeight: "bold" }}>Pending Tasks</div>
+      {pendingTodos.map((item) => (
+        <div
+          className='todo-row'
+          key={item.id}
+        >
+          <div key={item.id}>
+            <div>Assigned to: {item.assigned_to}</div>
+            <div>Task: {item.todo_item}</div>
+            <div>Deadline: {formatAMPM(new Date(item.expected_time))}, {new Date(item.expected_time).getDate()} {month[new Date(item.expected_time).getMonth()]} {new Date(item.expected_time).getFullYear()}</div>
+          </div>
+
+          <div className='icons'>
+            <HighlightOffIcon
+              onClick={() => handleDelete(item)}
+              className='delete-icon'
+            />
+            <DoneIcon
+              onClick={() => handleComplete(item)}
+              className='delete-icon'
+            />
+          </div>
+        </div>
+      ))}
+      <div style={{ textAlign: "center", fontSize: "20px", fontWeight: "bold" }}>Completed Tasks</div>
+      {completedTodos.map((item) => (
+        <div
+          className='todo-row'
+          key={item.id}
+        >
+          <div key={item.id}>
+            <div>Assigned to: {item.assigned_to}</div>
+            <div>Task: {item.todo_item}</div>
+            <div>Completed by: {item.completed_by ? item.completed_by : " "}</div>
+            <div>Deadline: {formatAMPM(new Date(item.expected_time))}, {new Date(item.expected_time).getDate()} {month[new Date(item.expected_time).getMonth()]} {new Date(item.expected_time).getFullYear()}</div>
+          </div>
+
+          <div className='icons'>
+            <HighlightOffIcon
+              onClick={() => handleDelete(item)}
+              className='delete-icon'
+            />
+          </div>
+        </div>
+      ))}
     </div>
-  ));
+  )
 };
 
 export default Todo;

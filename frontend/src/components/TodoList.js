@@ -5,7 +5,8 @@ import { api } from '../screen/Helper'
 import axios from 'axios';
 
 function TodoList(props) {
-  const [todos, setTodos] = useState([])
+  const [pendingTodos, setPendingTodos] = useState([])
+  const [completedTodos, setCompletedTodos] = useState([])
   const [task, setTask] = useState("")
   const [assigned, setAssigned] = useState("")
   const [id, setId] = useState();
@@ -26,7 +27,8 @@ function TodoList(props) {
     })
       .then(res => {
         console.log(res.data)
-        setTodos(res.data.pending_todos)
+        setPendingTodos(res.data.pending_todos)
+        setCompletedTodos(res.data.completed_todos)
       })
       .catch(err => {
         console.log(err);
@@ -43,8 +45,8 @@ function TodoList(props) {
       <h1>What's the Plan ?</h1>
 
       <TodoForm
-        todos={todos}
-        setTodos={setTodos}
+        pendingTodos={pendingTodos}
+        setPendingTodos={setPendingTodos}
         task={task}
         assigned={assigned}
         setTask={setTask}
@@ -57,12 +59,14 @@ function TodoList(props) {
         id={id}
         setId={setId}
       />
-      
+
       <Todo
-        todos={todos}
+        pendingTodos={pendingTodos}
         team_slug={props.team_slug}
-        setTodos={setTodos}
+        setPendingTodos={setPendingTodos}
         reloadTodos={reloadTodos}
+        completedTodos={completedTodos}
+        setCompletedTodos={setCompletedTodos}
       />
     </>
   );
