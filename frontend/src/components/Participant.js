@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
+import MicIcon from '@material-ui/icons/Mic';
+import MicOffIcon from '@material-ui/icons/MicOff';
 
-const Participant = ({ participant }) => {
+const Participant = ({ participant, isMuted }) => {
   const [videoTracks, setVideoTracks] = useState([]);
   const [audioTracks, setAudioTracks] = useState([]);
   const [removed, setRemoved] = useState(false);
@@ -81,14 +83,17 @@ const Participant = ({ participant }) => {
 
   return (
     <div className="participant">
-      <h3>{participant.identity.split('!!!')[0]}</h3>
+      {/* <h3>{participant.identity.split('!!!')[0]}</h3> */}
       <div style={{ position: 'relative', width: 'fit-content' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: "center", width: 200, position: 'absolute', margin: 'auto', bottom: 25, left: 'calc(50% - 100px)' }}>
-          <button style={{ marginLeft: 20 }}>Audio</button>
-          <button style={{ marginRight: 20 }}>Video</button>
+        <div style={{ display: 'flex', position: 'absolute', margin: 'auto', top: "10px", right: "10px", color: "gray" }}>
+          {isMuted ? <MicOffIcon /> : <MicIcon />}
         </div>
-        {!removed && <video ref={videoRef} autoPlay={true} style={{ border: "aqua", borderStyle: "solid", borderWidth: "5px", borderRadius: "2%" }} />}
-        {removed && <div style={{ width: 640, height: 480, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'black' }}><h3 style={{ color: 'white' }}>{participant.identity.split('!!!')[0]}</h3></div>}
+        {!removed && <video ref={videoRef} autoPlay={true} style={{ border: "#e8cd41", borderStyle: "solid", borderWidth: "5px", borderRadius: "2%" }} />}
+        {removed && <div style={{ width: 640, height: 480, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'black', borderStyle: "solid", borderWidth: "5px", borderColor: "#e8cd41", borderRadius: "2%" }}>
+          <div style={{ height: "200px", width: "200px", display: "flex", justifyContent: "center", alignItems: "center", borderStyle: "solid", borderRadius: "50%", backgroundColor: "#4470445c" }}>
+            <h3 style={{ color: 'white' }}>{participant.identity.split('!!!')[0]}</h3>
+          </div>
+        </div>}
         <audio ref={audioRef} autoPlay={true} mute={true} />
       </div>
     </div>

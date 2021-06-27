@@ -263,6 +263,7 @@ def get_all_threads(request):
             'thread_id': i.thread_id,
             'other_user': other_user.username,
             'other_user_name': other_user.get_full_name(),
+            'active': False,
             'has_unseen_messages': unseen_messages.exists(),
             'unseen_messages_count': unseen_messages.count()
         }

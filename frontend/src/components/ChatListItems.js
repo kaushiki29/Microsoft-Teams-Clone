@@ -1,12 +1,12 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import Avatar from "../components/Avatar";
 
-export default class ChatListItems extends Component {
-  constructor(props) {
-    super(props);
-  }
-  selectChat = (e) => {
-    this.props.fun(this.props.thread_id);
+export default function ChatListItems(props) {
+  useEffect(()=>{
+    // console.log(props.active);
+  },[props])
+  const selectChat = (e) => {
+    props.fun(props.thread_id);
     for (
       let index = 0;
       index < e.currentTarget.parentNode.children.length;
@@ -17,25 +17,23 @@ export default class ChatListItems extends Component {
     e.currentTarget.classList.add("active");
   };
 
-  render() {
     return (
       <div
-        style={{ animationDelay: `0.${this.props.animationDelay}s`, alignItems: "center" }}
-        onClick={this.selectChat}
-        className={`chatlist__item ${this.props.active ? this.props.active : ""} `}
+        style={{ animationDelay: `0.${props.animationDelay}s`, alignItems: "center" }}
+        onClick={selectChat}
+        className={`chatlist__item ${props.active ? props.active : ""} `}
       >
         <Avatar
           image={
-            this.props.image ? this.props.image : "http://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png"
+            props.image ? props.image : "http://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png"
           }
-          isOnline={this.props.isOnline}
+          isOnline={props.isOnline}
         />
 
         <div className="userMeta" >
-          <p>{this.props.name}</p>
+          <p>{props.name}</p>
           {/* <span className="activeTime">32 mins ago</span> */}
         </div>
       </div>
     );
-  }
 }

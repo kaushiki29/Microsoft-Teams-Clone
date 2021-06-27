@@ -3,7 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
-import { api } from '../screen/Helper'
+import { api } from '../screen/Helper';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -16,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Invite(props) {
     const classes = useStyles();
+    const history = useHistory();
     const token = localStorage.getItem("token");
     const [email, setEmail] = useState({
         value: "",
@@ -112,6 +114,7 @@ function Invite(props) {
         })
             .then(res => {
                 console.log(res.data);
+                history.push('/chat/'+res.data.thread_id);
 
             })
             .catch(err => {
@@ -150,3 +153,7 @@ function Invite(props) {
 }
 
 export default Invite
+
+
+
+

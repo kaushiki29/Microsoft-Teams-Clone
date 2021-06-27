@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Participant from "./Participant";
+import MicIcon from '@material-ui/icons/Mic';
+import MicOffIcon from '@material-ui/icons/MicOff';
 import { createLocalVideoTrack } from 'twilio-video';
+import VideocamOffIcon from '@material-ui/icons/VideocamOff';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import VideocamIcon from '@material-ui/icons/Videocam';
 
 const Room = ({ roomName, room, handleLogout }) => {
   const [participants, setParticipants] = useState([]);
@@ -72,23 +76,33 @@ const Room = ({ roomName, room, handleLogout }) => {
 
   return (
     <div className="room" style={{ backgroundColor: "#302e2e", height: "100%" }}>
-      <h2>Room: {roomName}</h2>
-      <div className="local-participant">
+      <div style={{ height: "45px", backgroundColor: "#f1f1f1", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <h2>Room: {roomName}</h2>
+      </div>
+      <div className="local-participant" style={{ marginTop: "56px" }}>
         {room ? (
           <Participant
             key={room.localParticipant.sid}
-            participant={room.localParticipant} />
+            participant={room.localParticipant}
+            isMuted={isMuted} />
 
         ) : (
           ""
         )}
       </div>
-      <h3>Remote Participants</h3>
+      {/* <h3>Remote Participants</h3> */}
       <div className="remote-participants">{remoteParticipants}</div>
-      <div style={{ backgroundColor: "white", left: 0, backgroundColor: "white", position: "fixed", bottom: 0, height: "65px", width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <button onClick={handleAudio} style={{ height: "33px", marginLeft: "1%" }}>Mute/Unmute</button>
-        <button onClick={handleVideo} style={{ height: "33px", marginLeft: "1%" }}>Video On/Off</button>
-        <button onClick={handleLogout} style={{ height: "33px", marginLeft: "1%" }}>
+      <div style={{ backgroundColor: "#f1f1f1", left: 0, position: "fixed", bottom: 0, height: "65px", width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <button style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white", justifyContent: 'flex-start' }}>
+          Invite
+        </button>
+        <button onClick={handleAudio} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white" }}>
+          {isMuted ? <MicOffIcon /> : <MicIcon />}
+        </button>
+        <button onClick={handleVideo} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white" }}>
+          {isVideo ? <VideocamIcon /> : <VideocamOffIcon />}
+        </button>
+        <button onClick={handleLogout} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white" }}>
           <ExitToAppIcon />
         </button>
       </div>

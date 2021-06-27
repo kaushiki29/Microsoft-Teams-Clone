@@ -7,9 +7,10 @@ import PeopleIcon from '@material-ui/icons/People';
 import ChatList from '../components/ChatList';
 import ChatContent from '../components/ChatContent';
 import Sidebar from '../components/Sidebar';
-import { useParams } from 'react-router-dom';
+import { useParams,useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { api } from './Helper';
+
 
 const useStyles = makeStyles((theme) => ({
     sidebar: {
@@ -77,6 +78,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Chat() {
     const classes = useStyles();
+    const history = useHistory();
     const token = localStorage.getItem('token');
     const [chatuuid,setChatuuid] = useState();
     const [chatItms,setChatItms] = useState([]);
@@ -96,7 +98,7 @@ function Chat() {
 
     const fetchMsgs=()=>{
         if(chatuuid && chatuuid!=='all-conversations'){
-            console.log(chatuuid)
+            // console.log(chatuuid)
             axios({
                 method: 'post',
                 url: api + 'communication/get_thread_messages',
@@ -104,7 +106,7 @@ function Chat() {
                 headers: {Authorization: 'Token '+ token}
             })
             .then(res=>{
-                console.log(res.data);
+                // console.log(res.data);
                 setChatItms(res.data.all_msgs);
                 setOtherUserName(res.data.name);
             })
@@ -122,8 +124,29 @@ function Chat() {
             headers: {Authorization: 'Token '+ token}
         })
         .then(res=>{
-            console.log(res.data);
-            setAllChatUsers(res.data.all_uuid);
+            // console.log(res.data);
+            let obj = "";
+            let all_uuid = res.data.all_uuid.map(i=>{
+                if(i.thread_id===chat_uuid){
+                    obj ={
+                        active: true,
+                        has_unseen_messages: i.has_unseen_messages,
+                        other_user: i.other_user,
+                        thread_id: i.thread_id,
+                        unseen_messages_count: i.unseen_messages_count,
+                        other_user_name: i.other_user_name
+                    }
+                    return obj;
+                }
+                else{
+                    return i;
+                }
+             });
+            //  if (obj!=""){
+            //      all_uuid = [obj,...all_uuid];
+            //  }
+            // console.log(all_uuid);
+            setAllChatUsers(all_uuid);
         })
         .catch(err=>{
             console.log(err);
@@ -131,9 +154,10 @@ function Chat() {
     }
 
     const setCurrChatuuid=(uuid)=>{
-        console.log('user changes');
+        // console.log('user changes');
         setChatuuid(uuid);
-        console.log(uuid);
+        history.push('/chat/'+uuid);
+        // console.log(uuid);
     }
     return (
         <div>
@@ -142,7 +166,7 @@ function Chat() {
                 <Sidebar />
             </div>
             <div className={classes.subComponent} >
-                <ChatList allChatUsers={allChatUsers} setCurrChatuuid = {setCurrChatuuid} />
+                <ChatList allChatUsers={allChatUsers} setCurrChatuuid = {setCurrChatuuid} thread_id={chatuuid} />
                 {otherUserName &&
                     <ChatContent chatItms={chatItms} thread_id={chatuuid} setChatItms={setChatItms} name={otherUserName} />
                 }
