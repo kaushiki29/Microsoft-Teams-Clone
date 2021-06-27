@@ -1,7 +1,11 @@
-import React from "react";
+import React, { Component } from "react";
+import Avatar from "../components/Avatar";
 
-function ChatListItems(props) {
-  const selectChat = (e) => {
+export default class ChatListItems extends Component {
+  constructor(props) {
+    super(props);
+  }
+  selectChat = (e) => {
     for (
       let index = 0;
       index < e.currentTarget.parentNode.children.length;
@@ -12,14 +16,26 @@ function ChatListItems(props) {
     e.currentTarget.classList.add("active");
   };
 
-  return (
-    <div style={{ animationDelay: `0.${props.animationDelay}s` }} onClick={selectChat} className={`chatlist__item ${props.active ? props.active : ""} `}>
-      <div className="userMeta" >
-        <p style={{ fontWeight: 500, fontSize: "17px" }}>{props.name}</p>
-        <span className="activeTime" style={{ paddingTop: "30%" }}>32 mins ago</span>
-      </div>
-    </div>
-  );
-}
+  render() {
+    return (
+      <div
+        style={{ animationDelay: `0.${this.props.animationDelay}s` }}
+        onClick={this.selectChat}
+        className={`chatlist__item ${this.props.active ? this.props.active : ""
+          } `}
+      >
+        <Avatar
+          image={
+            this.props.image ? this.props.image : "http://placehold.it/80x80"
+          }
+          isOnline={this.props.isOnline}
+        />
 
-export default ChatListItems
+        <div className="userMeta">
+          <p>{this.props.name}</p>
+          <span className="activeTime">32 mins ago</span>
+        </div>
+      </div>
+    );
+  }
+}

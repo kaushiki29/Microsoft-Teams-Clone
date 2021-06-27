@@ -45,7 +45,7 @@ function Todo({ todos, setTodos, team_slug, reloadTodos }) {
       }
     })
       .then(res => {
-        console.log(res.data)
+        console.log(res.data);
         reloadTodos();
       })
       .catch(err => {

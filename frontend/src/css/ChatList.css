@@ -1,5 +1,8 @@
 .main__chatlist {
-  /* border-right: 1px solid #ebe7fb; */
+  border-right: 1px solid #ebe7fb;
+  padding: 0 40px 0 0px;
+  width: 320px;
+    padding-left: 2%;
 }
 .chatlist__heading {
   display: flex;
@@ -38,9 +41,9 @@
   font-size: 20px;
 }
 .chatlist__items {
-  /* margin-top: 30px; */
+  margin-top: 30px;
   overflow: auto;
-  /* max-height: calc(100vh - calc(100vh / 2)); */
+  max-height: calc(112vh - calc(90vh / 2));
 }
 
 .chatlist__item {
@@ -49,7 +52,7 @@
   padding-bottom: 10px;
   margin-top: 10px;
   cursor: pointer;
-  padding: 10px 10px 10px 10px;
+  padding: 10px 10px 10px 20px;
   transition: all 0.3s cubic-bezier(0.88, 0.19, 0.37, 1.11);
   transform: scale(0);
   animation-name: showIn;

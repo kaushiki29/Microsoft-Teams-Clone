@@ -236,6 +236,7 @@ def todo_completed(request):
         todo = TeamTodo.objects.get(id=id)
         todo.completed_by = user
         todo.is_completed = True
+        todo.save()
         return Response({
             'completed_by':user.first_name+" "+user.last_name,
             'is_completed':todo.is_completed,

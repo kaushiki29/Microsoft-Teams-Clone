@@ -157,7 +157,7 @@ def get_twilio_token(request):
             'error': True,
             'error_msg': "The meeting has already ended"
         })
-    identity = user.username
+    identity = user.get_full_name() + "!!!" + user.username
 
     # Create access token with credentials
     token = AccessToken(settings.ACCOUNT_SID, settings.API_KEY, settings.API_SECRET, identity=identity)

@@ -40,17 +40,19 @@ const useStyles = makeStyles((theme) => ({
     subComponent: {
         // alignItems: "center",
         // maxWidth: "90%",
-        minHeight: "94.5vh",
+        // minHeight: "94.5vh",
         boxSizing: "border-box",
         display: "flex",
         borderRadius: "10px",
         marginLeft: "68px",
+        paddingBottom: 0,
         // justifyContent: "center",
         paddingLeft: 0,
         marginRight: "auto",
         // flexDirection: "column",
         backgroundColor: "#f5f5f5",
-        padding: "20px"
+        padding: "20px",
+        marginTop: "56px"
 
     },
 

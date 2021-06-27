@@ -57,7 +57,7 @@ function TodoList(props) {
         id={id}
         setId={setId}
       />
-
+      
       <Todo
         todos={todos}
         team_slug={props.team_slug}

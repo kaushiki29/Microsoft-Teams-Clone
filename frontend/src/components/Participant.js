@@ -81,14 +81,14 @@ const Participant = ({ participant }) => {
 
   return (
     <div className="participant">
-      <h3>{participant.identity}</h3>
+      <h3>{participant.identity.split('!!!')[0]}</h3>
       <div style={{position: 'relative', width: 'fit-content'}}>
         <div style={{display: 'flex', justifyContent: 'center', alignItems: "center", width: 200,position: 'absolute',margin: 'auto', bottom: 25, left: 'calc(50% - 100px)'}}>
         <button style={{margineft: 20}}>Audio</button> 
         <button style={{marginRight: 20}}>Video</button> 
         </div>
         {!removed && <video ref={videoRef} autoPlay={true} />}
-        {removed && <div style={{width: 640,height: 480, display: 'flex',alignItems: 'center',justifyContent: 'center',backgroundColor: 'black'}}><h3 style={{color: 'white'}}>{participant.identity}</h3></div>}
+        {removed && <div style={{width: 640,height: 480, display: 'flex',alignItems: 'center',justifyContent: 'center',backgroundColor: 'black'}}><h3 style={{color: 'white'}}>{participant.identity.split('!!!')[0]}</h3></div>}
         <audio ref={audioRef} autoPlay={true} mute={true} />
       </div>
     </div>

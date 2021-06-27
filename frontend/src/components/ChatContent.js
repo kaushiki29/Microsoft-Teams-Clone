@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { Component, useState, createRef, useEffect } from "react";
+
 import "../css/ChatContent.css";
+import Avatar from "../components/Avatar";
 import AddIcon from '@material-ui/icons/Add';
-import VideoCallIcon from '@material-ui/icons/VideoCall';
 import ChatItem from "./ChatItem";
 import SendIcon from '@material-ui/icons/Send';
 
-function ChatContent(props) {
-  const chatItms = [
+export default class ChatContent extends Component {
+  messagesEndRef = createRef(null);
+  chatItms = [
     {
       key: 1,
       image:
         "https://pbs.twimg.com/profile_images/1116431270697766912/-NfnQHvh_400x400.jpg",
       type: "",
-      msg: "Hi Kaushiki, How are you?",
+      msg: "Hi Tim, How are you?",
     },
     {
       key: 2,
@@ -58,69 +60,96 @@ function ChatContent(props) {
     },
   ];
 
-  const [chat, setChat] = useState({
-    chat: chatItms,
-    msg: ""
-  })
+  constructor(props) {
+    super(props);
+    this.state = {
+      chat: this.chatItms,
+      msg: "",
+    };
+  }
 
-
-  const onStateChange = (e) => {
-    setChat({ msg: e.target.value });
+  scrollToBottom = () => {
+    this.messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  return (
-    <div className="main__chatcontent">
-      <div className="content__header">
-        <div className="blocks">
-          <div className="current-chatting-user">
-            <p style={{ fontSize: "x-large", cursor: "pointer" }}>Kaushiki</p>
-            <div>
+  componentDidMount() {
+    window.addEventListener("keydown", (e) => {
+      if (e.keyCode == 13) {
+        if (this.state.msg != "") {
+          this.chatItms.push({
+            key: 1,
+            type: "",
+            msg: this.state.msg,
+            image:
+              "https://pbs.twimg.com/profile_images/1116431270697766912/-NfnQHvh_400x400.jpg",
+          });
+          this.setState({ chat: [...this.chatItms] });
+          this.scrollToBottom();
+          this.setState({ msg: "" });
+        }
+      }
+    });
+    this.scrollToBottom();
+  }
+  onStateChange = (e) => {
+    this.setState({ msg: e.target.value });
+  };
 
+  render() {
+    return (
+      <div className="main__chatcontent">
+        <div className="content__header">
+          <div className="blocks">
+            <div className="current-chatting-user">
+              <Avatar
+                isOnline="active"
+                image="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU"
+              />
+              <p>Tim Hover</p>
+            </div>
+          </div>
+
+          <div className="blocks">
+            <div className="settings">
+              <button className="btn-nobg">
+                <i className="fa fa-cog"></i>
+              </button>
             </div>
           </div>
         </div>
-
-        <div className="blocks">
-          <div className="settings">
-            <button className="btn-nobg">
-              <VideoCallIcon style={{ fontSize: "1.5rem", color: "#6264a7" }} />
+        <div className="content__body">
+          <div className="chat__items">
+            {this.state.chat.map((itm, index) => {
+              return (
+                <ChatItem
+                  animationDelay={index + 2}
+                  key={itm.key}
+                  user={itm.type ? itm.type : "me"}
+                  msg={itm.msg}
+                  image={itm.image}
+                />
+              );
+            })}
+            <div ref={this.messagesEndRef} />
+          </div>
+        </div>
+        <div className="content__footer">
+          <div className="sendNewMessage">
+            <button className="addFiles">
+              <AddIcon style={{ color: "white" }} />
+            </button>
+            <input
+              type="text"
+              placeholder="Type a message here"
+              onChange={this.onStateChange}
+              value={this.state.msg}
+            />
+            <button className="btnSendMsg" id="sendMsgBtn">
+              <SendIcon style={{ color: "white" }} />
             </button>
           </div>
         </div>
       </div>
-      <div className="content__body">
-        <div className="chat__items" style={{ paddingTop: "2%" }}>
-          {chatItms.map((itm, index) => {
-            return (
-              <ChatItem
-                animationDelay={index + 2}
-                key={itm.key}
-                user={itm.type ? itm.type : "me"}
-                msg={itm.msg}
-                image={itm.image}
-              />
-            );
-          })}
-          <div />
-        </div>
-      </div>
-      <div className="content__footer">
-        <div className="sendNewMessage">
-          <button className="addFiles">
-            <AddIcon style={{ verticalAlign: "middle", color: "#464775" }} />
-          </button>
-          <input
-            type="text"
-            placeholder="Type a message here"
-            onChange={onStateChange}
-            value={chat.msg}
-          />
-          <button className="btnSendMsg" id="sendMsgBtn">
-            <SendIcon style={{ verticalAlign: "middle", color: "#464775" }} />
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+    );
+  }
 }
-export default ChatContent;
