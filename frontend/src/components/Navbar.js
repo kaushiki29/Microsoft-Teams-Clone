@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 // import './Navbar.css'
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -90,6 +90,25 @@ function Navbar(props) {
     setAnchorEl(null);
   };
 
+  const [username, setUsername] = useState("")
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    axios({
+      method: 'get',
+      url: api + "auth/get_username",
+      headers: {
+        Authorization: "Token " + token
+      }
+    })
+      .then(res => {
+        console.log(res.data);
+        setUsername(res.data.username)
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }, [])
+
   const handleLogout = () => {
     const token = localStorage.getItem("token");
     axios({
@@ -134,7 +153,7 @@ function Navbar(props) {
       </div>
       <div className={classes.profile}>
         <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} className={classes.button}>
-          {props.username}
+          {username}
         </Button>
         <Menu
           id="simple-menu"

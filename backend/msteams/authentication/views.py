@@ -26,6 +26,15 @@ def user_login(request):
         })
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_username(request):
+    user=request.user
+    return Response({
+        'username':user.first_name+" "+user.last_name
+    })
+
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def logout(request):
