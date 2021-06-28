@@ -136,10 +136,13 @@ function Invite(props) {
                         onChange={handleChange}
                     />
                     <Button variant="contained" color="primary" style={{ marginTop: "2%", height: "33px", backgroundColor: "#464775" }} onClick={handleSubmit}>Add to Team</Button>
+                    <div style={{ paddingTop: "2%", display: "flex", paddingBottom: "5%" }}>
+                        Team Joining Code: <div style={{ fontWeight: "bolder" }}>{props.uniqueCode} </div>
+                    </div>
                 </div>
             )}
             <div>
-                <h2 style={{ paddingTop: "5%", paddingBottom: "2%" }}>Team Participants</h2>
+                <h2 style={{ paddingBottom: "2%" }}>Team Participants</h2>
                 {props.allUsers.map((i, index) => {
                     return (
                         <div style={{ display: "flex", justifyContent: "space-between", fontSize: "20px" }}>

@@ -45,7 +45,8 @@ function TeamsList(props) {
         })
             .then(res => {
                 setMyTeams(res.data.my_teams)
-                console.log(res.data.my_teams)
+                console.log(res.data)
+                props.handleUserName(res.data.name);
             })
             .catch(err => {
                 console.log(err);

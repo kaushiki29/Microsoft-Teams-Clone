@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bolder",
   },
   search: {
-    flex: "4",
+    flex: "3",
     '@media(max-width: 780px)': {
       display: "none",
     }
@@ -67,18 +67,18 @@ const useStyles = makeStyles((theme) => ({
 
   profile: {
     marginLeft: "auto",
-    paddingRight: "2%",
     cursor: "pointer",
+    minWidth: "125px"
   },
   button: {
     marginLeft: "auto",
-    paddingRight: "2%",
+    // paddingRight: "2%",
     color: "white"
   }
 
 }));
 
-function Navbar() {
+function Navbar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const history = useHistory();
@@ -134,7 +134,7 @@ function Navbar() {
       </div>
       <div className={classes.profile}>
         <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} className={classes.button}>
-          Profile
+          {props.username}
         </Button>
         <Menu
           id="simple-menu"

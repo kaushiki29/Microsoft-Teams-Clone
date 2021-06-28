@@ -56,20 +56,25 @@ const useStyles = makeStyles((theme) => ({
 
 function LandingPage() {
     const classes = useStyles();
+    const [username, setUsername] = useState("");
     const [val, setVal] = useState(1);
 
     const reloadTeams = () => {
         setVal(val + 1);
     }
 
+    const handleUserName = (name) => {
+        setUsername(name);
+    }
+
     return (
         <div style={{ height: '100%' }}>
-            <Navbar />
+            <Navbar username={username} />
             <div style={{ display: 'flex', height: '100%', backgroundColor: "#f5f5f5" }}>
                 <Sidebar />
                 <div className={classes.subComponent} >
                     <Navbar2 reloadTeams={reloadTeams} />
-                    <TeamsList val={val} />
+                    <TeamsList val={val} handleUserName={handleUserName} />
                 </div>
             </div>
         </div>

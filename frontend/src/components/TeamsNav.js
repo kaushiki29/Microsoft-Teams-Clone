@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import TodoList from './TodoList';
 import Box from '@material-ui/core/Box';
 import GeneralCard from '../components/GeneralCard';
-import PostCard from '../components/PostCard';
+import ScheduledCalls from './ScheduledCalls';
 import Invite from '../components/Invite';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
@@ -99,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "rgb(245, 245, 245)",
         paddingLeft: "10%",
         paddingRight: "10%",
-        marginTop: "13%",
+        marginTop: "112px",
         paddingBottom: "6%"
     },
     meetingStart: {
@@ -399,7 +399,7 @@ export default function TeamsNav(props) {
                 }
             </TabPanel>
             <TabPanel value={value} index={1} className={classes.tabPanel}>
-                <PostCard />
+                <ScheduledCalls />
             </TabPanel>
             <TabPanel value={value} index={2} className={classes.tabPanel}>
                 <div style={{ display: "flex", flexDirection: "column", width: "100%", padding: "5%" }}>
@@ -409,7 +409,7 @@ export default function TeamsNav(props) {
                 </div>
             </TabPanel>
             <TabPanel value={value} index={3} className={classes.tabPanel}>
-                <Invite team_slug={props.team_slug} allUsers={allUsers} reloadValue={reloadValue} isAdmin={props.isAdmin} />
+                <Invite team_slug={props.team_slug} allUsers={allUsers} reloadValue={reloadValue} isAdmin={props.isAdmin} uniqueCode={props.uniqueCode} />
             </TabPanel>
             <div className={classes.footer}>
                 <Divider style={{ width: "80%" }} />

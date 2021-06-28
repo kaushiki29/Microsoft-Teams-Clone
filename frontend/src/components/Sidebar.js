@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     sidediv: {
         display: "flex",
         padding: "24%",
-        maxWidth: "40px",
+        width: "68px",
         alignItems: "center",
         cursor: "pointer",
         flexDirection: "column",

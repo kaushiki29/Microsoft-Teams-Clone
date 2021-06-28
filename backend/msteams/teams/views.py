@@ -67,12 +67,13 @@ def get_teams(request):
             'team_name': t.team.team_name,
             'admin': t.team.admin.first_name,
             'email':t.team.admin.email,
-            # 'unique_code':t.team.unique_code
+            # 'unique_code':t.team.unique_code,
             'team_slug': t.team.team_slug,
         }
         my_teams.append(temp)
     return Response({
-        'my_teams':my_teams
+        'my_teams':my_teams,
+        'name': user.first_name+" "+user.last_name
     })
 
 
@@ -94,6 +95,7 @@ def check_permissions(request):
         'is_admin': is_admin,
         'team_slug': team_slug,
         'user_name': user.get_full_name(),
+        'unique_code':team.unique_code
     })
 
 

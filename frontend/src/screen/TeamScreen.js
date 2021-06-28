@@ -125,6 +125,7 @@ function TeamScreen() {
     const classes = useStyles();
     // const history = useHistory();
     const [teamName, setTeamName] = useState("");
+    const [uniqueCode, setUniqueCode] = useState("");
     const [allCalls, setAllCalls] = useState([]);
     const [open, setOpen] = useState(false);
 
@@ -182,6 +183,7 @@ function TeamScreen() {
                 setUserName(res.data.user_name);
                 setTeamSlug(res.data.team_slug);
                 setAdmin(res.data.is_admin);
+                setUniqueCode(res.data.unique_code);
                 setPermission(res.data.has_permissions);
 
                 if (res.data.has_permissions) {
@@ -217,7 +219,7 @@ function TeamScreen() {
                         </div>
                     </div>
                     <div className={classes.subComponent} style={{ marginLeft: "388px" }} >
-                        <TeamsNav team_slug={team_slug} allCalls={allCalls} isAdmin={isAdmin} />
+                        <TeamsNav team_slug={team_slug} allCalls={allCalls} isAdmin={isAdmin} uniqueCode={uniqueCode} />
                     </div>
                 </div>
             </div>
