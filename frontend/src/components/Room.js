@@ -30,10 +30,15 @@ const Room = ({ roomName, room, handleLogout }) => {
       room.off("participantConnected", participantConnected);
       room.off("participantDisconnected", participantDisconnected);
     };
+   
   }, [room]);
 
+  useEffect(()=>{
+    console.log(participants.length);
+  },[participants]);
+
   const remoteParticipants = participants.map((participant) => (
-    <Participant key={participant.sid} participant={participant} />
+    <Participant noPart = {participants.length} key={participant.sid} participant={participant} />
   ));
 
   const handleAudio = () => {
@@ -79,19 +84,22 @@ const Room = ({ roomName, room, handleLogout }) => {
       <div style={{ height: "45px", backgroundColor: "#f1f1f1", display: "flex", justifyContent: "center", alignItems: "center" }}>
         <h2>Room: {roomName}</h2>
       </div>
-      <div className="local-participant" style={{ marginTop: "56px" }}>
+      <div style={{display: 'flex',flexWrap: 'wrap', padding: 30,}}>
+      <div className="local-participant" style={{ marginTop: "0px" }}>
         {room ? (
           <Participant
             key={room.localParticipant.sid}
             participant={room.localParticipant}
-            isMuted={isMuted} />
+            isMuted={isMuted} 
+            noPart = {participants.length}
+          />
 
         ) : (
           ""
         )}
       </div>
-      {/* <h3>Remote Participants</h3> */}
-      <div className="remote-participants">{remoteParticipants}</div>
+      {remoteParticipants}
+      </div>
       <div style={{ backgroundColor: "#f1f1f1", left: 0, position: "fixed", bottom: 0, height: "65px", width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
         <button style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white", justifyContent: 'flex-start' }}>
           Invite

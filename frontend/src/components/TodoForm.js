@@ -142,7 +142,7 @@ function TodoForm({ allUsers, pendingTodos, setPendingTodos, task, setTask, assi
                     multiline
                     onChange={handleTask}
                     name='task'
-                    style={{ marginBottom: "4%", width: 300, marginTop: "4%", minHeight: "100px" }}
+                    style={{ marginBottom: "4%", width: 300, marginTop: "4%", }}
                   />
                   <TextField
                     id="datetime-local"
