@@ -114,7 +114,7 @@ function Invite(props) {
         })
             .then(res => {
                 console.log(res.data);
-                history.push('/chat/'+res.data.thread_id);
+                history.push('/chat/' + res.data.thread_id);
 
             })
             .catch(err => {
@@ -124,18 +124,20 @@ function Invite(props) {
 
     return (
         <div>
-            <div>
-                <TextField
-                    id="standard-basic"
-                    label="Type email here"
-                    style={{ width: "100%" }}
-                    // value={email.value}
-                    error={email.error}
-                    helperText={email.helperText}
-                    onChange={handleChange}
-                />
-                <Button variant="contained" color="primary" style={{ marginTop: "2%", height: "33px", backgroundColor: "#464775" }} onClick={handleSubmit}>Add to Team</Button>
-            </div>
+            {props.isAdmin && (
+                <div>
+                    <TextField
+                        id="standard-basic"
+                        label="Type email here"
+                        style={{ width: "100%" }}
+                        // value={email.value}
+                        error={email.error}
+                        helperText={email.helperText}
+                        onChange={handleChange}
+                    />
+                    <Button variant="contained" color="primary" style={{ marginTop: "2%", height: "33px", backgroundColor: "#464775" }} onClick={handleSubmit}>Add to Team</Button>
+                </div>
+            )}
             <div>
                 <h2 style={{ paddingTop: "5%", paddingBottom: "2%" }}>Team Participants</h2>
                 {props.allUsers.map((i, index) => {

@@ -381,9 +381,9 @@ export default function TeamsNav(props) {
                     aria-label="scrollable auto tabs example"
                 >
                     <Tab label="General" style={{ fontWeight: "bolder" }} />
-                    <Tab label="Posts" style={{ fontWeight: "bolder" }} />
+                    <Tab label="Scheduled Calls" style={{ fontWeight: "bolder" }} />
                     <Tab label="Tasks" style={{ fontWeight: "bolder" }} />
-                    <Tab label="Add to Team " style={{ fontWeight: "bolder" }} />
+                    <Tab label="Team Participants" style={{ fontWeight: "bolder" }} />
 
                 </Tabs>
             </AppBar>
@@ -409,7 +409,7 @@ export default function TeamsNav(props) {
                 </div>
             </TabPanel>
             <TabPanel value={value} index={3} className={classes.tabPanel}>
-                <Invite team_slug={props.team_slug} allUsers={allUsers} reloadValue={reloadValue} />
+                <Invite team_slug={props.team_slug} allUsers={allUsers} reloadValue={reloadValue} isAdmin={props.isAdmin} />
             </TabPanel>
             <div className={classes.footer}>
                 <Divider style={{ width: "80%" }} />

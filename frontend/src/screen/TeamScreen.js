@@ -157,6 +157,7 @@ function TeamScreen() {
     }
     const [userName, setUserName] = useState("");
     const [teamSlug, setTeamSlug] = useState("");
+    const [isAdmin, setAdmin] = useState(false)
     const [permission, setPermission] = useState(false);
 
     const handleClose = () => {
@@ -180,6 +181,7 @@ function TeamScreen() {
                 console.log(res.data);
                 setUserName(res.data.user_name);
                 setTeamSlug(res.data.team_slug);
+                setAdmin(res.data.is_admin);
                 setPermission(res.data.has_permissions);
 
                 if (res.data.has_permissions) {
@@ -215,7 +217,7 @@ function TeamScreen() {
                         </div>
                     </div>
                     <div className={classes.subComponent} style={{ marginLeft: "388px" }} >
-                        <TeamsNav team_slug={team_slug} allCalls={allCalls} />
+                        <TeamsNav team_slug={team_slug} allCalls={allCalls} isAdmin={isAdmin} />
                     </div>
                 </div>
             </div>

@@ -66,6 +66,7 @@ def get_teams(request):
         temp = {
             'team_name': t.team.team_name,
             'admin': t.team.admin.first_name,
+            'email':t.team.admin.email,
             # 'unique_code':t.team.unique_code
             'team_slug': t.team.team_slug,
         }
@@ -83,10 +84,14 @@ def check_permissions(request):
     team_slug = request.data.get('team_slug')
     has_perm = False
     team = Teams.objects.get(team_slug=team_slug)
+    is_admin=False
+    if team.admin == user:
+        is_admin=True
     if TeamParticipants.objects.filter(team=team, user=user).exists():
         has_perm=True
     return Response({
         'has_permissions': has_perm,
+        'is_admin': is_admin,
         'team_slug': team_slug,
         'user_name': user.get_full_name(),
     })

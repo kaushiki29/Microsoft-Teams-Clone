@@ -1,7 +1,6 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
-import TodoListPersonal from '../components/TodoPersonal/TodoListPersonal'
 import '../css/Tasks.css'
 
 function Tasks() {
@@ -12,7 +11,6 @@ function Tasks() {
                 <Sidebar />
                 <div style={{ marginLeft: "68px", display: "flex", flexDirection: "column", width: "100%", padding: "5%", marginTop: "56px" }}>
                     <div style={{ backgroundColor: "white", borderRadius: "2%", paddingBottom: "4%" }}>
-                        <TodoListPersonal />
                     </div>
                 </div>
             </div>

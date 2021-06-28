@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     sidediv: {
         display: "flex",
         padding: "24%",
-        maxWidth: "68px",
+        maxWidth: "40px",
         alignItems: "center",
         cursor: "pointer",
         flexDirection: "column",
@@ -83,9 +83,6 @@ function Sidebar() {
         history.push('/chat/all-conversations')
     }
 
-    const handleTasks = () => {
-        history.push('/tasks')
-    }
     return (
         <div className={classes.sidebar}>
             <div className={classes.sidediv} onClick={handleTeams}>
@@ -95,10 +92,6 @@ function Sidebar() {
             <div className={classes.sidediv} onClick={handleChat}>
                 <ChatIcon style={{ fontSize: "1.5rem", }} />
                 <p className={classes.p}>Chitchat</p>
-            </div>
-            <div className={classes.sidediv} onClick={handleTasks}>
-                <ListAltRoundedIcon style={{ fontSize: "1.5rem", }} />
-                <p className={classes.p}>Tasks</p>
             </div>
         </div>
     )
