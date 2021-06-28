@@ -42,8 +42,6 @@ function TodoList(props) {
 
   return (
     <>
-      <h1>What's the Plan ?</h1>
-
       <TodoForm
         pendingTodos={pendingTodos}
         setPendingTodos={setPendingTodos}

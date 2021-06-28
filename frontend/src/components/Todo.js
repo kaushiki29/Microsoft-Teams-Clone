@@ -53,15 +53,6 @@ function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completed
       })
   }
 
-  if (pendingTodos.length === 0 && completedTodos.length === 0) {
-    return (
-      <div style={{ textAlign: "center" }}>
-        <img
-          style={{ height: "240px" }}
-          src="https://media.istockphoto.com/vectors/young-business-woman-relaxing-on-coffee-break-sitting-on-huge-cup-vector-id1161935533?b=1&k=6&m=1161935533&s=170667a&w=0&h=VsFmAhUAQz_7AkGSjJ6jMzphlIf_HKNas375cP6gGuM=" />
-      </div>
-    )
-  }
   const formatAMPM = (date) => {
     var hours = date.getHours();
     var minutes = date.getMinutes();
@@ -72,60 +63,43 @@ function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completed
     var strTime = hours + ':' + minutes + ' ' + ampm;
     return strTime;
   }
-  // const date = new Date(item.expectedTime);
-  // return pendingTodos.map((item) => (
-  //   <div
-  //     className={item.is_completed ? 'todo-row complete' : 'todo-row'}
-  //     key={item.id}
-  //   >
-  //     <div key={item.id}>
-  //       <div>Assigned to: {item.assigned_to}</div>
-  //       <div>Task: {item.todo_item}</div>
-  //       <div>Completed by: {item.completed_by ? item.completed_by : " "}</div>
-  //       <div>Deadline: {formatAMPM(new Date(item.expected_time))}, {new Date(item.expected_time).getDate()} {month[new Date(item.expected_time).getMonth()]} {new Date(item.expected_time).getFullYear()}</div>
-  //     </div>
-
-  //     <div className='icons'>
-  //       <HighlightOffIcon
-  //         onClick={() => handleDelete(item)}
-  //         className='delete-icon'
-  //       />
-  //       <DoneIcon
-  //         onClick={() => handleComplete(item)}
-  //         className='delete-icon'
-  //       />
-  //     </div>
-  //   </div>
-  // ));
 
   return (
     <div>
       <div style={{ textAlign: "center", fontSize: "20px", fontWeight: "bold" }}>Pending Tasks</div>
-      {pendingTodos.map((item) => (
-        <div
-          className='todo-row'
-          key={item.id}
-        >
-          <div key={item.id}>
-            <div>Assigned to: {item.assigned_to}</div>
-            <div>Task: {item.todo_item}</div>
-            <div>Deadline: {formatAMPM(new Date(item.expected_time))}, {new Date(item.expected_time).getDate()} {month[new Date(item.expected_time).getMonth()]} {new Date(item.expected_time).getFullYear()}</div>
-          </div>
+      {pendingTodos.length > 0 ?
+        pendingTodos.map((item) => (
+          <div
+            className='todo-row'
+            key={item.id}
+          >
+            <div key={item.id}>
+              <div>Assigned to: {item.assigned_to}</div>
+              <div>Task: {item.todo_item}</div>
+              <div>Deadline: {formatAMPM(new Date(item.expected_time))}, {new Date(item.expected_time).getDate()} {month[new Date(item.expected_time).getMonth()]} {new Date(item.expected_time).getFullYear()}</div>
+            </div>
 
-          <div className='icons'>
-            <HighlightOffIcon
-              onClick={() => handleDelete(item)}
-              className='delete-icon'
-            />
-            <DoneIcon
-              onClick={() => handleComplete(item)}
-              className='delete-icon'
-            />
+            <div className='icons'>
+              <HighlightOffIcon
+                onClick={() => handleDelete(item)}
+                className='delete-icon'
+              />
+              <DoneIcon
+                onClick={() => handleComplete(item)}
+                className='delete-icon'
+              />
+            </div>
           </div>
+        )) :
+        <div style={{ textAlign: "center" }}>
+          <img
+            style={{ height: "240px" }}
+            src="https://img.freepik.com/free-vector/girl-sits-couch-learns-play-ukulele-notes_321061-373.jpg?size=626&ext=jpg" />
+          <p style={{ color: "gray" }}>No pending tasks</p>
         </div>
-      ))}
-      <div style={{ textAlign: "center", fontSize: "20px", fontWeight: "bold" }}>Completed Tasks</div>
-      {completedTodos.map((item) => (
+      }
+      <div style={{ textAlign: "center", fontSize: "20px", fontWeight: "bold", paddingTop: "3%" }}>Completed Tasks</div>
+      {completedTodos.length > 0 ? completedTodos.map((item) => (
         <div
           className='todo-row'
           key={item.id}
@@ -144,9 +118,17 @@ function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completed
             />
           </div>
         </div>
-      ))}
+      )) :
+        <div style={{ textAlign: "center" }}>
+          <img
+            style={{ height: "240px" }}
+            src="https://media.istockphoto.com/vectors/girl-with-laptop-on-the-chair-freelance-or-studying-concept-cute-in-vector-id1178761712?k=6&m=1178761712&s=612x612&w=0&h=Gk_EzskIIO1ncZRBjeGQweDr4z70yyPEum9I8ftukUw=" />
+          <p style={{ color: "gray" }}>No completed tasks</p>
+        </div>
+      }
     </div>
   )
 };
 
 export default Todo;
+// https://media.istockphoto.com/vectors/young-business-woman-relaxing-on-coffee-break-sitting-on-huge-cup-vector-id1161935533?b=1&k=6&m=1161935533&s=170667a&w=0&h=VsFmAhUAQz_7AkGSjJ6jMzphlIf_HKNas375cP6gGuM=

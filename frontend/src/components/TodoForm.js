@@ -3,6 +3,10 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import InputLabel from '@material-ui/core/InputLabel';
+import Button from '@material-ui/core/Button';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -17,10 +21,35 @@ const useStyles = makeStyles((theme) => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
 }));
 
 function TodoForm({ allUsers, pendingTodos, setPendingTodos, task, setTask, assigned, setAssigned, expectedTime, setExpectedTime, team_slug, reloadTodos, id, setId }) {
   const classes = useStyles();
+
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setTask("");
+    setAssigned("")
+    setExpectedTime("")
+    document.getElementById('datetime-local').value = "";
+  };
 
   const handleTask = (e) => {
     setTask(e.target.value);
@@ -59,6 +88,7 @@ function TodoForm({ allUsers, pendingTodos, setPendingTodos, task, setTask, assi
         setExpectedTime("")
         document.getElementById('datetime-local').value = "";
         reloadTodos();
+        handleClose()
       })
       .catch(err => {
         console.log(err);
@@ -66,55 +96,78 @@ function TodoForm({ allUsers, pendingTodos, setPendingTodos, task, setTask, assi
   }
 
   return (
-    <div className='todo-form'>
-      <>
-        <>
-          {/* <div style={{ display: "flex", flexDirection: "row", width: "500px", paddingBottom: "2%" }}> */}
-          <FormControl variant="outlined" className={classes.formControl}>
-            <InputLabel id="demo-simple-select-outlined-label">Assigned To</InputLabel>
-            <Select
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              value={assigned}
-              onChange={handleAssigned}
-              label="Assigned To"
-            >
+    <div style={{ textAlign: "center", paddingTop: "3%", paddingBottom: "3%" }}>
+      <Button variant="outlined" color="primary" onClick={handleOpen} style={{ height: "33px" }}>
+        Create a new task
+      </Button>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <div className={classes.paper}>
+            <div className='todo-form' style={{ marginBottom: 0 }}>
+              <>
+                <>
+                  <h1>What's the Plan ?</h1>
+                  <FormControl variant="outlined" className={classes.formControl}>
+                    <InputLabel id="demo-simple-select-outlined-label">Assigned To</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-outlined-label"
+                      id="demo-simple-select-outlined"
+                      value={assigned}
+                      onChange={handleAssigned}
+                      label="Assigned To"
+                    >
 
-              {allUsers.map(i => {
-                return <MenuItem value={i.email}>{i.name}-{i.email}</MenuItem>
-              })}
-            </Select>
-          </FormControl>
-          {/* </div> */}
-        </>
-        <TextField
-          id="outlined-basic"
-          placeholder='Add a task'
-          variant="outlined"
-          value={task}
-          multiline
-          onChange={handleTask}
-          name='task'
-          style={{ marginBottom: "1%", width: 300 }}
-        />
-        <TextField
-          id="datetime-local"
-          label="Deadline"
-          type="datetime-local"
-          variant="outlined"
-          defaultValue=""
-          placeholder="YYYY-MM-DD HH:MM"
-          onChange={handleTime}
-          style={{ width: 300, marginBottom: "1%" }}
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
-        <button onClick={handleSubmit} className='todo-button'>
-          <div>Add to my List</div>
-        </button>
-      </>
+                      {allUsers.map(i => {
+                        return <MenuItem value={i.email}>{i.name}-{i.email}</MenuItem>
+                      })}
+                    </Select>
+                  </FormControl>
+                  <TextField
+                    id="outlined-basic"
+                    placeholder='Add a task'
+                    variant="outlined"
+                    value={task}
+                    label="Add a task"
+                    multiline
+                    onChange={handleTask}
+                    name='task'
+                    style={{ marginBottom: "4%", width: 300, marginTop: "4%", minHeight: "100px" }}
+                  />
+                  <TextField
+                    id="datetime-local"
+                    label="Deadline"
+                    type="datetime-local"
+                    variant="outlined"
+                    defaultValue=""
+                    placeholder="YYYY-MM-DD HH:MM"
+                    onChange={handleTime}
+                    style={{ width: 300, marginBottom: "4%" }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                  <button onClick={handleSubmit} className='todo-button' style={{ width: "100px" }}>
+                    <div>Add to List</div>
+                  </button>
+                </>
+              </>
+            </div>
+          </div>
+        </Fade>
+      </Modal>
     </div>
+
   );
 }
 
