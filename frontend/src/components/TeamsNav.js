@@ -432,7 +432,7 @@ export default function TeamsNav(props) {
                 {scheduledCalls.map(i => <ScheduledCalls call={i} scheduleVal={scheduleVal} setScheduleVal={setScheduleVal} />)}
                 {scheduledCalls.length == 0 &&
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                        <img src="https://envoy.com/wp-content/uploads/2020/01/USED-FOR_-_4-Ways-to-Improve-Conference-Room-Experience_-SEO-21_17.-video-conferencing_v1-1200x630.png" style={{ width: "60%" }} />
+                        <img src="https://envoy.com/wp-content/uploads/2020/01/USED-FOR_-_4-Ways-to-Improve-Conference-Room-Experience_-SEO-21_17.-video-conferencing_v1-1200x630.png" style={{ width: "40%" }} />
                         <div style={{ paddingTop: "2%", color: "gray" }}>No scheduled meeting!</div>
                     </div>
                 }
