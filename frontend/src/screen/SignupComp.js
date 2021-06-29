@@ -6,6 +6,7 @@ import '../css/Login.css'
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { api } from './Helper';
+import ReCAPTCHA from "react-google-recaptcha";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -229,6 +230,12 @@ function SignupComp() {
         }
     }
 
+    const [isVerified, setVerified] = useState(false)
+    const handleCaptcha = (value) => {
+        // console.log("Captcha value:", value);
+        setVerified(true);
+    }
+
     const handleLogin = () => {
         history.push("/login");
     }
@@ -284,7 +291,11 @@ function SignupComp() {
                         onChange={handleConfirmPassword}
                         error={confirmPass.error}
                         helperText={confirmPass.helperText} />
-                    <Button variant="contained" color="primary" onClick={handleSubmit}>
+                    <ReCAPTCHA
+                        sitekey="6Leib2QbAAAAAECYwqLcdJ2SEhQFE4KSfRORWIA2"
+                        onChange={handleCaptcha}
+                    />
+                    <Button variant="contained" color="primary" onClick={handleSubmit} disabled={!isVerified}>
                         Sign-Up
                     </Button>
                     <Button onClick={handleLogin} color="primary" style={{ display: "grid" }} >

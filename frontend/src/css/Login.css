@@ -30,6 +30,10 @@ Button {
   height: 56px;
 }
 
+Button:disabled{
+  display:none;
+}
+
 .form {
   display: flex;
   align-self: center;

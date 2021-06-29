@@ -5,6 +5,8 @@ import TextField from '@material-ui/core/TextField';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { api } from './Helper';
+import ReCAPTCHA from "react-google-recaptcha";
+
 const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
@@ -38,6 +40,7 @@ function LoginComp(props) {
         email: "k@1.com",
         password: "pass"
     })
+    const [isVerified, setVerified] = useState(false);
     const [email, setEmail] = useState({
         value: "",
         error: false,
@@ -128,6 +131,11 @@ function LoginComp(props) {
 
     }
 
+    const handleCaptcha = (value) => {
+        // console.log("Captcha value:", value);
+        setVerified(true);
+    }
+
     const handleSignup = () => {
         history.push('/signup');
     }
@@ -158,7 +166,11 @@ function LoginComp(props) {
                             helperText={password.helperText}
                             onChange={handlePassword}
                         />
-                        <Button variant="contained" color="primary" onClick={handleLogin}>
+                        <ReCAPTCHA
+                            sitekey="6Leib2QbAAAAAECYwqLcdJ2SEhQFE4KSfRORWIA2"
+                            onChange={handleCaptcha}
+                        />
+                        <Button variant="contained" color="primary" onClick={handleLogin} disabled={!isVerified}>
                             Sign-In
                         </Button>
                         <Button onClick={handleSignup} color="primary" style={{ display: "grid" }}>
