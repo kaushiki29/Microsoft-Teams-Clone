@@ -3,6 +3,7 @@
   display: flex;
   width: 100%;
   flex: 1;
+  justify-content: center;
   background-color: #f5f5f5;
 }
 
@@ -15,6 +16,7 @@ form {
   display: flex;
   flex-direction: column;
   padding-bottom: 8px;
+  width:319px;
 }
 
 h1 {
@@ -30,20 +32,15 @@ Button {
 
 .form {
   display: flex;
-  width: 30%;
   align-self: center;
   justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
-  padding-top: 10px;
   flex-direction: column;
   align-items: center;
-  border-radius: 2%;
+  border-radius: 1%;
   border-width: 0.2px;
   border-color: #0000002e;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-style: solid;
-  padding-bottom: 10px;
   min-width: fit-content;
   background-color: white;
 }

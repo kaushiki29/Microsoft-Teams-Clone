@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
             margin: theme.spacing(1),
-            width: '38ch',
+            // width: '38ch',
 
         },
     },
@@ -136,7 +136,7 @@ function LoginComp(props) {
             <div className="login">
                 <div className="form">
                     <img src="https://img.icons8.com/fluent/48/000000/microsoft-teams-2019.png" alt="MS-Teams Icon" className={classes.image} />
-                    <h1>Sign-In</h1>
+                    <h1 style={{ margin: 0, marginTop: "3%", marginBottom: "3%" }}>Sign-In</h1>
                     <form className={classes.root} noValidate autoComplete="off">
                         <TextField
                             id="outlined-basic"
@@ -162,7 +162,8 @@ function LoginComp(props) {
                             Sign-In
                         </Button>
                         <Button onClick={handleSignup} color="primary" style={{ display: "grid" }}>
-                            No account? <div style={{ fontWeight: "bolder" }}>Create-one</div>
+                            <div>No account? </div>
+                            <div style={{ fontWeight: "bolder" }}>Create one!</div>
                         </Button>
                     </form>
                 </div>

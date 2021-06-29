@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
             margin: theme.spacing(1),
-            width: '38ch',
+            // width: '38ch',
 
         },
         image: {
@@ -237,7 +237,7 @@ function SignupComp() {
         <div className="login">
             <div className="form">
                 <img src="https://img.icons8.com/fluent/48/000000/microsoft-teams-2019.png" alt="MS-Teams Icon" className="image" />
-                <h1>Sign-Up</h1>
+                <h1 style={{ margin: 0, marginTop: "3%", marginBottom: "3%" }}>Sign-Up</h1>
                 <form className={classes.root} noValidate autoComplete="off">
                     <TextField
                         id="outlined-basic"
