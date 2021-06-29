@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import ChatIcon from '@material-ui/icons/Chat';
 import CallIcon from '@material-ui/icons/Call';
@@ -7,7 +7,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import ChatList from '../components/ChatList';
 import ChatContent from '../components/ChatContent';
 import Sidebar from '../components/Sidebar';
-import {unmountComponentAtNode, useParams,useHistory } from 'react-router-dom';
+import { unmountComponentAtNode, useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { api } from './Helper';
 
@@ -80,82 +80,82 @@ function Chat() {
     const classes = useStyles();
     const history = useHistory();
     const token = localStorage.getItem('token');
-    const [chatuuid,setChatuuid] = useState();
-    const [chatItms,setChatItms] = useState([]);
-    const [otherUserName,setOtherUserName] = useState('');
-    const [allChatUsers,setAllChatUsers] = useState([]);
-    const {chat_uuid} = useParams();
-    useEffect(()=>{
+    const [chatuuid, setChatuuid] = useState();
+    const [chatItms, setChatItms] = useState([]);
+    const [otherUserName, setOtherUserName] = useState('');
+    const [allChatUsers, setAllChatUsers] = useState([]);
+    const { chat_uuid } = useParams();
+    useEffect(() => {
         fetchChatList();
-        
-        setChatuuid(chat_uuid);
-    },[]);
 
-    useEffect(()=>{
+        setChatuuid(chat_uuid);
+    }, []);
+
+    useEffect(() => {
         setChatItms([]);
         fetchMsgs();
-    },[chatuuid]);
+    }, [chatuuid]);
 
-    const fetchMsgs=()=>{
-        if(chatuuid && chatuuid!=='all-conversations'){
+    const fetchMsgs = () => {
+        if (chatuuid && chatuuid !== 'all-conversations') {
             // console.log(chatuuid)
             axios({
                 method: 'post',
                 url: api + 'communication/get_thread_messages',
-                data: {'thread_id': chatuuid},
-                headers: {Authorization: 'Token '+ token}
+                data: { 'thread_id': chatuuid },
+                headers: { Authorization: 'Token ' + token }
             })
-            .then(res=>{
-                // console.log(res.data);
-                setChatItms(res.data.all_msgs);
-                setOtherUserName(res.data.name);
-            })
-            .catch(err=>{
-                console.log(err);
-            })
+                .then(res => {
+                    // console.log(res.data);
+                    setChatItms(res.data.all_msgs);
+                    setOtherUserName(res.data.name);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
         }
     }
 
-    const fetchChatList=()=>{
-        
+    const fetchChatList = () => {
+
         axios({
             method: 'post',
             url: api + 'communication/get_all_threads',
-            headers: {Authorization: 'Token '+ token}
+            headers: { Authorization: 'Token ' + token }
         })
-        .then(res=>{
-            // console.log(res.data);
-            let obj = "";
-            let all_uuid = res.data.all_uuid.map(i=>{
-                if(i.thread_id===chat_uuid){
-                    obj ={
-                        active: true,
-                        has_unseen_messages: i.has_unseen_messages,
-                        other_user: i.other_user,
-                        thread_id: i.thread_id,
-                        unseen_messages_count: i.unseen_messages_count,
-                        other_user_name: i.other_user_name
+            .then(res => {
+                // console.log(res.data);
+                let obj = "";
+                let all_uuid = res.data.all_uuid.map(i => {
+                    if (i.thread_id === chat_uuid) {
+                        obj = {
+                            active: true,
+                            has_unseen_messages: i.has_unseen_messages,
+                            other_user: i.other_user,
+                            thread_id: i.thread_id,
+                            unseen_messages_count: i.unseen_messages_count,
+                            other_user_name: i.other_user_name
+                        }
+                        return obj;
                     }
-                    return obj;
-                }
-                else{
-                    return i;
-                }
-             });
-            setAllChatUsers(all_uuid);
-        })
-        .catch(err=>{
-            console.log(err);
-        })
+                    else {
+                        return i;
+                    }
+                });
+                setAllChatUsers(all_uuid);
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 
-    const setCurrChatuuid=(uuid)=>{
+    const setCurrChatuuid = (uuid) => {
         // console.log('user changes');
         setChatuuid(uuid);
         setOtherUserName("");
-        history.push('/chat/'+uuid);
+        history.push('/chat/' + uuid);
         // console.log(uuid);
-        
+
     }
     return (
         <div>
@@ -164,10 +164,15 @@ function Chat() {
                 <Sidebar />
             </div>
             <div className={classes.subComponent} >
-                <ChatList allChatUsers={allChatUsers} setCurrChatuuid = {setCurrChatuuid} thread_id={chatuuid} />
+                <ChatList allChatUsers={allChatUsers} setCurrChatuuid={setCurrChatuuid} thread_id={chatuuid} />
                 {otherUserName &&
-                    <ChatContent chatItms={chatItms} thread_id={chatuuid} setChatItms={setChatItms} name={otherUserName}  />
+                    <ChatContent chatItms={chatItms} thread_id={chatuuid} setChatItms={setChatItms} name={otherUserName} />
                 }
+                {!otherUserName &&
+                    <div style={{ display: "flex", justifyContent: "center", width: "100%", alignItems: "center", fontSize: "20px", color: "gray", fontWeight: "bold", flexDirection: "column" }}>
+                        <img src="https://newyorkcityvoices.org/wp-content/uploads/2020/04/animated-chat-gifs-4.jpg" style={{ width: "35%", borderRadius: "2%" }} />
+                        <div>Please stay connected and continue chatting. </div>
+                    </div>}
             </div>
         </div>
     )

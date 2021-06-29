@@ -4,7 +4,7 @@ import Avatar from "../components/Avatar";
 export default class ChatItem extends Component {
   constructor(props) {
     super(props);
-    this.state ={
+    this.state = {
       day: 'Today'
     }
     this.month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
@@ -19,11 +19,11 @@ export default class ChatItem extends Component {
     var strTime = hours + ':' + minutes + ' ' + ampm;
     return strTime;
   }
-  componentDidMount(){
+  componentDidMount() {
     this.time = new Date(this.props.sent_time);
     this.day = 'Today';
-    if(new Date().getTime() - this.time.getTime() > 24*60*60*1000 ){
-      this.day = this.time.getDate() + '-' + this.month[this.time.getMonth()] + '-' + this.month.getFullYear();
+    if (new Date().getTime() - this.time.getTime() > 24 * 60 * 60 * 1000) {
+      this.day = this.time.getDate() + '-' + this.month[this.time.getMonth()] + '-' + this.time.getFullYear();
     }
     this.setState({
       day: this.day,
