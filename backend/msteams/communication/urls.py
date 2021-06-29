@@ -13,4 +13,6 @@ urlpatterns = [
     path('send_message',views.send_message,name='send_message'),
     path('get_all_threads',views.get_all_threads,name='get_all_threads'),
     path('test',views.test,name="test"),
+    path('get_scheduled_calls',views.get_scheduled_calls, name='get_scheduled_calls'),
+    path('delete_call',views.delete_call, name='delete_call')
 ]

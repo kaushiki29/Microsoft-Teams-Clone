@@ -84,7 +84,7 @@ const Room = ({ roomName, room, handleLogout }) => {
       <div style={{ height: "45px", backgroundColor: "#f1f1f1", display: "flex", justifyContent: "center", alignItems: "center" }}>
         <h2>Room: {roomName}</h2>
       </div>
-      <div style={{display: 'flex',flexWrap: 'wrap', padding: 30,}}>
+      <div style={{display: 'flex',flexWrap: 'wrap', padding: 30,justifyContent: 'center'}}>
       <div className="local-participant" style={{ marginTop: "0px" }}>
         {room ? (
           <Participant

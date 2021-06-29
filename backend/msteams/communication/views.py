@@ -79,9 +79,46 @@ def schedule_call(request):
     # sends response to frontend and can be accessed by res.data example res.data.team_name
     return Response({
         'meeting_slug': videocall.meeting_slug,
-        'name':videocall.name
+        'name':videocall.name,
+        'schedule_time':videocall.schedule_time
     })
 
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def get_scheduled_calls(request):
+    user = request.user
+    team_slug = request.data.get('team_slug')
+    team = Teams.objects.get(team_slug=team_slug)
+    calls = Videocall.objects.filter(team_associated=team)
+    scheduled_calls = []
+
+    for c in calls:
+        if c.is_active == False and c.is_scheduled==True and c.is_completed==False:
+            temp={
+                'meeting_slug':c.meeting_slug,
+                'name':c.name,
+                'time':c.schedule_time
+            }
+            scheduled_calls.append(temp)
+    return Response({
+        'scheduled_calls':scheduled_calls
+    })
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def delete_call(request):
+    user=request.user
+    meeting_slug = request.data.get('meeting_slug')
+    meeting = Videocall.objects.get(meeting_slug=meeting_slug)
+    meeting.delete()
+
+    return Response({
+        'error':False,
+        'message':"Call deleted successfully"
+    })
+    
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])

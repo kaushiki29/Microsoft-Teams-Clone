@@ -228,6 +228,8 @@ export default function TeamsNav(props) {
         }
     }
 
+
+
     const handleClose = () => {
         isStartModalOpen(false);
         setMeetName({
@@ -295,10 +297,38 @@ export default function TeamsNav(props) {
         })
             .then(res => {
                 console.log(res.data);
+                reloadScheduleCalls();
             })
             .catch(err => {
                 console.log(err);
             })
+    }
+
+    const [scheduleVal, setScheduleVal] = useState(1);
+    const [scheduledCalls, setScheduledCalls] = useState([])
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        axios({
+            method: 'post',
+            data: {
+                team_slug: props.team_slug
+            },
+            url: api + "communication/get_scheduled_calls",
+            headers: {
+                Authorization: "Token " + token
+            }
+        })
+            .then(res => {
+                console.log(res.data.scheduled_calls);
+                setScheduledCalls(res.data.scheduled_calls)
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }, [scheduleVal])
+
+    const reloadScheduleCalls = () => {
+        setScheduleVal(scheduleVal + 1);
     }
 
     const handleMeetName = (e) => {
@@ -394,12 +424,18 @@ export default function TeamsNav(props) {
                 {props.allCalls.length == 0 &&
                     <div style={{ display: "flex", flexDirection: "column", textAlign: "center" }}>
                         <img src="https://slek-react.laborasyon.com/static/media/unselected-chat.cfb49f55.svg" style={{ height: "200px" }} />
-                        <div style={{ paddingTop: "2%" }}>Nothing to do!</div>
+                        <div style={{ paddingTop: "2%", color: "gray" }}>Nothing to do!</div>
                     </div>
                 }
             </TabPanel>
             <TabPanel value={value} index={1} className={classes.tabPanel}>
-                <ScheduledCalls />
+                {scheduledCalls.map(i => <ScheduledCalls call={i} scheduleVal={scheduleVal} setScheduleVal={setScheduleVal} />)}
+                {scheduledCalls.length == 0 &&
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                        <img src="https://envoy.com/wp-content/uploads/2020/01/USED-FOR_-_4-Ways-to-Improve-Conference-Room-Experience_-SEO-21_17.-video-conferencing_v1-1200x630.png" style={{ width: "60%" }} />
+                        <div style={{ paddingTop: "2%", color: "gray" }}>No scheduled meeting!</div>
+                    </div>
+                }
             </TabPanel>
             <TabPanel value={value} index={2} className={classes.tabPanel}>
                 <div style={{ display: "flex", flexDirection: "column", width: "100%", padding: "5%" }}>
