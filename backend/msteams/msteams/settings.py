@@ -179,3 +179,10 @@ CELERY_BEAT_SCHEDULE = {
 # celery -A msteams beat -l info
 # celery -A msteams worker -l info -B --> both beat and worker run at once
 # python manage.py runsslserver --certificate /home/kaushiki/ms-teams-clone/ssl/mydomain.crt --key /home/kaushiki/ms-teams-clone/ssl/server.key 0.0.0.0:9000
+
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'msteamsclone@gmail.com'
+EMAIL_HOST_PASSWORD = 'ruchi2992'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True

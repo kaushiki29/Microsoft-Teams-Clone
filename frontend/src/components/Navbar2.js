@@ -2,6 +2,10 @@ import React, { useState } from 'react'
 import Button from '@material-ui/core/Button';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import CreateIcon from '@material-ui/icons/Create';
@@ -9,7 +13,9 @@ import TextField from "@material-ui/core/TextField";
 import GroupWorkIcon from '@material-ui/icons/GroupWork';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import axios from 'axios';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { api } from '../screen/Helper';
+
 const CssTextField = withStyles({
   root: {
     "& label.Mui-focused": {
@@ -53,6 +59,9 @@ const useStyles = makeStyles((theme) => ({
 
   options: {
     display: "flex",
+    '@media(max-width: 648px)': {
+      display: "none"
+    }
   },
 
   modal: {
@@ -60,6 +69,13 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
 
+  },
+
+  optionsPhone: {
+    display: 'none',
+    '@media(max-width: 648px)': {
+      display: "flex"
+    }
   },
 
   paper: {
@@ -100,6 +116,37 @@ const useStyles = makeStyles((theme) => ({
   }
 
 }));
+
+const StyledMenu = withStyles({
+  paper: {
+    border: '1px solid #d3d4d5',
+  },
+})((props) => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'center',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'center',
+    }}
+    {...props}
+  />
+));
+
+const StyledMenuItem = withStyles((theme) => ({
+  root: {
+    '&:focus': {
+      backgroundColor: theme.palette.primary.main,
+      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+        color: theme.palette.common.white,
+      },
+    },
+  },
+}))(MenuItem);
 
 function Navbar2(props) {
   const classes = useStyles();
@@ -214,6 +261,7 @@ function Navbar2(props) {
 
   const handleOpenJoin = () => {
     setOpenJoin(!openJoin);
+    handleClose()
     setTeamCode({
       value: "",
       error: false,
@@ -224,12 +272,28 @@ function Navbar2(props) {
 
   const handleOpenCreate = () => {
     setOpenCreate(!openCreate);
+    handleClose()
     setTeamName({
       value: "",
       error: false,
       helperText: "",
     });
   };
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+
+  const handleClickO1 = () => {
+    console.log("o1 clicked")
+  }
   return (
     <div className={classes.teams}>
       <div className={classes.title}>Teams</div>
@@ -268,7 +332,7 @@ function Navbar2(props) {
             </Fade>
           </Modal>
         </div>
-        <div className={classes.create} style={{ marginRight: 20 }}>
+        <div className={classes.create} style={{}}>
           <Button variant="outlined" style={{ width: 190 }} onClick={handleOpenCreate}><CreateIcon style={{ paddingRight: "5px" }} />Create a Team</Button>
           <Modal
             aria-labelledby="transition-modal-title"
@@ -304,6 +368,38 @@ function Navbar2(props) {
         </div>
       </div>
 
+      <div className={classes.optionsPhone}>
+        {/* <Button
+          aria-controls="customized-menu"
+          aria-haspopup="true"
+          variant="contained"
+          color="primary"
+          style={{ backgroundColor: "transparent", height: "33px" }}
+         
+        > */}
+        <MoreVertIcon onClick={handleClick} />
+        {/* </Button> */}
+        <StyledMenu
+          id="customized-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <StyledMenuItem onClick={handleOpenJoin}>
+            <ListItemIcon>
+              <PersonAddIcon />
+            </ListItemIcon>
+            <ListItemText primary="Join a team" />
+          </StyledMenuItem>
+          <StyledMenuItem onClick={handleOpenCreate}>
+            <ListItemIcon>
+              <CreateIcon />
+            </ListItemIcon>
+            <ListItemText primary="Create a team" />
+          </StyledMenuItem>
+        </StyledMenu>
+      </div>
     </div>
   )
 }

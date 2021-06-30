@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     marginRight: '13%',
     height: '34px',
+    width: "80%",
     backgroundColor: '#cdcdd5',
   },
   nav: {
@@ -45,11 +46,15 @@ const useStyles = makeStyles((theme) => ({
   },
   iconButton: {
     padding: 10,
+    // width: "80%"
   },
   imag: {
-    width: "46px",
+    width: "64px",
     paddingLeft: "22%",
     paddingRight: "23%",
+    '@media(max-width: 928px)': {
+      display: "none",
+    }
   },
   appName: {
     flex: "1",
@@ -57,6 +62,9 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "x-large",
     cursor: "pointer",
     fontWeight: "bolder",
+    '@media(max-width: 928px)': {
+      paddingLeft: "2%",
+    }
   },
   search: {
     flex: "3",
@@ -68,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
   profile: {
     marginLeft: "auto",
     cursor: "pointer",
-    minWidth: "125px"
+    // minWidth: "125px"
   },
   button: {
     marginLeft: "auto",

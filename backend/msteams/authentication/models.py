@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 
 class userData(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
+    # is_verified = models.BooleanField(default=False)
+    # otp = models.IntegerField()
     age = models.IntegerField(null=True, blank=True)
     gender = models.CharField(null=True,blank=True,max_length=20)
     created_at = models.DateTimeField(auto_now_add=True)

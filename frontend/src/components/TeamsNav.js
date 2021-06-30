@@ -100,7 +100,13 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: "10%",
         paddingRight: "10%",
         marginTop: "112px",
-        paddingBottom: "6%"
+        paddingBottom: "6%",
+    },
+    tab: {
+        fontWeight: "bolder",
+        '@media(max-width: 1030px)': {
+            minWidth: "120px"
+        }
     },
     meetingStart: {
         fontSize: "12px",
@@ -410,10 +416,10 @@ export default function TeamsNav(props) {
 
                     aria-label="scrollable auto tabs example"
                 >
-                    <Tab label="General" style={{ fontWeight: "bolder" }} />
-                    <Tab label="Scheduled Calls" style={{ fontWeight: "bolder" }} />
-                    <Tab label="Tasks" style={{ fontWeight: "bolder" }} />
-                    <Tab label="Team Participants" style={{ fontWeight: "bolder" }} />
+                    <Tab label="General" className={classes.tab} />
+                    <Tab label="Scheduled Calls" className={classes.tab} />
+                    <Tab label="Tasks" className={classes.tab} />
+                    <Tab label="Team Participants" className={classes.tab} />
 
                 </Tabs>
             </AppBar>

@@ -50,6 +50,9 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: "3%",
         backgroundColor: "#f5f5f5",
         marginLeft: 78,
+        '@media(max-width: 648px)': {
+            paddingLeft: 0
+        }
     }
 }));
 

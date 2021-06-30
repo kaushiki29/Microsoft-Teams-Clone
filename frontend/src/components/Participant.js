@@ -2,13 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import MicIcon from '@material-ui/icons/Mic';
 import MicOffIcon from '@material-ui/icons/MicOff';
 
-const Participant = ({ participant, isMuted, noPart }) => {
+const Participant = ({ participant, isMuted, noPart, reduceWidth }) => {
   const [videoTracks, setVideoTracks] = useState([]);
   const [audioTracks, setAudioTracks] = useState([]);
   const [removed, setRemoved] = useState(false);
   const videoRef = useRef();
   const audioRef = useRef();
-
+  const [trackName,setTrackName]=  useState('');
+  const [st,setSt] = useState();
   const trackpubsToTracks = (trackMap) =>
     Array.from(trackMap.values())
       .map((publication) => publication.track)
@@ -37,7 +38,11 @@ const Participant = ({ participant, isMuted, noPart }) => {
     setAudioTracks(trackpubsToTracks(participant.audioTracks));
 
     const trackSubscribed = (track) => {
-
+      console.log(track.name);
+      setTrackName(track.name);
+      if(track.name !== 'screen'){
+        setSt();
+      }
       if (track.kind === "video") {
         setRemoved(false);
         setVideoTracks((videoTracks) => [track]);
@@ -100,14 +105,68 @@ const Participant = ({ participant, isMuted, noPart }) => {
   }, [audioTracks]);
   let height1 = `calc((100vh - 170px)/${height})`;
   let width1 = `calc((100vw - 68px)/${width})`;
+  if(reduceWidth){
+    width1 = `calc((100vw - 68px - 310px)/${width})`;
+  }
+  // if(trackName==='screen'){
+  //   height1 = `calc((100vh - 170px))`;
+  //   width1 = `calc((100vw - 68px))`;
+  // }
+
+  useEffect(()=>{
+    if(reduceWidth){
+      if(st){
+        setSt({
+          border: "#e8cd41", borderStyle: "solid", borderWidth: "2px", borderRadius: "2%",height: `calc((100vh - 170px))`,width:`calc(100vw - 68px - 300px)`, position: 'fixed', top: 75, left: 30, background: '#000000',zIndex: 1000,
+        });
+      }
+      else{
+        setSt();
+      }
+    }
+    else{
+      if(st){
+        setSt({
+          border: "#e8cd41", borderStyle: "solid", borderWidth: "2px", borderRadius: "2%",height: `calc((100vh - 170px))`,width:`calc(100vw - 60px)`, position: 'fixed', top: 75, left: 30, background: '#000000',zIndex: 1000
+        });
+      }
+      else{
+        setSt();
+      }
+    }
+  },[reduceWidth])
+
+  const handleClick=()=>{
+    console.log("hi");
+      if(trackName==='screen'){
+        if(st){
+          setSt();
+        }
+        else{
+          if(reduceWidth){
+            setSt({
+              border: "#e8cd41", borderStyle: "solid", borderWidth: "2px", borderRadius: "2%",height: `calc((100vh - 170px))`,width:`calc(100vw - 68px - 300px)`, position: 'fixed', top: 75, left: 30,zIndex: 1000, background: '#000000'
+            });
+          }
+          else{
+            setSt({
+              border: "#e8cd41", borderStyle: "solid", borderWidth: "2px", borderRadius: "2%",height: `calc((100vh - 170px))`,width:`calc(100vw - 60px)`, position: 'fixed', top: 75, left: 30,zIndex: 1000, background: '#000000'
+            });
+          }
+          
+        }
+        
+      }
+  }
+  
   return (
-    <div className="participant">
+    <div className="participant" >
       {/* <h3>{participant.identity.split('!!!')[0]}</h3> */}
-      <div style={{ position: 'relative', width: 'fit-content' }}>
+      <div style={{ position: 'relative', width: 'fit-content', }}>
         <div style={{ display: 'flex', position: 'absolute', margin: 'auto', top: "10px", right: "10px", color: "gray" }}>
           {isMuted ? <MicOffIcon /> : <MicIcon />}
         </div>
-        {!removed && <video ref={videoRef} autoPlay={true} style={{ border: "#e8cd41", borderStyle: "solid", borderWidth: "2px", borderRadius: "2%",width: width1,height: height1 }} />}
+        {!removed && <video onClick={handleClick} ref={videoRef} autoPlay={true} style={st? st: { border: "#e8cd41", borderStyle: "solid", borderWidth: "2px", borderRadius: "2%",width: width1,height: height1 }} />}
         {removed && <div style={{ width: width1, height: height1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'black', borderStyle: "solid", borderWidth: "2px", borderColor: "#e8cd41", borderRadius: "2%" }}>
           <div style={{ height: "200px", width: "200px", display: "flex", justifyContent: "center", alignItems: "center", borderStyle: "solid", borderRadius: "50%", backgroundColor: "#4470445c" }}>
             <h3 style={{ color: 'white' }}>{participant.identity.split('!!!')[0]}</h3>

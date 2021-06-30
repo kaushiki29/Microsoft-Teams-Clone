@@ -9,6 +9,10 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
         backgroundColor: "#f5f5f5",
         padding: "auto",
+        '@media(max-width: 648px)': {
+            textAlign: "center",
+            marginTop: "5%"
+        }
     },
     heading: {
         marginTop: "2%",
@@ -20,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
         minHeight: "250px",
         flexWrap: "wrap",
         justifyContent: "space-between",
+        '@media(max-width: 648px)': {
+            justifyContent: "center"
+        }
     },
 }));
 
