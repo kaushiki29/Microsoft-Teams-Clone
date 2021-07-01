@@ -74,9 +74,9 @@ const Room = ({ roomName, room, handleLogout }) => {
     });
 
     // }
-    socket.on('updatechat', function (data, name) {
-      console.log(data, name);
-      msgs.push({ username: name, msg: data });
+    socket.on('updatechat', function (data, name,time) {
+      console.log(data, name,time);
+      msgs.push({ username: name, msg: data, timestamp: time });
       setAllMsg([...msgs]);
       scrollToBottom();
     });
@@ -134,7 +134,10 @@ const Room = ({ roomName, room, handleLogout }) => {
         publication.track.stop();
         publication.unpublish();
       });
-      setSharing(!sharing);
+      // setSharing(!sharing);
+      if(sharing){
+        setSharing(false);
+      }
     }
     else {
 
@@ -203,11 +206,21 @@ const Room = ({ roomName, room, handleLogout }) => {
 
 
   const chatList = () => {
-
+    const formatAMPM = (date) => {
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      var strTime = hours + ':' + minutes + ' ' + ampm;
+      return strTime;
+    }
     const chatItem = (i, index) => {
+      const date = new Date(i.timestamp);
       return (
         <div key={index} style={{ margin: 0, }}>
-          <p style={{ marginLeft: 0, marginTop: 20, fontWeight: 'bold' }}>{i.username}</p>
+          <p style={{ marginLeft: 0, marginTop: 20, fontWeight: 'normal' }}><b>{i.username}</b> &nbsp; {formatAMPM(date)} </p>
           <p style={{ marginLeft: 0, marginTop: 5, maxWidth: 250 }}>{i.msg}</p>
         </div>
       )
@@ -224,7 +237,7 @@ const Room = ({ roomName, room, handleLogout }) => {
     const sendMessage = () => {
       if (msg != '') {
         setMsg('');
-        socket.emit('sendchat', roomName, msg, room.localParticipant.identity.split("!!!")[0]);
+        socket.emit('sendchat', roomName, msg, room.localParticipant.identity.split("!!!")[0],new Date().getTime());
       }
 
     }

@@ -97,7 +97,10 @@ function LoginComp(props) {
                     if (res.data.token) {
                         localStorage.setItem("token", res.data.token);
                         props.refreshToken();
-                        history.push("/home");
+                        if (res.data.is_verified)
+                            history.push("/home");
+                        else
+                            history.push("/verify");
                     }
                     else {
                         setEmail({

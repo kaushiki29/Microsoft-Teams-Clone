@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 function SignupComp() {
     const classes = useStyles();
     const history = useHistory();
+    const [isUserVerified, setUserVerified] = useState(false)
     const [firstName, setFirstName] = useState({
         value: "",
         error: false,
@@ -220,8 +221,12 @@ function SignupComp() {
                     }
                     else {
                         localStorage.setItem("token", res.data.token);
+                        setUserVerified(res.data.is_verified);
                         console.log("Signup success")
-                        history.push('/home');
+                        if (isUserVerified)
+                            history.push('/home');
+                        else
+                            history.push('/verify');
                     }
                 })
                 .catch(err => {

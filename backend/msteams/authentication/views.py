@@ -1,4 +1,5 @@
 # from backend.msteams.authentication.models import userData
+# from backend.msteams.authentication.models import userData
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
@@ -9,7 +10,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from .models import userData
 from random import randint
+import uuid
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
@@ -23,8 +26,10 @@ def user_login(request):
         }, status=status.HTTP_200_OK)
     else:
         token = Token.objects.get_or_create(user=user)[0]
+        # is_verified = user.userData.is_verified
         return Response({
-            'token': token.key
+            'token': token.key,
+            # 'is_verified':is_verified
         })
 
 
@@ -62,20 +67,48 @@ def signup(request):
             'message':"User with this email already exists"
         })
     else:
-        otp = randint(100000, 999999)
+        user = User.objects.create_user(username, email, password)
+        user_verification = userData()
+        user_verification.user=user
+        user_verification.email_uuid=str(uuid.uuid4())
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+        user_verification.save()
         send_mail('Email Verification - MS Teams Clone',
-        'Hello '+first_name+' '+last_name+' , your OTP for email verification is: '+str(otp)+'. Please use this OTP to use Microsoft Teams Clone services.',
+        'Hello '+first_name+' '+last_name+' , please click on the link to verify your email: https://www.msteams.games/verify/'+user_verification.email_uuid+'.',
         'msteamsclone@gmail.com',
         [email],
         fail_silently=False
         )
-        user = User.objects.create_user(username, email, password)
-        user.first_name = first_name
-        user.last_name = last_name
-        user.save()
+        print(user_verification.email_uuid)
         token = Token.objects.get_or_create(user=user)[0]
         return Response({
             'token': token.key,
+            'is_verified':user_verification.is_verified,
             'error':False,
-            'message':"OTP has been sent successfully on the registered email ID."
+            'message':"Verification has been sent successfully on the registered email ID."
         })
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def verify_email(request):
+    email_uuid = request.data.get('email_uuid')
+    
+    if userData.objects.filter(email_uuid=email_uuid).exists():
+        user_data = userData.objects.get(email_uuid=email_uuid)
+        user_data.is_verified = True
+        user_data.save()
+        user = user_data.user
+        token = Token.objects.get_or_create(user=user)[0]
+
+        return Response({
+            'is_verified':user_data.is_verified,
+            'token':token.key,
+            'email':user.email
+        })
+    return Response({
+        'error':True
+    })
+
