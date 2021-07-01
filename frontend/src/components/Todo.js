@@ -94,6 +94,7 @@ function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completed
             key={item.id}
           >
             <div key={item.id}>
+              <div>Created by: {item.created_by}</div>
               <div>Assigned to: {item.assigned_to}</div>
               <div>Task: {item.todo_item}</div>
               <div>Deadline: {formatAMPM(new Date(item.expected_time))}, {new Date(item.expected_time).getDate()} {month[new Date(item.expected_time).getMonth()]} {new Date(item.expected_time).getFullYear()}</div>
@@ -126,6 +127,7 @@ function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completed
           key={item.id}
         >
           <div key={item.id}>
+            <div>Created by: {item.created_by}</div>
             <div>Assigned to: {item.assigned_to}</div>
             <div>Task: {item.todo_item}</div>
             <div>Completed by: {item.completed_by ? item.completed_by : " "}</div>

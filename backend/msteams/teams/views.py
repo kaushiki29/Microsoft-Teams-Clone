@@ -142,31 +142,26 @@ def add_todos_teams(request):
     expected_completion_unix_time = request.data.get('expected_completion_unix_time')
     associated_team = Teams.objects.get(team_slug=team_slug)
 
-    if User.objects.filter(email=email_assigned_to).exists():
-            if Teams.objects.filter(admin=user):
-                todo = TeamTodo()
-                todo.created_by = user
-                todo.todo_item = todo_item
-                todo.assigned_to = User.objects.get(email=email_assigned_to)
-                todo.expected_completion_unix_time = expected_completion_unix_time
-                todo.is_completed = is_completed
-                todo.associated_team = associated_team
-                todo.save()
+    if User.objects.filter(email=email_assigned_to).exists():    
+        todo = TeamTodo()
+        todo.created_by = user
+        todo.todo_item = todo_item
+        todo.assigned_to = User.objects.get(email=email_assigned_to)
+        todo.expected_completion_unix_time = expected_completion_unix_time
+        todo.is_completed = is_completed
+        todo.associated_team = associated_team
+        todo.save()
 
-                return Response({
-                    'id':todo.id,
-                    'created_by':user.email,
-                    'todo_item': todo_item,
-                    'is_completed':is_completed,
-                    'assigned_to':todo.assigned_to.first_name,
-                    'team_slug': team_slug,
-                    'expected_time':expected_completion_unix_time
-                })
-            else:
-                return Response({
-                    'error':True,
-                    'message':'Your are not authorized to create the task'
-                })
+        return Response({
+            'id':todo.id,
+            'created_by':user.email,
+            'todo_item': todo_item,
+            'is_completed':is_completed,
+            'assigned_to':todo.assigned_to.first_name,
+            'team_slug': team_slug,
+            'expected_time':expected_completion_unix_time
+        })
+            
     else:
         return Response({
             'error':True,
@@ -189,6 +184,7 @@ def get_todos_teams(request):
             temp = {
                 'id':todo.id,
                 'todo_item':todo.todo_item,
+                'created_by':todo.created_by.first_name+" "+todo.created_by.last_name,
                 'is_completed':todo.is_completed,
                 'assigned_to':todo.assigned_to.first_name+" "+todo.assigned_to.last_name,
                 'expected_time':todo.expected_completion_unix_time
@@ -198,6 +194,7 @@ def get_todos_teams(request):
             temp = {
                 'id':todo.id,
                 'todo_item':todo.todo_item,
+                'created_by':todo.created_by.first_name+" "+todo.created_by.last_name,
                 'is_completed':todo.is_completed,
                 'completed_by':todo.completed_by.first_name+" "+todo.completed_by.last_name,
                 'assigned_to':todo.assigned_to.first_name+" "+todo.assigned_to.last_name,
