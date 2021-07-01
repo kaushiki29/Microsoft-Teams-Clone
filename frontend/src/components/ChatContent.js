@@ -4,21 +4,31 @@ import Avatar from "../components/Avatar";
 import AddIcon from '@material-ui/icons/Add';
 import ChatItem from "./ChatItem";
 import SendIcon from '@material-ui/icons/Send';
+import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import { api } from "../screen/Helper";
 import { useHistory } from "react-router-dom";
+import Button from '@material-ui/core/Button';
 import { io } from "socket.io-client";
 import { Modal } from "@material-ui/core";
+import VideoCallIcon from '@material-ui/icons/VideoCall';
+
+const useStyles = makeStyles({
+  input: {
+    display: "none"
+  }
+})
 
 
 export default function ChatContent(props) {
   const history = useHistory();
+  const classes = useStyles();
   const messagesEndRef = useRef(null);
   const [chat, setChat] = useState([]);
   const [msg, setMsg] = useState('');
-  const [open,setOpen] = useState(false);
-  const [image,setImage] = useState();
-  const [imgFile,setImgFile] = useState();
+  const [open, setOpen] = useState(false);
+  const [image, setImage] = useState();
+  const [imgFile, setImgFile] = useState();
   const dropRef = useRef();
   const chatItms = props.chatItms;
   const socket = io("https://msteams.games:5000");
@@ -26,7 +36,7 @@ export default function ChatContent(props) {
     setChat(props.chatItms);
   }, [props])
 
- 
+
   useEffect(() => {
     messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
   });
@@ -48,7 +58,7 @@ export default function ChatContent(props) {
     e.preventDefault()
     e.stopPropagation()
   }
-  const handleDrop = (e) => {    
+  const handleDrop = (e) => {
     e.preventDefault()
     e.stopPropagation()
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
@@ -61,7 +71,7 @@ export default function ChatContent(props) {
       e.dataTransfer.clearData();
     }
   }
-  
+
   useEffect(() => {
 
     scrollToBottom();
@@ -71,14 +81,14 @@ export default function ChatContent(props) {
       });
 
     }
-    socket.on('updatechat', function (data, name,type) {
+    socket.on('updatechat', function (data, name, type) {
       // console.log(data,name);
       if (name != props.name) {
         chatItms.push({
           type: "other",
-          msg_text: type == 'txt'?data: null,
+          msg_text: type == 'txt' ? data : null,
           type1: type,
-          img: type == 'img'?data: null,
+          img: type == 'img' ? data : null,
           sent_time: new Date(),
         });
         setChat([...chatItms])
@@ -101,7 +111,7 @@ export default function ChatContent(props) {
   const sendMessage = () => {
 
     if (msg != "") {
-      socket.emit('sendchat', props.thread_id, msg, props.name,'txt');
+      socket.emit('sendchat', props.thread_id, msg, props.name, 'txt');
       const token = localStorage.getItem('token');
       axios({
         method: 'post',
@@ -137,54 +147,54 @@ export default function ChatContent(props) {
     }
   }
 
-  const startCall=()=>{
+  const startCall = () => {
     const token = localStorage.getItem("token");
+    axios({
+      method: 'post',
+      data: {
+        username: props.uName,
+      },
+      url: api + "communication/create_p2p_call",
+      headers: {
+        Authorization: "Token " + token
+      }
+    })
+      .then(res => {
+        console.log(res.data);
+        socket.emit('sendchat', props.thread_id, `Quick! Come join me in this call https://www.msteams.games/call/${res.data.meeting_slug}`, props.name, 'txt');
+        const token = localStorage.getItem('token');
         axios({
-            method: 'post',
-            data: {
-              username: props.uName,
-            },
-            url: api + "communication/create_p2p_call",
-            headers: {
-                Authorization: "Token " + token
-            }
+          method: 'post',
+          url: api + 'communication/send_message',
+          data: {
+            msg_text: `Quick! Come join me in this call https://www.msteams.games/call/${res.data.meeting_slug}`,
+            thread_id: props.thread_id,
+          },
+          headers: { Authorization: 'Token ' + token }
         })
-        .then(res => {
+          .then(res => {
             console.log(res.data);
-            socket.emit('sendchat', props.thread_id, `Quick! Come join me in this call https://www.msteams.games/call/${res.data.meeting_slug}`, props.name,'txt');
-            const token = localStorage.getItem('token');
-            axios({
-              method: 'post',
-              url: api + 'communication/send_message',
-              data: {
-                msg_text: `Quick! Come join me in this call https://www.msteams.games/call/${res.data.meeting_slug}`,
-                thread_id: props.thread_id,
-              },
-              headers: { Authorization: 'Token ' + token }
-              })
-              .then(res => {
-                console.log(res.data);
-              })
-              .catch(err => {
-                console.log(err);
-              })
-
-            chatItms.push({
-              type: "",
-              msg_text: msg,
-              sent_time: new Date(),
-            });
-            setChat(chatItms)
-            scrollToBottom();
-            // setMsg('');
-            history.push('/call/' + res.data.meeting_slug);
-        })
-        .catch(err => {
+          })
+          .catch(err => {
             console.log(err);
-        })
+          })
+
+        chatItms.push({
+          type: "",
+          msg_text: msg,
+          sent_time: new Date(),
+        });
+        setChat(chatItms)
+        scrollToBottom();
+        // setMsg('');
+        history.push('/call/' + res.data.meeting_slug);
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
 
-  const onImageChange=(event)=>{
+  const onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       let img = event.target.files[0];
       // this.setState({
@@ -195,13 +205,18 @@ export default function ChatContent(props) {
     }
   }
 
-  const handleUploadImage=()=>{
+  const handleUploadImage = () => {
     console.log('upload');
     // setImage();
     // setImgFile();
     let form_data = new FormData();
-    form_data.append('img',imgFile);
-    form_data.append('thread_id',props.thread_id);
+    if (!imgFile) {
+      return (
+        alert("Please attach a media first.")
+      )
+    }
+    form_data.append('img', imgFile);
+    form_data.append('thread_id', props.thread_id);
     handleClose();
     axios({
       method: 'post',
@@ -210,7 +225,7 @@ export default function ChatContent(props) {
       headers: { Authorization: 'Token ' + localStorage.getItem('token') }
     })
       .then(res => {
-        socket.emit('sendchat', props.thread_id, res.data.imgUrl, props.name,'img');
+        socket.emit('sendchat', props.thread_id, res.data.imgUrl, props.name, 'img');
         chatItms.push({
           type: "",
           msg_text: null,
@@ -229,14 +244,16 @@ export default function ChatContent(props) {
       })
   }
 
-  const openModal=()=>{
+  const openModal = () => {
     setOpen(true);
   }
-  const handleClose=()=>{
+  const handleClose = () => {
     setOpen(false);
+    setImgFile();
+    setImage();
   }
-  const handlePaste=(e)=>{
-    if(e.clipboardData.files.length){
+  const handlePaste = (e) => {
+    if (e.clipboardData.files.length) {
       console.log(e.clipboardData.files[0]);
       setOpen(true);
       setMsg('');
@@ -254,14 +271,14 @@ export default function ChatContent(props) {
               image="http://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png"
             />
             <p >{props.name}</p>
-            <p onClick={startCall} style={{marginLeft: 200}}>Call</p>
+
           </div>
         </div>
 
         <div className="blocks">
           <div className="settings">
             <button className="btn-nobg">
-              <i className="fa fa-cog"></i>
+              <p onClick={startCall}><VideoCallIcon /></p>
             </button>
           </div>
         </div>
@@ -275,18 +292,18 @@ export default function ChatContent(props) {
                 key={index}
                 user={itm.type ? itm.type : "me"}
                 msg={itm.msg_text}
-                type = {itm.type1}
-                img = {itm.img}
+                type={itm.type1}
+                img={itm.img}
                 image={"http://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png"}
                 sent_time={itm.sent_time}
               />
             );
           })}
-          <div  ref = {messagesEndRef}/>
+          <div ref={messagesEndRef} />
         </div>
       </div>
       <div className="content__footer">
-        <div className="sendNewMessage" onPaste={handlePaste} ref = {dropRef}>
+        <div className="sendNewMessage" onPaste={handlePaste} ref={dropRef}>
           <button className="addFiles" onClick={openModal}>
             <AddIcon style={{ color: "white" }} />
           </button>
@@ -302,18 +319,32 @@ export default function ChatContent(props) {
           </button>
         </div>
       </div>
-      <Modal open={open} onClose={handleClose} style={{display: 'flex',justifyContent: 'center',alignItems: 'center', margin: 'auto'}}>
-          <div style={{width: 400, height: 400, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white'}}>
-            <div style={{display: 'flex', flexDirection: 'column',justifyContent: 'center', alignItems: 'center'}}>
-              <img src={image} style={{width: 200, height: 200,margin: 'auto', objectFit: 'contain'}} />
-              <h1>Select Image</h1>
-              <input type="file" name="myImage" onChange={onImageChange} />
-              <button style={{width: 200}} onClick={handleUploadImage}>Upload</button>
+      <Modal open={open} onClose={handleClose} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 'auto' }}>
+        <div style={{ width: 400, height: 400, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', borderRadius: "2%" }}>
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <div>Preview Image</div>
+            <div style={{ display: "flex" }}>
+              <div style={{ width: 205, height: 205, borderRadius: "2%", borderColor: "#464775", borderStyle: "solid", backgroundColor: "#f1f1f1" }}>
+                <img src={image} style={{ width: 200, height: 200, objectFit: 'contain' }} />
+              </div>
             </div>
+            {!imgFile ? <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose an Image</div> : <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose Some Other Image</div>}
+
+            <input type="file" name="myImage" id="contained-button-file" onChange={onImageChange} className={classes.input} />
+            <label htmlFor="contained-button-file" style={{ paddingBottom: "15%" }}>
+              <Button variant="contained" color="primary" component="span" style={{ backgroundColor: "#464775", height: "33px" }}>
+                Upload
+              </Button>
+            </label>
+            {/* <button style={{ width: 200 }} >Done!</button> */}
+            <Button variant="outlined" color="primary" onClick={handleUploadImage} style={{ height: "33px", color: "#464775" }}>
+              Done!
+            </Button>
           </div>
+        </div>
       </Modal>
     </div>
-    
+
   );
 
 }
