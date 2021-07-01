@@ -10,6 +10,7 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth }) => {
   const audioRef = useRef();
   const [trackName,setTrackName]=  useState('');
   const [st,setSt] = useState();
+  const [isMute,setIsMute] = useState(false);
   const trackpubsToTracks = (trackMap) =>
     Array.from(trackMap.values())
       .map((publication) => publication.track)
@@ -36,7 +37,11 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth }) => {
   useEffect(() => {
     setVideoTracks(trackpubsToTracks(participant.videoTracks));
     setAudioTracks(trackpubsToTracks(participant.audioTracks));
-
+    console.log(participant.videoTracks.size,'track');
+    if(!participant.videoTracks.size){
+      setRemoved(true);
+    }
+    // if(participant.videoTrack == {})
     const trackSubscribed = (track) => {
       console.log(track.name);
       setTrackName(track.name);
@@ -47,7 +52,6 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth }) => {
         setRemoved(false);
         setVideoTracks((videoTracks) => [track]);
       } else if (track.kind === "audio") {
-        console.log("unmuted and enabled");
         setAudioTracks((audioTracks) => [track]);
       }
     };
@@ -58,24 +62,34 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth }) => {
         setRemoved(true);
         setVideoTracks((videoTracks) => videoTracks.filter((v) => v !== track));
       } else if (track.kind === "audio") {
+        console.log('audio');
+        setIsMute(false);
         setAudioTracks((audioTracks) => audioTracks.filter((a) => a !== track));
       }
     };
 
-
-    const trackEnabled = (track) => {
-      console.log("trackEnabled");
+    const trackEnabled=(track)=>{
+      if (track.kind === "audio") {
+        console.log('audio');
+        setIsMute(false);
+        setAudioTracks((audioTracks) => audioTracks.filter((a) => a !== track));
+      }
     }
 
-    const dis = () => {
-      console.log("disabled");
+
+    const trackDisabled = (track) => {
+      if(track.kind=='audio'){
+        setIsMute(true);
+      }
+      
     }
 
     participant.on("trackSubscribed", trackSubscribed);
     participant.on("trackStarted", trackSubscribed); // for video on
     participant.on("trackStopped", trackUnsubscribed);// for video off
     participant.on("trackUnsubscribed", trackUnsubscribed);
-    participant.on("trackEnabled", trackUnsubscribed);
+    participant.on("trackDisabled",trackDisabled);
+    participant.on("trackEnabled", trackEnabled);
 
     return () => {
       setVideoTracks([]);
@@ -87,11 +101,16 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth }) => {
   useEffect(() => {
     const videoTrack = videoTracks[0];
     if (videoTrack) {
+      // setRemoved(false);
       videoTrack.attach(videoRef.current);
       return () => {
         videoTrack.detach();
       };
     }
+    else{
+      // setRemoved(true);
+    }
+    
   }, [videoTracks]);
 
   useEffect(() => {
@@ -164,7 +183,7 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth }) => {
       {/* <h3>{participant.identity.split('!!!')[0]}</h3> */}
       <div style={{ position: 'relative', width: 'fit-content', }}>
         <div style={{ display: 'flex', position: 'absolute', margin: 'auto', top: "10px", right: "10px", color: "gray" }}>
-          {isMuted ? <MicOffIcon /> : <MicIcon />}
+          {isMute ? <MicOffIcon /> : <MicIcon />}
         </div>
         {!removed && <video onClick={handleClick} ref={videoRef} autoPlay={true} style={st? st: { border: "#e8cd41", borderStyle: "solid", borderWidth: "2px", borderRadius: "2%",width: width1,height: height1 }} />}
         {removed && <div style={{ width: width1, height: height1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'black', borderStyle: "solid", borderWidth: "2px", borderColor: "#e8cd41", borderRadius: "2%" }}>

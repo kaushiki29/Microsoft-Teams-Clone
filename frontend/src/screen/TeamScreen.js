@@ -36,7 +36,32 @@ const useStyles = makeStyles((theme) => ({
         overflow: "overlay",
         position: "fixed",
         display: "flex",
-        height: "100vh"
+        height: "100vh",
+        '@media(max-width: 931px)': {
+            width: "250px"
+        },
+        '@media(max-width: 800px)': {
+            width: "220px"
+        },
+        '@media(max-width: 770px)': {
+            display: "none",
+
+        },
+    },
+    newSideDivPhone: {
+        display: "none",
+        marginLeft: "68px",
+        marginTop: "56px",
+        height: "45px",
+        boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+        backgroundColor: "#e8e8e894",
+        overflow: "overlay",
+        position: "fixed",
+        display: "flex",
+        '@media(max-width: 770px)': {
+            display: "flex",
+            width: "-webkit-fill-available"
+        },
     },
 
     p: {
@@ -62,12 +87,58 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "#ebebeb"
     },
 
+    newSidedivDataPhone: {
+        display: "none",
+        // flexDirection: "column",
+        '@media(max-width: 770px)': {
+            display: "flex",
+            width: "100%",
+            alignItems: "center",
+        },
+    },
+
     subComponent: {
         height: "fit-content",
         flexDirection: 'column',
         display: 'flex',
         width: '100%',
-        marginLeft: 0
+        marginLeft: 0,
+        // '@media(max-width: 931px)': {
+        //     padding: 0
+        // },
+    },
+
+    subComponentPhone: {
+        // height: "fit-content",
+        // flexDirection: 'column',
+
+        '@media(max-width: 770px)': {
+            display: 'flex',
+            width: '100%',
+            marginLeft: 0,
+            flex: 1,
+        },
+    },
+
+    subComponentNav: {
+        height: "fit-content",
+        flexDirection: 'column',
+        display: 'flex',
+        width: '100%',
+        marginLeft: "388px",
+        '@media(max-width: 931px)': {
+            marginLeft: "318px"
+        },
+        '@media(max-width: 800px)': {
+            marginLeft: "289px"
+        },
+        '@media(max-width: 770px)': {
+            marginLeft: "68px",
+            marginTop: "45px",
+        },
+        '@media(max-width: 556px)': {
+            minWidth: "90px"
+        }
 
     },
 
@@ -77,6 +148,15 @@ const useStyles = makeStyles((theme) => ({
         alignSelf: "flex-start",
         padding: 0,
         marginLeft: "5%"
+    },
+
+    buttonPhone: {
+        // marginBottom: "20px",
+        border: 0,
+        // alignSelf: "flex-start",
+        padding: 0,
+        paddingRight: "2%"
+        // marginLeft: "5%"
     },
 
     teamNameDiv: {
@@ -105,6 +185,15 @@ const useStyles = makeStyles((theme) => ({
         fontSize: "18px",
         cursor: "pointer",
         fontWeight: "bolder"
+    },
+
+    titleTeamPhone: {
+        // marginLeft: "5%",
+        // paddingTop: "25px",
+        fontSize: "18px",
+        cursor: "pointer",
+        fontWeight: "bolder",
+        paddingLeft: "2%"
     },
 
     titleGeneral: {
@@ -218,7 +307,15 @@ function TeamScreen() {
                             </div>
                         </div>
                     </div>
-                    <div className={classes.subComponent} style={{ marginLeft: "388px" }} >
+                    <div className={classes.newSideDivPhone}>
+                        <div className={classes.newSidedivDataPhone}>
+                            <div className={classes.subComponentPhone} >
+                                <div className={classes.titleTeamPhone}>{teamName}</div>
+                            </div>
+                            <Button variant="outlined" color="primary" href="/home" className={classes.buttonPhone}> All teams </Button>
+                        </div>
+                    </div>
+                    <div className={classes.subComponentNav} >
                         <TeamsNav team_slug={team_slug} allCalls={allCalls} isAdmin={isAdmin} uniqueCode={uniqueCode} />
                     </div>
                 </div>

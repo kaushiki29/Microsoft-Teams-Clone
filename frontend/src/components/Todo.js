@@ -93,7 +93,7 @@ function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completed
         )) :
         <div style={{ textAlign: "center" }}>
           <img
-            style={{ height: "240px" }}
+            style={{ height: "239px" }}
             src="https://img.freepik.com/free-vector/girl-sits-couch-learns-play-ukulele-notes_321061-373.jpg?size=626&ext=jpg" />
           <p style={{ color: "gray" }}>No pending tasks</p>
         </div>
@@ -121,7 +121,7 @@ function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completed
       )) :
         <div style={{ textAlign: "center" }}>
           <img
-            style={{ height: "240px" }}
+            style={{ height: "239px" }}
             src="https://media.istockphoto.com/vectors/girl-with-laptop-on-the-chair-freelance-or-studying-concept-cute-in-vector-id1178761712?k=6&m=1178761712&s=612x612&w=0&h=Gk_EzskIIO1ncZRBjeGQweDr4z70yyPEum9I8ftukUw=" />
           <p style={{ color: "gray" }}>No completed tasks</p>
         </div>

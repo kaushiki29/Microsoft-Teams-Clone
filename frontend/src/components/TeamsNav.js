@@ -42,38 +42,19 @@ const CssTextField = withStyles({
     },
 })(TextField);
 
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`scrollable-auto-tabpanel-${index}`}
-            aria-labelledby={`scrollable-auto-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box p={4}>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
-        </div>
-    );
-}
-
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-};
 
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
         width: '100%',
-        display: "flex",
+        // display: "flex",
         paddingBottom: "6%",
-        flexDirection: "column",
+        // flexDirection: "column",
+    },
+    tabPanelFrame: {
+        '@media(max-width: 1030px)': {
+            padding: 0
+        },
     },
     container: {
         display: 'flex',
@@ -106,6 +87,12 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: "bolder",
         '@media(max-width: 1030px)': {
             minWidth: "120px"
+        },
+        '@media(max-width: 931px)': {
+            minWidth: "90px"
+        },
+        '@media(max-width: 556px)': {
+            minWidth: "30px"
         }
     },
     meetingStart: {
@@ -134,9 +121,46 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
         color: "black",
         height: "90px"
-    }
+    },
+    tabsPhone: {
+        height: "45px",
+        alignItems: "center"
+    },
+
 }));
 
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`scrollable-force-tabpanel-${index}`}
+            aria-labelledby={`scrollable-force-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box p={3}>
+                    <Typography>{children}</Typography>
+                </Box>
+            )}
+        </div>
+    );
+}
+
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.any.isRequired,
+    value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+    return {
+        id: `scrollable-force-tab-${index}`,
+        'aria-controls': `scrollable-force-tabpanel-${index}`,
+    };
+}
 export default function TeamsNav(props) {
 
     const [val, setVal] = useState(1)
@@ -405,7 +429,7 @@ export default function TeamsNav(props) {
     }
     return (
         <div className={classes.root}>
-            <AppBar position="static" color="default" style={{ zIndex: "10", position: "fixed", marginTop: "56px", marginBottom: "2%" }}>
+            <AppBar position="static" color="default" style={{ zIndex: "10", position: "fixed", marginTop: "56px", marginBottom: "2%" }} className={classes.appbar}>
                 <Tabs
                     value={value}
                     onChange={handleChange}
@@ -413,7 +437,7 @@ export default function TeamsNav(props) {
                     textColor="primary"
                     variant="scrollable"
                     scrollButtons="auto"
-
+                    className={classes.tabsPhone}
                     aria-label="scrollable auto tabs example"
                 >
                     <Tab label="General" className={classes.tab} />
@@ -444,7 +468,7 @@ export default function TeamsNav(props) {
                 }
             </TabPanel>
             <TabPanel value={value} index={2} className={classes.tabPanel}>
-                <div style={{ display: "flex", flexDirection: "column", width: "100%", padding: "5%" }}>
+                <div style={{ display: "flex", flexDirection: "column", width: "100%", }}>
                     <div style={{ backgroundColor: "white", borderRadius: "2%", paddingBottom: "4%" }}>
                         <TodoList allUsers={allUsers} team_slug={props.team_slug} />
                     </div>
@@ -453,6 +477,14 @@ export default function TeamsNav(props) {
             <TabPanel value={value} index={3} className={classes.tabPanel}>
                 <Invite team_slug={props.team_slug} allUsers={allUsers} reloadValue={reloadValue} isAdmin={props.isAdmin} uniqueCode={props.uniqueCode} />
             </TabPanel>
+
+
+
+
+
+
+
+
             <div className={classes.footer}>
                 <Divider style={{ width: "80%" }} />
                 <div style={{ paddingTop: "25px", paddingLeft: "10%", paddingRight: "10%" }}>
