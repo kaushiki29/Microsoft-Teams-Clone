@@ -49,3 +49,14 @@ class VideoCallParticipant(models.Model):
     in_call = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+class P2PVideocall(models.Model):
+    meeting_slug = models.CharField(max_length=100)
+    user_a = models.ForeignKey(User,on_delete=models.CASCADE, related_name="user_c")
+    user_b = models.ForeignKey(User,on_delete=models.CASCADE, related_name="user_d")
+    is_active = models.BooleanField(default=False)
+    started_at = models.BigIntegerField()
+    is_completed= models.BooleanField(default=False)
+    s_id = models.CharField(max_length=500, blank=True,null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

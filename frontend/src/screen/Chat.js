@@ -84,6 +84,7 @@ function Chat() {
     const [chatItms, setChatItms] = useState([]);
     const [otherUserName, setOtherUserName] = useState('');
     const [allChatUsers, setAllChatUsers] = useState([]);
+    const [uName,setUName] = useState('');
     const { chat_uuid } = useParams();
     useEffect(() => {
         fetchChatList();
@@ -109,6 +110,7 @@ function Chat() {
                     // console.log(res.data);
                     setChatItms(res.data.all_msgs);
                     setOtherUserName(res.data.name);
+                    setUName(res.data.username)
                 })
                 .catch(err => {
                     console.log(err);
@@ -166,7 +168,7 @@ function Chat() {
             <div className={classes.subComponent} >
                 <ChatList allChatUsers={allChatUsers} setCurrChatuuid={setCurrChatuuid} thread_id={chatuuid} />
                 {otherUserName &&
-                    <ChatContent chatItms={chatItms} thread_id={chatuuid} setChatItms={setChatItms} name={otherUserName} />
+                    <ChatContent chatItms={chatItms} thread_id={chatuuid} setChatItms={setChatItms} uName={uName} name={otherUserName} />
                 }
                 {!otherUserName &&
                     <div style={{ display: "flex", justifyContent: "center", width: "100%", alignItems: "center", fontSize: "20px", color: "gray", fontWeight: "bold", flexDirection: "column" }}>

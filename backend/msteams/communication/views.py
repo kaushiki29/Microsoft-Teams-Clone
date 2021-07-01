@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 
-from .models import Videocall,VideoCallParticipant,Message,UserMailbox,ChatUUID
+from .models import Videocall,VideoCallParticipant,Message,UserMailbox,ChatUUID, P2PVideocall
 from time import time
 from teams.models import Teams, TeamParticipants
 import random
@@ -51,7 +51,29 @@ def create_call(request):
         'sid': videocall.s_id
     })
 
-
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def create_p2p_call(request):
+    username = request.data.get('username')
+    other_user = User.objects.get(username = username)
+    user = request.user
+    videocall = P2PVideocall()
+    thread_id = ChatUUID.objects.get(Q(user_a = user, user_b = other_user)| Q(user_a = other_user,user_b = user)).thread_id
+    videocall.meeting_slug = getP2PSlug(thread_id)
+    videocall.user_a = user
+    videocall.user_b = other_user
+    videocall.is_active = True
+    videocall.started_at = time()*1000
+    videocall.is_completed = False
+    videocall.s_id = create_twilio_call(videocall.meeting_slug)
+    videocall.save()
+    
+    # add_video_call_participant(user,videocall,0)
+    # sends response to frontend and can be accessed by res.data example res.data.team_name
+    return Response({
+        'meeting_slug': videocall.meeting_slug,
+        'sid': videocall.s_id
+    })
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -215,6 +237,54 @@ def get_twilio_token(request):
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
+def get_p2p_twilio_token(request):
+    user = request.user
+    meeting_slug = request.data.get('meeting_slug')
+    if not P2PVideocall.objects.filter(meeting_slug = meeting_slug).exists():
+        return Response({
+            'error': True,
+            'error_msg': "Invalid video call link"
+        })
+    videocall = P2PVideocall.objects.get(meeting_slug = meeting_slug)
+    user_a  =videocall.user_a
+    user_b = videocall.user_b
+    if user_a != user and user_b != user:
+        return Response({
+            'error': True,
+            'error_msg': "You are not authorized to access this call"
+        })
+    try:
+        if check_room_status(meeting_slug) == 'completed':
+            return Response({
+                'error': True,
+                'error_msg': "The meeting has already ended"
+            })
+    except:
+        return Response({
+            'error': True,
+            'error_msg': "The meeting has already ended"
+        })
+    identity = user.get_full_name() + "!!!" + user.username
+
+    # Create access token with credentials
+    token = AccessToken(settings.ACCOUNT_SID, settings.API_KEY, settings.API_SECRET, identity=identity)
+
+    # Create a Video grant and add to token
+    video_grant = VideoGrant(room=meeting_slug)
+    token.add_grant(video_grant)
+
+    # Return token info as JSON
+    print(token.to_jwt())
+    return Response({
+        'error': False,
+        'access_token': token.to_jwt(),
+        'user_name': user.get_full_name(),
+        'thread_id': ChatUUID.objects.get(Q(user_a = user_a, user_b = user_b)| Q(user_a = user_b,user_b = user_a)).thread_id
+    })
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def init_chat(request):
     user = request.user
 
@@ -334,7 +404,8 @@ def get_thread_messages(request):
     
     return Response({
         'all_msgs': all_msgs,
-        'name': otheruser.get_full_name()
+        'name': otheruser.get_full_name(),
+        'username': otheruser.username
     })
 
 
@@ -345,6 +416,16 @@ def getSlug(title):
     title = title.replace(" ", "-")
     if Videocall.objects.filter(meeting_slug=title).exists():    
         c = Videocall.objects.all().last()
+        title = title+'-'+str(c.id+1)
+    return title
+
+def getP2PSlug(title):
+    title = str(title)
+    title = title.lower()
+    title = re.sub('\s+', ' ', title).strip()
+    title = title.replace(" ", "-")
+    if P2PVideocall.objects.filter(meeting_slug=title).exists():    
+        c = P2PVideocall.objects.all().last()
         title = title+'-'+str(c.id+1)
     return title
 

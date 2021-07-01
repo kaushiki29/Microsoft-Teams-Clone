@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Avatar from "../components/Avatar";
-
+import Linkify from 'react-linkify';
 export default class ChatItem extends Component {
   constructor(props) {
     super(props);
@@ -37,7 +37,7 @@ export default class ChatItem extends Component {
         className={`chat__item ${this.props.user ? this.props.user : ""}`}
       >
         <div className="chat__item__content">
-          <div className="chat__msg">{this.props.msg}</div>
+        <Linkify ><div className="chat__msg">{this.props.msg}</div></Linkify>
           <div className="chat__meta">
             <span>{this.formatAMPM(new Date(this.props.sent_time))}  &nbsp; {this.state.day}</span>
             {/* <span>Seen 1.03PM</span> */}

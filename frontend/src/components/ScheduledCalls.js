@@ -13,7 +13,10 @@ import { api } from '../screen/Helper'
 const useStyles = makeStyles({
     root: {
         minWidth: 275,
-        marginBottom: "7%"
+        marginBottom: "7%",
+        '@media(max-width: 389px)': {
+            minWidth: 200
+        },
     },
     header: {
         backgroundColor: "rgb(70, 71, 117)",

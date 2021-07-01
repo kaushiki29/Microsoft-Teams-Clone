@@ -10,7 +10,10 @@ import { useHistory } from 'react-router-dom';
 const useStyles = makeStyles({
     root: {
         minWidth: 275,
-        marginBottom: "7%"
+        marginBottom: "7%",
+        '@media(max-width: 389px)': {
+            minWidth: 200
+        },
     },
     header: {
         backgroundColor: "rgb(70, 71, 117)",
@@ -18,6 +21,9 @@ const useStyles = makeStyles({
     head: {
         display: 'flex',
         alignItems: 'center',
+        '@media(max-width: 560px)': {
+            flexDirection: "column"
+        },
     },
     bullet: {
         display: 'inline-block',
@@ -30,6 +36,9 @@ const useStyles = makeStyles({
         paddingBottom: '13px',
         color: '#FFFFFF',
         flex: 1,
+        '@media(max-width: 560px)': {
+            textAlign: "center"
+        },
     },
     time: {
         fontSize: 18,
@@ -70,12 +79,12 @@ export default function SimpleCard(props) {
     }
 
     const updateSec = () => {
-        
+
         setTime(new Date());
     }
 
     const formatTime = () => {
-        
+
         let t = (new Date().getTime() - props.call.started_at) / 1000;
         let hour = Math.floor(t / 3600);
         if (String(hour).length === 1) {

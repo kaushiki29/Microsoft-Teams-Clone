@@ -5,10 +5,10 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import LoginComp from '../screen/LoginComp';
 import TeamScreen from '../screen/TeamScreen';
 import LandingPage from '../screen/LandingPage';
-import JitsiCall from './JitsiCall';
 import Chat from '../screen/Chat'
 import TwilioCall from './TwilioCall';
 import Tasks from '../screen/Tasks';
+import Call from './P2Pvideocall/Call';
 
 function Login() {
 
@@ -31,6 +31,7 @@ function Login() {
                 <Route path="/chat/:chat_uuid" component={Chat} />
                 <Route path="/tasks" component={Tasks} />
                 <Route path="/videocall/:meeting_slug" component={TwilioCall} />
+                <Route path="/call/:meeting_slug" component={Call} />
                 <Route path="*">
                     <Redirect to="/login" />
                 </Route>

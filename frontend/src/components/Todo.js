@@ -1,12 +1,32 @@
 import React, { useState } from 'react';
 import TodoForm from './TodoForm';
+import { makeStyles } from '@material-ui/core/styles';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import DoneIcon from '@material-ui/icons/Done';
 import EditIcon from '@material-ui/icons/Edit';
 import axios from 'axios';
 import { api } from '../screen/Helper';
 
+const useStyles = makeStyles({
+  pendingTodos: {
+    height: "239px",
+    '@media(max-width: 535px)': {
+      height: 200
+    },
+    '@media(max-width: 535px)': {
+      height: 190
+    },
+    '@media(max-width: 376px)': {
+      height: 160
+    },
+    '@media(max-width: 334px)': {
+      height: 140
+    },
+  }
+})
+
 function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completedTodos, setCompletedTodos }) {
+  const classes = useStyles();
 
   var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 
@@ -93,7 +113,8 @@ function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completed
         )) :
         <div style={{ textAlign: "center" }}>
           <img
-            style={{ height: "239px" }}
+            style={{}}
+            className={classes.pendingTodos}
             src="https://img.freepik.com/free-vector/girl-sits-couch-learns-play-ukulele-notes_321061-373.jpg?size=626&ext=jpg" />
           <p style={{ color: "gray" }}>No pending tasks</p>
         </div>
@@ -121,7 +142,7 @@ function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completed
       )) :
         <div style={{ textAlign: "center" }}>
           <img
-            style={{ height: "239px" }}
+            className={classes.pendingTodos}
             src="https://media.istockphoto.com/vectors/girl-with-laptop-on-the-chair-freelance-or-studying-concept-cute-in-vector-id1178761712?k=6&m=1178761712&s=612x612&w=0&h=Gk_EzskIIO1ncZRBjeGQweDr4z70yyPEum9I8ftukUw=" />
           <p style={{ color: "gray" }}>No completed tasks</p>
         </div>

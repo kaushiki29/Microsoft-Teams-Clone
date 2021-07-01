@@ -86,6 +86,11 @@
   user-select: none;
 }
 
+a{
+  word-break: break-all;
+  color: currentColor;
+}
+
 .chat__item.other {
   flex-direction: row-reverse;
   transform-origin: left;

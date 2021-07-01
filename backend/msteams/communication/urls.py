@@ -14,5 +14,7 @@ urlpatterns = [
     path('get_all_threads',views.get_all_threads,name='get_all_threads'),
     path('test',views.test,name="test"),
     path('get_scheduled_calls',views.get_scheduled_calls, name='get_scheduled_calls'),
-    path('delete_call',views.delete_call, name='delete_call')
+    path('delete_call',views.delete_call, name='delete_call'),
+    path('create_p2p_call',views.create_p2p_call,name='create_p2p_call'),
+    path('get_p2p_twilio_token',views.get_p2p_twilio_token,name='get_p2p_twilio_token')
 ]

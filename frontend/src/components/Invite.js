@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import { api } from '../screen/Helper';
 import { useHistory } from 'react-router-dom';
@@ -12,6 +16,53 @@ const useStyles = makeStyles((theme) => ({
             margin: theme.spacing(1),
             width: '100%',
         },
+    },
+    rootCard: {
+        minWidth: 260,
+        display: "flex",
+        flexDirection: "column",
+        maxWidth: 280,
+        margin: 2,
+        alignItems: "center",
+        textAlign: "center",
+        '@media(max-width: 1108px)': {
+            minWidth: 220
+        },
+        '@media(max-width: 1008px)': {
+            minWidth: 205
+        },
+        '@media(max-width: 651px)': {
+
+        },
+    },
+    cards: {
+        justifyContent: "space-between",
+        '@media(max-width: 650px)': {
+            justifyContent: "center"
+        },
+
+    },
+    code: {
+        '@media(max-width: 650px)': {
+            justifyContent: "center",
+            paddingTop: "5%"
+        },
+    },
+    heading: {
+        '@media(max-width: 651px)': {
+            textAlign: "center"
+        },
+    },
+    bullet: {
+        display: 'inline-block',
+        margin: '0 2px',
+        transform: 'scale(0.8)',
+    },
+    title: {
+        fontSize: 14,
+    },
+    pos: {
+        marginBottom: 12,
     },
 }));
 
@@ -136,22 +187,38 @@ function Invite(props) {
                         onChange={handleChange}
                     />
                     <Button variant="contained" color="primary" style={{ marginTop: "2%", height: "33px", backgroundColor: "#464775" }} onClick={handleSubmit}>Add to Team</Button>
-                    <div style={{ paddingTop: "2%", display: "flex", paddingBottom: "5%" }}>
-                        Team Joining Code: <div style={{ fontWeight: "bolder" }}>{props.uniqueCode} </div>
+                    <div style={{ paddingTop: "2%", display: "flex", paddingBottom: "5%" }} className={classes.code}>
+                        Team Code: <div style={{ fontWeight: "bolder" }}>{props.uniqueCode} </div>
                     </div>
                 </div>
             )}
             <div>
-                <h2 style={{ paddingBottom: "2%" }}>Team Participants</h2>
-                {props.allUsers.map((i, index) => {
-                    return (
-                        <div style={{ display: "flex", justifyContent: "space-between", fontSize: "20px" }}>
-                            <div>{i.name}</div>
-                            <div>{i.email}</div>
-                            <div style={{ margin: 0, cursor: 'pointer' }} onClick={() => { handleInitChat(i.email) }}>Message</div>
-                        </div>
-                    )
-                })}
+                <h2 style={{ paddingBottom: "2%" }} className={classes.heading}>Team Participants</h2>
+                <div style={{ display: "flex", flexWrap: "wrap" }} className={classes.cards}>
+                    {props.allUsers.map((i, index) => {
+                        return (
+                            <Card className={classes.rootCard}>
+                                <CardContent style={{ paddingBottom: 0 }}>
+                                    <Typography variant="h5" component="h2">
+                                        {i.name}
+                                    </Typography>
+                                    <Typography component="h3">
+                                        {i.email}
+                                    </Typography>
+                                </CardContent>
+                                <CardActions>
+                                    <Button size="small" onClick={() => { handleInitChat(i.email) }}>Message</Button>
+                                </CardActions>
+                            </Card>
+
+                            // <div style={{ display: "flex", justifyContent: "space-between", fontSize: "20px" }}>
+                            //     <div>{i.name}</div>
+                            //     <div>{i.email}</div>
+                            //     <div style={{ margin: 0, cursor: 'pointer' }} onClick={() => { handleInitChat(i.email) }}>Message</div>
+                            // </div>
+                        )
+                    })}
+                </div>
             </div>
         </div>
     )
