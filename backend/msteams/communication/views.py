@@ -324,6 +324,7 @@ def send_message(request):
     message = Message()
     message.sender = sender
     message.msg_text = msg_text
+    message.type = 'txt'
     message.save()
 
     # if ChatUUID.objects.filter(Q(user_a = sender, user_b = receiver) | Q(user_a = receiver, user_b = sender)).exists():
@@ -352,6 +353,55 @@ def send_message(request):
 
     return Response({
         'msg': 'message sent successfully'
+    })
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def send_img(request):
+    user = request.user
+
+    img = request.data.get('img')
+    thread_id = request.data.get('thread_id')
+    thread_uuid = ChatUUID.objects.get(thread_id = thread_id)
+    if user == thread_uuid.user_a:
+        receiver = thread_uuid.user_b
+    else:
+        receiver = thread_uuid.user_a
+    sender = user
+
+    message = Message()
+    message.sender = sender
+    message.img = img
+    message.type = 'img'
+    message.save()
+
+    # if ChatUUID.objects.filter(Q(user_a = sender, user_b = receiver) | Q(user_a = receiver, user_b = sender)).exists():
+    #     thread_uuid = ChatUUID.objects.get(Q(user_a = sender, user_b = receiver) | Q(user_a = receiver, user_b = sender))
+    # else:
+    #     chatuuid = ChatUUID()
+    #     chatuuid.user_a = sender
+    #     chatuuid.user_b = receiver
+    #     chatuuid.thread_id = str(uuid.uuid4())
+    #     chatuuid.save()
+    #     thread_uuid = chatuuid
+
+    new_mailbox_for_sender = UserMailbox()
+    new_mailbox_for_sender.mail_box_user = sender
+    new_mailbox_for_sender.message = message
+    new_mailbox_for_sender.thread_id = thread_uuid
+    new_mailbox_for_sender.has_seen = True
+    new_mailbox_for_sender.save()
+
+    new_mailbox_for_receiver = UserMailbox()
+    new_mailbox_for_receiver.mail_box_user = receiver
+    new_mailbox_for_receiver.message = message
+    new_mailbox_for_receiver.thread_id = thread_uuid
+    new_mailbox_for_receiver.has_seen = False
+    new_mailbox_for_receiver.save()
+
+    return Response({
+        'msg': 'image sent successfully',
+        'imgUrl': message.img.url,
     })
 
 @api_view(["POST"])
@@ -398,7 +448,9 @@ def get_thread_messages(request):
             'sender_name': sender.get_full_name(),
             'sent_time': msg.message.created_at,
             'msg_text': msg.message.msg_text,
-            'type': 'other' if sender == otheruser else ""
+            'type': 'other' if sender == otheruser else "",
+            'type1': msg.message.type,
+            'img': msg.message.img.url if msg.message.img else '',
         }
         all_msgs.append(m)
     
@@ -407,6 +459,8 @@ def get_thread_messages(request):
         'name': otheruser.get_full_name(),
         'username': otheruser.username
     })
+
+
 
 
 

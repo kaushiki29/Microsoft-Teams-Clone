@@ -34,12 +34,12 @@ io.on("connection", socket => {
 		// socket.emit('updaterooms', rooms, newroom);
 	});
 
-    socket.on('sendchat', function (room,data,name) {
+    socket.on('sendchat', function (room,data,name,type) {
 		// we tell the client to execute 'updatechat' with 2 parameters
         console.log(data,"sendchat");
         socket.room = room;
         console.log(socket.room,"sendchat");
-		    io.sockets.in(socket.room).emit('updatechat', data,name);
+		    io.sockets.in(socket.room).emit('updatechat', data,name,type);
 	});
 });
 

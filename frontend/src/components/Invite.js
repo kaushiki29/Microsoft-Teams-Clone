@@ -199,10 +199,10 @@ function Invite(props) {
                         return (
                             <Card className={classes.rootCard}>
                                 <CardContent style={{ paddingBottom: 0 }}>
-                                    <Typography variant="h5" component="h2">
+                                    <Typography variant="h5" component="h2" style={{ fontSize: "18px" }}>
                                         {i.name}
                                     </Typography>
-                                    <Typography component="h3">
+                                    <Typography component="h3" style={{ fontSize: "14px" }}>
                                         {i.email}
                                     </Typography>
                                 </CardContent>

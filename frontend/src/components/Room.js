@@ -10,13 +10,36 @@ import Avatar from "../components/Avatar";
 import ChatIcon from '@material-ui/icons/Chat';
 import ScreenShareIcon from '@material-ui/icons/ScreenShare';
 import StopScreenShareIcon from '@material-ui/icons/StopScreenShare';
+import Button from '@material-ui/core/Button';
 import PeopleIcon from '@material-ui/icons/People';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import TextField from '@material-ui/core/TextField';
+import { makeStyles } from '@material-ui/core/styles';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import Fade from '@material-ui/core/Fade';
 import SendIcon from '@material-ui/icons/Send';
 import { io } from "socket.io-client";
 
 
+const useStyles = makeStyles((theme) => ({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+}));
+
 const Room = ({ roomName, room, handleLogout }) => {
+  const classes = useStyles();
+  const [open, setOpen] = useState(false);
   const [participants, setParticipants] = useState([]);
   const messagesEndRef = useRef(null);
   const [isMuted, setMuted] = useState(false);
@@ -242,6 +265,24 @@ const Room = ({ roomName, room, handleLogout }) => {
     setSharing(!sharing);
 
   }
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const [linkValue, setLinkValue] = useState("https://www.msteams.games/videocall/")
+  const [isCopied, setCopied] = useState(false)
+  const onCopy = () => {
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 1000);
+  };
+
   return (
     <div className="room" style={{ backgroundColor: "#302e2e", height: "100%" }}>
       <div style={{ height: "45px", backgroundColor: "#f1f1f1", display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -273,7 +314,7 @@ const Room = ({ roomName, room, handleLogout }) => {
         }
       </div>
       <div style={{ backgroundColor: "#f1f1f1", left: 0, position: "fixed", bottom: 0, height: "65px", width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <button style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white", justifyContent: 'flex-start' }}>
+        <button onClick={handleOpen} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white", justifyContent: 'flex-start' }}>
           <PersonAddIcon />
         </button>
         <button onClick={handleAudio} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white" }}>
@@ -294,6 +335,36 @@ const Room = ({ roomName, room, handleLogout }) => {
         <button onClick={handleLogout} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white" }}>
           <ExitToAppIcon />
         </button>
+      </div>
+      <div>
+        <Modal
+          className={classes.modal}
+          open={open}
+          onClose={handleClose}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          style={{ textAlign: "center" }}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={open}>
+            <div className={classes.paper}>
+              <h2 style={{ paddingBottom: "2%" }}>Invite to call</h2>
+              <TextField
+                id="outlined-basic"
+                variant="outlined"
+                disabled
+                value={linkValue + roomName}
+                style={{ fontSize: "10px" }}
+              />
+              <CopyToClipboard onCopy={onCopy} text={linkValue + roomName}>
+                <Button variant="outlined" color="primary">Copy Link</Button>
+              </CopyToClipboard>
+              {isCopied ? <div>Copied</div> : <div></div>}
+            </div>
+          </Fade>
+        </Modal>
       </div>
     </div>
   );

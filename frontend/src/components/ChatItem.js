@@ -37,7 +37,8 @@ export default class ChatItem extends Component {
         className={`chat__item ${this.props.user ? this.props.user : ""}`}
       >
         <div className="chat__item__content">
-        <Linkify ><div className="chat__msg">{this.props.msg}</div></Linkify>
+        {this.props.type == 'txt' && <Linkify ><div className="chat__msg">{this.props.msg}</div></Linkify>}
+        {this.props.type=='img' && <img src={"https://www.msteams.games:9000" + this.props.img} style={{width: 200,height: 200, objectFit: 'contain'}}></img>}
           <div className="chat__meta">
             <span>{this.formatAMPM(new Date(this.props.sent_time))}  &nbsp; {this.state.day}</span>
             {/* <span>Seen 1.03PM</span> */}

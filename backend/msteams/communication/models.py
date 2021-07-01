@@ -13,8 +13,10 @@ class ChatUUID(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 class Message(models.Model):
-    msg_text = models.TextField()
+    msg_text = models.TextField(null=True)
     sender = models.ForeignKey(User,on_delete=models.CASCADE, related_name="sender")
+    img = models.FileField(null=True)
+    type = models.CharField(max_length=20)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

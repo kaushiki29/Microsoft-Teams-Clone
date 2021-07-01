@@ -107,7 +107,7 @@ function Chat() {
                 headers: { Authorization: 'Token ' + token }
             })
                 .then(res => {
-                    // console.log(res.data);
+                    console.log(res.data);
                     setChatItms(res.data.all_msgs);
                     setOtherUserName(res.data.name);
                     setUName(res.data.username)
@@ -152,11 +152,11 @@ function Chat() {
     }
 
     const setCurrChatuuid = (uuid) => {
-        // console.log('user changes');
-        setChatuuid(uuid);
-        setOtherUserName("");
-        history.push('/chat/' + uuid);
-        // console.log(uuid);
+        if(!allChatUsers.find(i=>i.thread_id == uuid).active){
+            setChatuuid(uuid);
+            setOtherUserName("");
+            history.push('/chat/' + uuid);
+        }
 
     }
     return (
