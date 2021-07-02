@@ -37,6 +37,7 @@ Button:disabled{
 .form {
   display: flex;
   align-self: center;
+  width:400px;
   justify-content: center;
   flex-direction: column;
   align-items: center;
@@ -45,6 +46,19 @@ Button:disabled{
   border-color: #0000002e;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-style: solid;
-  min-width: fit-content;
+  min-width: 318px;
   background-color: white;
+}
+
+@media screen and (max-width: 420px) {
+  .form {
+    width: 350px;
+  }
+}
+
+
+@media screen and (max-width: 356px) {
+  .form {
+    width: 300px;
+  }
 }
