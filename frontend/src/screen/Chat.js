@@ -10,6 +10,7 @@ import Sidebar from '../components/Sidebar';
 import { unmountComponentAtNode, useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { api } from './Helper';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -98,6 +99,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Chat() {
+    const isMobile = useMediaQuery('(max-width:600px)');
     const classes = useStyles();
     const history = useHistory();
     const token = localStorage.getItem('token');
@@ -188,12 +190,13 @@ function Chat() {
             <div style={{ display: 'flex', height: '100%', backgroundColor: "#f5f5f5" }}>
                 <Sidebar />
             </div>
-            <div className={classes.subComponent} >
-                <ChatList allChatUsers={allChatUsers} setCurrChatuuid={setCurrChatuuid} thread_id={chatuuid} />
-                {otherUserName &&
+            <div style={{overflowX: 'hidden'}} className={classes.subComponent} >
+                {(isMobile && chat_uuid !== 'all-conversations') && <p style={{position: 'absolute', top:   65, left: 78 }} onClick={()=>{history.push('/chat/all-conversations')}}>Back</p>}
+                {(!isMobile || chat_uuid === 'all-conversations') &&  <ChatList allChatUsers={allChatUsers} setCurrChatuuid={setCurrChatuuid} thread_id={chatuuid} />}
+                {otherUserName && (!isMobile || chat_uuid !== 'all-conversations') &&
                     <ChatContent chatItms={chatItms} thread_id={chatuuid} setChatItms={setChatItms} uName={uName} name={otherUserName} />
                 }
-                {!otherUserName &&
+                {!otherUserName && !isMobile &&
                     <div style={{ display: "flex", justifyContent: "center", width: "100%", alignItems: "center", fontSize: "20px", color: "gray", fontWeight: "bold", flexDirection: "column" }}>
                         <img src="https://newyorkcityvoices.org/wp-content/uploads/2020/04/animated-chat-gifs-4.jpg" className={classes.chatImage} />
                         <div className={classes.message}>Please stay connected and continue chatting. </div>

@@ -172,12 +172,12 @@ function LoginComp(props) {
                             helperText={password.helperText}
                             onChange={handlePassword}
                         />
-                        {/* <ReCAPTCHA
+                        <ReCAPTCHA
                             sitekey="6Leib2QbAAAAAECYwqLcdJ2SEhQFE4KSfRORWIA2"
                             onChange={handleCaptcha}
-                        /> */}
-                        {/* disabled={!isVerified} */}
-                        <Button variant="contained" color="primary" onClick={handleLogin} >
+                        />
+
+                        <Button variant="contained" color="primary" onClick={handleLogin} disabled={!isVerified}>
                             Sign-In
                         </Button>
                         <Button onClick={handleSignup} color="primary" style={{ display: "grid" }}>

@@ -22,10 +22,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function SignupComp() {
+function SignupComp(props) {
     const classes = useStyles();
     const history = useHistory();
-    const [isUserVerified, setUserVerified] = useState(false)
+    // const [isUserVerified, setUserVerified] = useState(false)
     const [firstName, setFirstName] = useState({
         value: "",
         error: false,
@@ -220,10 +220,10 @@ function SignupComp() {
                         })
                     }
                     else {
-                        // localStorage.setItem("token", res.data.token);
-                        setUserVerified(res.data.is_verified);
+                        localStorage.setItem("token", res.data.token);
                         console.log("Signup success")
-                        history.push('/verification');
+                        props.refreshToken();
+                        history.push('/home');
                     }
                 })
                 .catch(err => {

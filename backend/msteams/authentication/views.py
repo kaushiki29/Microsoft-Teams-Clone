@@ -52,19 +52,19 @@ def user_login(request):
         })
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def check_verified_user(request):
-    user=request.user
-    is_verified = userData.objects.get(user=user)
-    if is_verified:
-        return Response({
-            'is_verified':True
-        })
-    else:
-        return Response({
-            'is_verified':False
-        })
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def check_verified_user(request):
+#     user=request.user
+#     is_verified = userData.objects.get(user=user)
+#     if is_verified:
+#         return Response({
+#             'is_verified':True
+#         })
+#     else:
+#         return Response({
+#             'is_verified':False
+#         })
 
 
 @api_view(['GET'])
@@ -102,47 +102,39 @@ def signup(request):
         })
     else:
         user = User.objects.create_user(username, email, password)
-        user_verification = userData()
-        user_verification.user=user
-        user_verification.email_uuid=str(uuid.uuid4())
         user.first_name = first_name
         user.last_name = last_name
         user.save()
-        user_verification.save()
-        send_mail('Email Verification - MS Teams Clone',
-        'Hello '+first_name+' '+last_name+' , please click on the link to verify your email: https://www.msteams.games/verify/'+user_verification.email_uuid+'.',
-        'msteamsclone@gmail.com',
-        [email],
-        fail_silently=False
-        )
-        print(user_verification.email_uuid)
-        # token = Token.objects.get_or_create(user=user)[0]
-        return Response({
-            # 'token': token.key,
-            'is_verified':user_verification.is_verified,
-            'error':False,
-            'message':"Verification has been sent successfully on the registered email ID."
-        })
-
-
-@api_view(["POST"])
-@permission_classes([AllowAny])
-def verify_email(request):
-    email_uuid = request.data.get('email_uuid')
-    
-    if userData.objects.filter(email_uuid=email_uuid).exists():
-        user_data = userData.objects.get(email_uuid=email_uuid)
-        user_data.is_verified = True
-        user_data.save()
-        user = user_data.user
+        # send_mail('Email Verification - MS Teams Clone',
+        # 'Hello '+first_name+' '+last_name+' , please click on the link to verify your email: https://www.msteams.games/verify/'+user_verification.email_uuid+'.',
+        # 'msteamsclone@gmail.com',
+        # [email],
+        # fail_silently=False
+        # )
         token = Token.objects.get_or_create(user=user)[0]
-
         return Response({
-            'is_verified':user_data.is_verified,
-            'token':token.key,
-            'email':user.email
+            'token': token.key,
         })
-    return Response({
-        'error':True
-    })
+
+
+# @api_view(["POST"])
+# @permission_classes([AllowAny])
+# def verify_email(request):
+#     email_uuid = request.data.get('email_uuid')
+    
+#     if userData.objects.filter(email_uuid=email_uuid).exists():
+#         user_data = userData.objects.get(email_uuid=email_uuid)
+#         user_data.is_verified = True
+#         user_data.save()
+#         user = user_data.user
+#         token = Token.objects.get_or_create(user=user)[0]
+
+#         return Response({
+#             'is_verified':user_data.is_verified,
+#             'token':token.key,
+#             'email':user.email
+#         })
+#     return Response({
+#         'error':True
+#     })
 

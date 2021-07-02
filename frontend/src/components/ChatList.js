@@ -3,12 +3,13 @@ import "../css/ChatList.css";
 import ChatListItems from "./ChatListItems";
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 export default function ChatList(props) {
-
+  const isMobile = useMediaQuery('(max-width:600px)')
 
   return (
-    <div className="main__chatlist">
+    <div style={{paddingLeft: isMobile?'8%':'2%', width: isMobile?'100%':'320px'}} className="main__chatlist">
       {/* <Button variant="outlined" className="btn" style={{ height: "33px", marginBottom: "5%" }}>
         <AddIcon style={{ paddingRight: "3%", }} />New Conversation
       </Button> */}

@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button';
 import { io } from "socket.io-client";
 import { Modal } from "@material-ui/core";
 import VideoCallIcon from '@material-ui/icons/VideoCall';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles({
   input: {
@@ -22,6 +23,7 @@ const useStyles = makeStyles({
 
 export default function ChatContent(props) {
   const history = useHistory();
+  const isMobile = useMediaQuery('(max-width:600px)')
   const classes = useStyles();
   const messagesEndRef = useRef(null);
   const [chat, setChat] = useState([]);
@@ -277,7 +279,7 @@ export default function ChatContent(props) {
     }
   }
   return (
-    <div className="main__chatcontent">
+    <div style={{paddingLeft: isMobile?'10px':'20px'}} className="main__chatcontent">
       <div className="content__header">
         <div className="blocks">
           <div className="current-chatting-user">
