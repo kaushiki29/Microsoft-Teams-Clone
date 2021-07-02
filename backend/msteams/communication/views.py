@@ -409,6 +409,19 @@ def send_img(request):
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
+def get_unseen_count(request):
+    user = request.user
+    chatuuid = ChatUUID.objects.filter(Q(user_a = user) | Q(user_b = user))
+    count = 0
+    for i in chatuuid:
+        unseen_messages = UserMailbox.objects.filter(thread_id = i, has_seen = False,mail_box_user = user)
+        count+=unseen_messages.count()
+    return Response({
+        'count': count
+    })
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def get_all_threads(request):
     user = request.user
     chatuuid = ChatUUID.objects.filter(Q(user_a = user) | Q(user_b = user))
@@ -418,7 +431,7 @@ def get_all_threads(request):
             other_user = i.user_b
         else:
             other_user = i.user_a
-        unseen_messages = UserMailbox.objects.filter(thread_id = i, has_seen = False)
+        unseen_messages = UserMailbox.objects.filter(thread_id = i, has_seen = False,mail_box_user = user)
         uid = {
             'thread_id': i.thread_id,
             'other_user': other_user.username,
@@ -439,6 +452,10 @@ def get_thread_messages(request):
     user = request.user
     thread_id = request.data.get('thread_id')
     thread_msgs = UserMailbox.objects.filter(thread_id__thread_id = thread_id, mail_box_user = user)
+    make_seen = UserMailbox.objects.filter(thread_id__thread_id = thread_id, mail_box_user = user, has_seen = False)
+    for i in make_seen:
+        i.has_seen = True
+        i.save()
     chatuuid = ChatUUID.objects.get(thread_id = thread_id)
     if chatuuid.user_a == user:
         otheruser = chatuuid.user_b

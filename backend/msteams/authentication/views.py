@@ -1,5 +1,3 @@
-# from backend.msteams.authentication.models import userData
-# from backend.msteams.authentication.models import userData
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
@@ -46,10 +44,26 @@ def user_login(request):
         else: 
             print("Device token is none")
         token = Token.objects.get_or_create(user=user)[0]
-        # is_verified = user.userData.is_verified
+        # user_data = userData.objects.get(user=user)
+        # is_verified = user_data.is_verified
         return Response({
             'token': token.key,
             # 'is_verified':is_verified
+        })
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def check_verified_user(request):
+    user=request.user
+    is_verified = userData.objects.get(user=user)
+    if is_verified:
+        return Response({
+            'is_verified':True
+        })
+    else:
+        return Response({
+            'is_verified':False
         })
 
 

@@ -17,5 +17,6 @@ urlpatterns = [
     path('delete_call',views.delete_call, name='delete_call'),
     path('create_p2p_call',views.create_p2p_call,name='create_p2p_call'),
     path('get_p2p_twilio_token',views.get_p2p_twilio_token,name='get_p2p_twilio_token'),
-    path('send_img',views.send_img,name='send_img')
+    path('send_img',views.send_img,name='send_img'),
+    path('get_unseen_count',views.get_unseen_count,name='get_unseen_count')
 ]
