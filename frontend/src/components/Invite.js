@@ -117,12 +117,13 @@ function Invite(props) {
                             })
                         }
                         else {
-                            props.reloadValue();
                             setEmail({
                                 value: "",
                                 error: false,
                                 helperText: ""
                             })
+                            props.reloadValue();
+
                         }
                     })
                     .catch(err => {
@@ -182,7 +183,7 @@ function Invite(props) {
                         id="standard-basic"
                         label="Type email here"
                         style={{ width: "100%" }}
-                        // value={email.value}
+                        value={email.value}
                         error={email.error}
                         helperText={email.helperText}
                         onChange={handleChange}

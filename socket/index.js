@@ -41,6 +41,7 @@ io.on("connection", socket => {
         console.log(socket.room,"sendchat");
 		    io.sockets.in(socket.room).emit('updatechat', data,name,type);
 	});
+  
 });
 
 

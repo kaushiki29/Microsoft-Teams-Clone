@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useEffect,useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import ChatIcon from '@material-ui/icons/Chat';
 import PeopleIcon from '@material-ui/icons/People';
 import ListAltRoundedIcon from '@material-ui/icons/ListAltRounded';
 import CallIcon from '@material-ui/icons/Call';
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
+import { api } from '../screen/Helper';
 
 const useStyles = makeStyles((theme) => ({
     sidebar: {
@@ -74,7 +76,21 @@ const useStyles = makeStyles((theme) => ({
 function Sidebar() {
     const classes = useStyles();
     const history = useHistory();
-
+    const [count,setCount] = useState(0);
+    useEffect(()=>{
+        axios({
+            method: 'post',
+            url: api + 'communication/get_unseen_count',
+            headers: { Authorization: 'Token ' + localStorage.getItem('token')}
+        })
+        .then(res => {
+            console.log(res.data);
+            setCount(res.data.count);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    },[])
     const handleTeams = () => {
         history.push('/home')
     }
@@ -90,7 +106,10 @@ function Sidebar() {
                 <p className={classes.p}>Teams</p>
             </div>
             <div className={classes.sidediv} onClick={handleChat}>
-                <ChatIcon style={{ fontSize: "1.5rem", }} />
+                <div style={{display: 'flex',alignItems: 'flex-start'}}>
+                    <ChatIcon style={{ fontSize: "1.5rem", }} />
+                    {count>0 && <div style={{width: 15,height: 15, backgroundColor: 'red',borderRadius: 100, display: 'flex', alignItems: 'center',justifyContent: 'center'}}><p style={{margin: 0, color: 'white', fontSize: 10}}>{count>99?'99+':count}</p></div>}
+                </div>
                 <p className={classes.p}>Chitchat</p>
             </div>
         </div>

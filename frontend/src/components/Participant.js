@@ -123,9 +123,9 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth }) => {
     }
   }, [audioTracks]);
   let height1 = `calc((100vh - 170px)/${height})`;
-  let width1 = `calc((100vw - 68px)/${width})`;
+  let width1 = `calc((100vw - 75px)/${width})`;
   if(reduceWidth){
-    width1 = `calc((100vw - 68px - 310px)/${width})`;
+    width1 = `calc((100vw - 75px - 310px)/${width})`;
   }
   // if(trackName==='screen'){
   //   height1 = `calc((100vh - 170px))`;
@@ -136,7 +136,7 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth }) => {
     if(reduceWidth){
       if(st){
         setSt({
-          border: "#e8cd41", borderStyle: "solid", borderWidth: "2px", borderRadius: "2%",height: `calc((100vh - 170px))`,width:`calc(100vw - 68px - 300px)`, position: 'fixed', top: 75, left: 30, background: '#000000',zIndex: 1000,
+          border: "#e8cd41", borderStyle: "solid", borderWidth: "2px", borderRadius: "2%",height: `calc((100vh - 170px))`,width:`calc(100vw - 75px - 300px)`, position: 'fixed', top: 75, left: 30, background: '#000000',zIndex: 1000,
         });
       }
       else{
@@ -164,7 +164,7 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth }) => {
         else{
           if(reduceWidth){
             setSt({
-              border: "#e8cd41", borderStyle: "solid", borderWidth: "2px", borderRadius: "2%",height: `calc((100vh - 170px))`,width:`calc(100vw - 68px - 300px)`, position: 'fixed', top: 75, left: 30,zIndex: 1000, background: '#000000'
+              border: "#e8cd41", borderStyle: "solid", borderWidth: "2px", borderRadius: "2%",height: `calc((100vh - 170px))`,width:`calc(100vw - 75px - 300px)`, position: 'fixed', top: 75, left: 30,zIndex: 1000, background: '#000000'
             });
           }
           else{

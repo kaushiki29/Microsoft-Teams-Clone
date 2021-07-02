@@ -100,10 +100,10 @@ function LoginComp(props) {
                     if (res.data.token) {
                         localStorage.setItem("token", res.data.token);
                         props.refreshToken();
-                        //if (res.data.is_verified)
-                        history.push("/home");
-                        // else
-                        //     history.push("/verify");
+                        if (res.data.is_verified)
+                            history.push("/home");
+                        else
+                            history.push("/verification");
                     }
                     else {
                         setEmail({
@@ -172,11 +172,12 @@ function LoginComp(props) {
                             helperText={password.helperText}
                             onChange={handlePassword}
                         />
-                        <ReCAPTCHA
+                        {/* <ReCAPTCHA
                             sitekey="6Leib2QbAAAAAECYwqLcdJ2SEhQFE4KSfRORWIA2"
                             onChange={handleCaptcha}
-                        />
-                        <Button variant="contained" color="primary" onClick={handleLogin} disabled={!isVerified}>
+                        /> */}
+                        {/* disabled={!isVerified} */}
+                        <Button variant="contained" color="primary" onClick={handleLogin} >
                             Sign-In
                         </Button>
                         <Button onClick={handleSignup} color="primary" style={{ display: "grid" }}>

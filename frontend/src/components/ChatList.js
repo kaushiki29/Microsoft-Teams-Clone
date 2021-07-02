@@ -35,6 +35,7 @@ export default function ChatList(props) {
               active={item.active ? "active" : ""}
               isOnline={item.isOnline ? "active" : ""}
               fun={props.setCurrChatuuid}
+              unseenMsgCount = {item.unseen_messages_count}
             // image={"https://www.paintingcontest.org/components/com_djclassifieds/assets/images/default_profile.png"}
             />
           );

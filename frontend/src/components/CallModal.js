@@ -39,9 +39,11 @@ const useStyles = makeStyles((theme) => ({
 export default function WarningModal(props) {
     const classes = useStyles();
     const history = useHistory();
-    
+
     const handleAnswer=()=>{
+        props.handleClose();
         history.push(props.answer);
+
     }
     const handleDecline=()=>{
         props.handleClose();

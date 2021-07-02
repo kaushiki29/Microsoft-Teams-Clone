@@ -82,8 +82,9 @@ export default function ChatContent(props) {
 
     }
     socket.on('updatechat', function (data, name, type) {
-      // console.log(data,name);
+      console.log(data,name);
       if (name != props.name) {
+        
         chatItms.push({
           type: "other",
           msg_text: type == 'txt' ? data : null,
@@ -100,7 +101,21 @@ export default function ChatContent(props) {
     div.addEventListener('dragleave', handleDragOut)
     div.addEventListener('dragover', handleDrag)
     div.addEventListener('drop', handleDrop)
-    return () => socket.disconnect();
+    return () =>{
+      socket.disconnect();
+      axios({
+        method: 'post',
+        url: api + 'communication/get_thread_messages',
+        data: { 'thread_id': props.thread_id },
+        headers: { Authorization: 'Token ' + localStorage.getItem('token') }
+      })
+        .then(res => {
+            console.log(res.data);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
   }, [])
 
   const onStateChange = (e) => {
@@ -325,7 +340,7 @@ export default function ChatContent(props) {
             <div>Preview Image</div>
             <div style={{ display: "flex" }}>
               <div style={{ width: 205, height: 205, borderRadius: "2%", borderColor: "#464775", borderStyle: "solid", backgroundColor: "#f1f1f1" }}>
-                <img src={image} style={{ width: 206, height: 206, objectFit: 'contain' }} />
+                <img src={image} style={{ width: 202, height: 202, objectFit: 'contain' }} />
               </div>
             </div>
             {!imgFile ? <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose an Image</div> : <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose Some Other Image</div>}

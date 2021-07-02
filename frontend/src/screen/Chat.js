@@ -147,7 +147,7 @@ function Chat() {
             headers: { Authorization: 'Token ' + token }
         })
             .then(res => {
-                // console.log(res.data);
+                console.log(res.data);
                 let obj = "";
                 let all_uuid = res.data.all_uuid.map(i => {
                     if (i.thread_id === chat_uuid) {
@@ -177,7 +177,9 @@ function Chat() {
             setChatuuid(uuid);
             setOtherUserName("");
             history.push('/chat/' + uuid);
+            
         }
+        fetchChatList();
 
     }
     return (
