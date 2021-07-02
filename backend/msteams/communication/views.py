@@ -20,6 +20,7 @@ from twilio.rest import Client
 from django.conf import settings
 import uuid 
 from django.db.models import Q
+from fcm_django.models import FCMDevice
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -67,6 +68,8 @@ def create_p2p_call(request):
     videocall.is_completed = False
     videocall.s_id = create_twilio_call(videocall.meeting_slug)
     videocall.save()
+
+    call(other_user,user, videocall.meeting_slug)
     
     # add_video_call_participant(user,videocall,0)
     # sends response to frontend and can be accessed by res.data example res.data.team_name
@@ -542,3 +545,11 @@ def check_room_status(s_id):
     room = client.video.rooms(s_id).fetch()
     return room.status
 
+def call(other_user,user,slug):
+    devices = FCMDevice.objects.filter(user = other_user)
+    title = "Incoming call from " + user.get_full_name()
+    devices.send_message(title=title, data={
+        'person': user.get_full_name(),
+        'type': 'call',
+        'uuid': slug,
+    })

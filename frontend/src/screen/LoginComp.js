@@ -7,6 +7,7 @@ import axios from 'axios';
 import { api } from './Helper';
 import ReCAPTCHA from "react-google-recaptcha";
 
+import { getToken } from '../components/Firebase';
 const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
@@ -26,6 +27,10 @@ function LoginComp(props) {
     const classes = useStyles();
     const history = useHistory();
     const [token, setToken] = useState();
+    const [isTokenFound, setTokenFound] = useState();
+
+    getToken(setTokenFound);
+
     useEffect(() => {
         setToken(localStorage.getItem("token"));
 
@@ -36,10 +41,6 @@ function LoginComp(props) {
             history.push("/home");
         }
     }, [token])
-    const [cred, setCred] = useState({
-        email: "k@1.com",
-        password: "pass"
-    })
     const [isVerified, setVerified] = useState(false);
     const [email, setEmail] = useState({
         value: "",
@@ -88,19 +89,21 @@ function LoginComp(props) {
                 data: {
                     email: email.value,
                     password: password.value,
+                    fcm_token: isTokenFound,
                 },
                 headers: {
 
                 }
             })
                 .then(res => {
+                    console.log(res.data)
                     if (res.data.token) {
                         localStorage.setItem("token", res.data.token);
                         props.refreshToken();
-                        if (res.data.is_verified)
-                            history.push("/home");
-                        else
-                            history.push("/verify");
+                        //if (res.data.is_verified)
+                        history.push("/home");
+                        // else
+                        //     history.push("/verify");
                     }
                     else {
                         setEmail({

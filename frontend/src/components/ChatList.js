@@ -9,9 +9,9 @@ export default function ChatList(props) {
 
   return (
     <div className="main__chatlist">
-      <Button variant="outlined" className="btn" style={{ height: "33px", marginBottom: "5%" }}>
+      {/* <Button variant="outlined" className="btn" style={{ height: "33px", marginBottom: "5%" }}>
         <AddIcon style={{ paddingRight: "3%", }} />New Conversation
-      </Button>
+      </Button> */}
       <div className="chatlist__heading">
         <h2>Chats</h2>
         <button className="btn-nobg">

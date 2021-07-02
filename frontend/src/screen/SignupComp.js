@@ -220,13 +220,10 @@ function SignupComp() {
                         })
                     }
                     else {
-                        localStorage.setItem("token", res.data.token);
+                        // localStorage.setItem("token", res.data.token);
                         setUserVerified(res.data.is_verified);
                         console.log("Signup success")
-                        if (isUserVerified)
-                            history.push('/home');
-                        else
-                            history.push('/verify');
+                        history.push('/verification');
                     }
                 })
                 .catch(err => {

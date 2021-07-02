@@ -325,7 +325,7 @@ export default function ChatContent(props) {
             <div>Preview Image</div>
             <div style={{ display: "flex" }}>
               <div style={{ width: 205, height: 205, borderRadius: "2%", borderColor: "#464775", borderStyle: "solid", backgroundColor: "#f1f1f1" }}>
-                <img src={image} style={{ width: 200, height: 200, objectFit: 'contain' }} />
+                <img src={image} style={{ width: 206, height: 206, objectFit: 'contain' }} />
               </div>
             </div>
             {!imgFile ? <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose an Image</div> : <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose Some Other Image</div>}

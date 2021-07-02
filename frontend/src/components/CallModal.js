@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1),
         alignItems: 'center',
         justifyContent: 'center',
+        outline: 'none'
     },
 
     modalDiv: {
@@ -21,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
         padding: 20,
         alignItems: 'center',
         justifyContent: 'space-evenly',
+        outline: 'none'
     },
 
     button: {
@@ -37,8 +39,12 @@ const useStyles = makeStyles((theme) => ({
 export default function WarningModal(props) {
     const classes = useStyles();
     const history = useHistory();
-    const handleRedirect = () => {
-        history.push(props.redirect);
+    
+    const handleAnswer=()=>{
+        history.push(props.answer);
+    }
+    const handleDecline=()=>{
+        props.handleClose();
     }
     return (
         <Modal
@@ -50,12 +56,16 @@ export default function WarningModal(props) {
         >
             <div className={classes.modalDiv}>
                 <p style={{ fontSize: 20, margin: 0 }}>{props.text}</p>
-                <button className={classes.button} onClick={handleRedirect}>
-                    <p style={{ margin: 0, fontSize: 15, color: 'white' }}>OK</p>
+                <div style={{display: 'flex'}}>
+                <button className={classes.button} onClick={handleAnswer}>
+                    <p style={{ margin: 0, fontSize: 15, color: 'white' }}>Answer</p>
                 </button>
+                <button className={classes.button} style={{marginLeft: 20}} onClick={handleDecline}>
+                    <p style={{ margin: 0, fontSize: 15, color: 'white' }}>Decline</p>
+                </button>
+
+                </div>
             </div>
         </Modal>
     )
 }
-
-

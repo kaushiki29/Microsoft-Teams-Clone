@@ -60,6 +60,27 @@ const useStyles = makeStyles((theme) => ({
 
     },
 
+    chatImage: {
+        width: "350px",
+        borderRadius: "2%",
+        '@media(max-width: 742px)': {
+            width: "300px"
+        },
+        '@media(max-width: 572px)': {
+            width: "250px"
+        },
+        '@media(max-width: 512px)': {
+            width: "200px"
+        },
+        '@media(max-width: 462px)': {
+            width: "180px"
+        },
+    },
+
+    message: {
+        textAlign: "center"
+    },
+
     webkitScrollbar: {
         width: "5px",
     },
@@ -84,7 +105,7 @@ function Chat() {
     const [chatItms, setChatItms] = useState([]);
     const [otherUserName, setOtherUserName] = useState('');
     const [allChatUsers, setAllChatUsers] = useState([]);
-    const [uName,setUName] = useState('');
+    const [uName, setUName] = useState('');
     const { chat_uuid } = useParams();
     useEffect(() => {
         fetchChatList();
@@ -152,7 +173,7 @@ function Chat() {
     }
 
     const setCurrChatuuid = (uuid) => {
-        if(!allChatUsers.find(i=>i.thread_id == uuid).active){
+        if (!allChatUsers.find(i => i.thread_id == uuid).active) {
             setChatuuid(uuid);
             setOtherUserName("");
             history.push('/chat/' + uuid);
@@ -172,8 +193,8 @@ function Chat() {
                 }
                 {!otherUserName &&
                     <div style={{ display: "flex", justifyContent: "center", width: "100%", alignItems: "center", fontSize: "20px", color: "gray", fontWeight: "bold", flexDirection: "column" }}>
-                        <img src="https://newyorkcityvoices.org/wp-content/uploads/2020/04/animated-chat-gifs-4.jpg" style={{ width: "35%", borderRadius: "2%" }} />
-                        <div>Please stay connected and continue chatting. </div>
+                        <img src="https://newyorkcityvoices.org/wp-content/uploads/2020/04/animated-chat-gifs-4.jpg" className={classes.chatImage} />
+                        <div className={classes.message}>Please stay connected and continue chatting. </div>
                     </div>}
             </div>
         </div>

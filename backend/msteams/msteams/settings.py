@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'sslserver',
     'rest_framework',
     'rest_framework.authtoken',
+    'fcm_django',
     'twilio',
     'authentication',
     'teams',
@@ -64,6 +65,10 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+FCM_DJANGO_SETTINGS = {
+        "FCM_SERVER_KEY": "AAAA0zZUqb4:APA91bEoRb_aBs0dfcKdqITepu2KW5widtNnnL-dM89FTZEBMSw7zm3gX41jtf0OCAbDa4XtElxGdFJgE9Xyld8mojBvH0LkMmH2huVuk9x7GaM4goYh97a2cuH_VXhm60tsBd5Bpuv3"
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

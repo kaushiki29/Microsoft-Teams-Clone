@@ -13,18 +13,38 @@ from django.core.mail import send_mail
 from .models import userData
 from random import randint
 import uuid
+from fcm_django.models import FCMDevice
+
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def user_login(request):
     email = request.data.get('email')
     password = request.data.get('password')
+    deviceToken = request.data.get("fcm_token")
+    
     user = auth.authenticate(username=email, password=password)
     if user is None:
         return Response({
             'msg': 'Enter valid email and password'
         }, status=status.HTTP_200_OK)
     else:
+        devices = FCMDevice.objects.filter(user=user,type='web')
+        if deviceToken is not None:
+            if devices.count() > 0:
+                device = devices.first()
+                device.registration_id = deviceToken
+                device.type = "web"
+                device.user = user
+                device.save()
+            else:
+                device = FCMDevice()
+                device.user = user
+                device.type = "web"
+                device.registration_id = deviceToken
+                device.save()
+        else: 
+            print("Device token is none")
         token = Token.objects.get_or_create(user=user)[0]
         # is_verified = user.userData.is_verified
         return Response({
@@ -82,9 +102,9 @@ def signup(request):
         fail_silently=False
         )
         print(user_verification.email_uuid)
-        token = Token.objects.get_or_create(user=user)[0]
+        # token = Token.objects.get_or_create(user=user)[0]
         return Response({
-            'token': token.key,
+            # 'token': token.key,
             'is_verified':user_verification.is_verified,
             'error':False,
             'message':"Verification has been sent successfully on the registered email ID."
