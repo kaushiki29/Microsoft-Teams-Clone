@@ -53,7 +53,7 @@ const Room = ({ roomName, room, handleLogout }) => {
   const msgs = [];
   const socket = io("https://msteams.games:5000");
   const [sharing, setSharing] = useState(false);
-  const isMobile = useMediaQuery('(max-width:550px)')
+  const isMobile = useMediaQuery('(max-width:600px)')
   useEffect(() => {
     if (showChat) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
