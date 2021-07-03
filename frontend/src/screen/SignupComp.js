@@ -223,7 +223,7 @@ function SignupComp(props) {
                         localStorage.setItem("token", res.data.token);
                         console.log("Signup success")
                         props.refreshToken();
-                        history.push('/home');
+                        history.push('/chat/all-conversations');
                     }
                 })
                 .catch(err => {

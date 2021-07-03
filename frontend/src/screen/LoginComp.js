@@ -38,7 +38,7 @@ function LoginComp(props) {
 
     useEffect(() => {
         if (token) {
-            history.push("/home");
+            history.push("/chat/all-conversations");
         }
     }, [token])
     const [isVerified, setVerified] = useState(false);
@@ -100,10 +100,7 @@ function LoginComp(props) {
                     if (res.data.token) {
                         localStorage.setItem("token", res.data.token);
                         props.refreshToken();
-                        if (res.data.is_verified)
-                            history.push("/home");
-                        else
-                            history.push("/verification");
+                        history.push("/chat/all-conversations");
                     }
                     else {
                         setEmail({
