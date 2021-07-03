@@ -54,7 +54,6 @@ function Login() {
             <Switch>
                 <Route path="/login"  ><LoginComp refreshToken={refreshToken} /></Route>
                 <Route path="/signup" ><SignupComp refreshToken={refreshToken} /></Route>
-                {(localStorage.getItem("token") || token) ? <Route path="/chat/all-conversations" component={Chat} /> : <Redirect to="/login" />}
                 {(localStorage.getItem("token") || token) ? <Route path="/teams/:team_slug" component={TeamScreen} /> : <Redirect to="/login" />}
                 {(localStorage.getItem("token") || token) ? <Route path="/home" component={LandingPage} /> : <Redirect to="/login" />}
                 <Route path="/chat/:chat_uuid" component={Chat} />
