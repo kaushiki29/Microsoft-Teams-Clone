@@ -169,6 +169,14 @@ function Navbar(props) {
           keepMounted
           open={Boolean(anchorEl)}
           onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
         >
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
