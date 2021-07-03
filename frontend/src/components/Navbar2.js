@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
 
   options: {
     display: "flex",
-    '@media(max-width: 648px)': {
+    '@media(max-width: 615px)': {
       display: "none"
     }
   },
@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
 
   optionsPhone: {
     display: 'none',
-    '@media(max-width: 648px)': {
+    '@media(max-width: 615px)': {
       display: "flex"
     }
   },

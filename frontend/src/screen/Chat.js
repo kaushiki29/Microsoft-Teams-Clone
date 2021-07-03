@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import ChatIcon from '@material-ui/icons/Chat';
 import CallIcon from '@material-ui/icons/Call';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import PeopleIcon from '@material-ui/icons/People';
 import ChatList from '../components/ChatList';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ChatContent from '../components/ChatContent';
 import Sidebar from '../components/Sidebar';
 import { unmountComponentAtNode, useParams, useHistory } from 'react-router-dom';
@@ -57,7 +59,10 @@ const useStyles = makeStyles((theme) => ({
         // flexDirection: "column",
         backgroundColor: "#f5f5f5",
         padding: "20px",
-        marginTop: "56px"
+        marginTop: "56px",
+        '@media(max-width: 600px)': {
+            marginLeft: "70px"
+        },
 
     },
 
@@ -179,20 +184,20 @@ function Chat() {
             setChatuuid(uuid);
             setOtherUserName("");
             history.push('/chat/' + uuid);
-            
+
         }
         fetchChatList();
-
     }
+
     return (
         <div>
             <Navbar />
             <div style={{ display: 'flex', height: '100%', backgroundColor: "#f5f5f5" }}>
                 <Sidebar />
             </div>
-            <div style={{overflowX: 'hidden'}} className={classes.subComponent} >
-                {(isMobile && chat_uuid !== 'all-conversations') && <p style={{position: 'absolute', top:   65, left: 78 }} onClick={()=>{history.push('/chat/all-conversations')}}>Back</p>}
-                {(!isMobile || chat_uuid === 'all-conversations') &&  <ChatList allChatUsers={allChatUsers} setCurrChatuuid={setCurrChatuuid} thread_id={chatuuid} />}
+            <div style={{ overflowX: 'hidden' }} className={classes.subComponent} >
+                {(isMobile && chat_uuid !== 'all-conversations') && <Button color="primary" style={{ height: "33px", position: 'absolute', top: 59, right: 0, display: "flex", justifyContent: "center", alignItems: "center", paddingBottom: "2%", marginRight: "10px" }} onClick={() => { history.push('/chat/all-conversations') }}><ArrowBackIcon style={{ fontSize: "1rem" }} /> Go Back </Button>}
+                {(!isMobile || chat_uuid === 'all-conversations') && <ChatList allChatUsers={allChatUsers} setCurrChatuuid={setCurrChatuuid} thread_id={chatuuid} />}
                 {otherUserName && (!isMobile || chat_uuid !== 'all-conversations') &&
                     <ChatContent chatItms={chatItms} thread_id={chatuuid} setChatItms={setChatItms} uName={uName} name={otherUserName} />
                 }

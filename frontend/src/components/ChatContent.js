@@ -84,9 +84,9 @@ export default function ChatContent(props) {
 
     }
     socket.on('updatechat', function (data, name, type) {
-      console.log(data,name);
+      console.log(data, name);
       if (name != props.name) {
-        
+
         chatItms.push({
           type: "other",
           msg_text: type == 'txt' ? data : null,
@@ -103,7 +103,7 @@ export default function ChatContent(props) {
     div.addEventListener('dragleave', handleDragOut)
     div.addEventListener('dragover', handleDrag)
     div.addEventListener('drop', handleDrop)
-    return () =>{
+    return () => {
       socket.disconnect();
       axios({
         method: 'post',
@@ -112,10 +112,10 @@ export default function ChatContent(props) {
         headers: { Authorization: 'Token ' + localStorage.getItem('token') }
       })
         .then(res => {
-            console.log(res.data);
+          console.log(res.data);
         })
         .catch(err => {
-            console.log(err);
+          console.log(err);
         })
     }
   }, [])
@@ -279,7 +279,7 @@ export default function ChatContent(props) {
     }
   }
   return (
-    <div style={{paddingLeft: isMobile?'10px':'20px'}} className="main__chatcontent">
+    <div style={{ paddingLeft: isMobile ? '10px' : '20px' }} className="main__chatcontent">
       <div className="content__header">
         <div className="blocks">
           <div className="current-chatting-user">

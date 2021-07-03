@@ -22,7 +22,7 @@ const useStyles = makeStyles({
     '@media(max-width: 334px)': {
       height: 140
     },
-  }
+  },
 })
 
 function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completedTodos, setCompletedTodos }) {
@@ -94,10 +94,10 @@ function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completed
             key={item.id}
           >
             <div key={item.id}>
-              <div>Created by: {item.created_by}</div>
-              <div>Assigned to: {item.assigned_to}</div>
-              <div>Task: {item.todo_item}</div>
-              <div>Deadline: {formatAMPM(new Date(item.expected_time))}, {new Date(item.expected_time).getDate()} {month[new Date(item.expected_time).getMonth()]} {new Date(item.expected_time).getFullYear()}</div>
+              <div style={{ display: 'flex', marginBottom: "1%" }}><p style={{ color: "antiquewhite" }}>Created by: </p> {item.created_by}</div>
+              <div style={{ display: 'flex', marginBottom: "1%" }}><p style={{ color: "antiquewhite" }}>Assigned to: </p>{item.assigned_to}</div>
+              <div style={{ display: 'flex', marginBottom: "1%" }}><p style={{ color: "antiquewhite" }}>Task: </p>{item.todo_item}</div>
+              <div style={{ display: 'flex', marginBottom: "1%" }}><p style={{ color: "antiquewhite" }}>Deadline: </p>{formatAMPM(new Date(item.expected_time))}, {new Date(item.expected_time).getDate()} {month[new Date(item.expected_time).getMonth()]} {new Date(item.expected_time).getFullYear()}</div>
             </div>
 
             <div className='icons'>
@@ -127,11 +127,11 @@ function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completed
           key={item.id}
         >
           <div key={item.id}>
-            <div>Created by: {item.created_by}</div>
-            <div>Assigned to: {item.assigned_to}</div>
-            <div>Task: {item.todo_item}</div>
-            <div>Completed by: {item.completed_by ? item.completed_by : " "}</div>
-            <div>Deadline: {formatAMPM(new Date(item.expected_time))}, {new Date(item.expected_time).getDate()} {month[new Date(item.expected_time).getMonth()]} {new Date(item.expected_time).getFullYear()}</div>
+            <div style={{ display: 'flex', marginBottom: "1%" }}><p style={{ color: "antiquewhite" }}>Created by: </p>{item.created_by}</div>
+            <div style={{ display: 'flex', marginBottom: "1%" }}><p style={{ color: "antiquewhite" }}>Assigned to: </p>{item.assigned_to}</div>
+            <div style={{ display: 'flex', marginBottom: "1%" }}><p style={{ color: "antiquewhite" }}>Task: </p>{item.todo_item}</div>
+            <div style={{ display: 'flex', marginBottom: "1%" }}><p style={{ color: "antiquewhite" }}>Completed by: </p>{item.completed_by ? item.completed_by : " "}</div>
+            <div style={{ display: 'flex', marginBottom: "1%" }}><p style={{ color: "antiquewhite" }}>Deadline: </p>{formatAMPM(new Date(item.expected_time))}, {new Date(item.expected_time).getDate()} {month[new Date(item.expected_time).getMonth()]} {new Date(item.expected_time).getFullYear()}</div>
           </div>
 
           <div className='icons'>

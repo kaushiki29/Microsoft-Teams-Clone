@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
         paddingRight: "10%",
         marginTop: "112px",
         paddingBottom: "6%",
-        '@media(max-width: 462px)': {
+        '@media(max-width: 550px)': {
             paddingLeft: 0,
             paddingRight: 0,
         }

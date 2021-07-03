@@ -11,7 +11,27 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "293px",
     minHeight: "252px",
     marginBottom: "2%",
-    minWidth: "260px"
+    minWidth: "260px",
+    '@media(max-width: 925px)': {
+      minHeight: "240px",
+      minWidth: "240px",
+      maxWidth: "250px"
+    },
+    '@media(max-width: 855px)': {
+      minHeight: "220px",
+      minWidth: "220px",
+      maxWidth: "230px"
+    },
+    '@media(max-width: 533px)': {
+      minHeight: "200px",
+      minWidth: "200px",
+      maxWidth: "210px"
+    },
+    '@media(max-width: 483px)': {
+      minHeight: "230px",
+      minWidth: "230px",
+      maxWidth: "240px"
+    }
   },
   cardActionArea: {
     height: "100%",
@@ -28,7 +48,15 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "4%",
     display: "flex",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    '@media(max-width: 483px)': {
+      height: "85px",
+      width: "105px",
+    },
+    '@media(max-width: 533px)': {
+      width: "100px",
+      height: "72px"
+    },
   },
   typo: {
     textAlign: "center",
@@ -38,7 +66,13 @@ const useStyles = makeStyles((theme) => ({
   para: {
     margin: 0,
     padding: 0,
-    fontSize: "xxx-large"
+    fontSize: "xxx-large",
+    '@media(max-width: 483px)': {
+      fontSize: "xx-large"
+    },
+    '@media(max-width: 533px)': {
+      fontSize: "xx-large"
+    },
   }
 }));
 

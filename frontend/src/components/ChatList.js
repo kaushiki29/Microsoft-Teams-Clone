@@ -9,7 +9,7 @@ export default function ChatList(props) {
   const isMobile = useMediaQuery('(max-width:600px)')
 
   return (
-    <div style={{paddingLeft: isMobile?'8%':'2%', width: isMobile?'100%':'320px'}} className="main__chatlist">
+    <div style={{ paddingLeft: isMobile ? '8%' : '2%', width: isMobile ? '100%' : '320px' }} className="main__chatlist">
       {/* <Button variant="outlined" className="btn" style={{ height: "33px", marginBottom: "5%" }}>
         <AddIcon style={{ paddingRight: "3%", }} />New Conversation
       </Button> */}
@@ -36,7 +36,7 @@ export default function ChatList(props) {
               active={item.active ? "active" : ""}
               isOnline={item.isOnline ? "active" : ""}
               fun={props.setCurrChatuuid}
-              unseenMsgCount = {item.unseen_messages_count}
+              unseenMsgCount={item.unseen_messages_count}
             // image={"https://www.paintingcontest.org/components/com_djclassifieds/assets/images/default_profile.png"}
             />
           );

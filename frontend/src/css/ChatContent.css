@@ -8,6 +8,8 @@
   padding-bottom: 15px;
   border-bottom: 1px solid #ebe7fb;
 }
+
+
 .current-chatting-user {
   display: flex;
   align-items: center;
@@ -174,4 +176,20 @@ a{
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #464775;
+}
+
+
+@media  only screen and (max-width: 600px){
+  .main__chatcontent {
+    padding:0;
+  }
+
+  .content__header{
+    padding-top: 4px;
+    padding-bottom: 0;
+  }
+
+  .content__footer {
+    padding-top: 15px;
+  }
 }

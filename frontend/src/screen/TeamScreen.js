@@ -60,7 +60,9 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         '@media(max-width: 770px)': {
             display: "flex",
-            width: "-webkit-fill-available"
+            width: "-webkit-fill-available",
+            zIndex: 1000,
+            backgroundColor: "#ebebeb"
         },
     },
 

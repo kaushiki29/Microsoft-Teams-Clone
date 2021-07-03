@@ -77,6 +77,7 @@ h1 {
 
 .todo-row {
   display: flex;
+  /* flex-direction: column; */
   justify-content: space-between;
   align-items: center;
   margin: 4px auto;
@@ -86,6 +87,22 @@ h1 {
   border-radius: 5px;
   width: 70%;
 }
+
+@media  only screen and (max-width: 865px) {
+  .todo-row {
+    flex-direction: column;
+  }
+  .icons{
+    padding-top: 15px;
+  }
+}
+
+@media  only screen and (max-width: 440px) {
+  .todo-row {
+    width: 100%;
+  }
+}
+
 
 .todo-row:nth-child(2n + 1) {
   background: #8a8adc;
@@ -100,9 +117,10 @@ h1 {
 
 .delete-icon {
   margin-right: 5px;
-  color: #fff;
+  color:antiquewhite;
 }
 
 .edit-icon {
   color: #fff;
+  color:antiquewhite;
 }

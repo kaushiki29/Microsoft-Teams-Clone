@@ -51,8 +51,9 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: "3%",
         backgroundColor: "#f5f5f5",
         marginLeft: 78,
-        '@media(max-width: 648px)': {
-            paddingLeft: 0
+        '@media(max-width: 615px)': {
+            paddingLeft: 0,
+            paddingRight: "1%"
         }
     }
 }));
@@ -65,8 +66,8 @@ function LandingPage() {
     const reloadTeams = () => {
         setVal(val + 1);
     }
-    
-    
+
+
 
     return (
         <div style={{ height: '100%' }}>

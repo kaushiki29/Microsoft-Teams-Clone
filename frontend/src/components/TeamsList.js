@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
         backgroundColor: "#f5f5f5",
         padding: "auto",
-        '@media(max-width: 648px)': {
+        '@media(max-width: 600px)': {
             textAlign: "center",
             marginTop: "5%"
         }
@@ -24,10 +24,27 @@ const useStyles = makeStyles((theme) => ({
         minHeight: "250px",
         flexWrap: "wrap",
         justifyContent: "space-between",
-        '@media(max-width: 648px)': {
-            justifyContent: "center"
+        '@media(max-width: 600px)': {
+            justifyContent: "space-around"
+        },
+        '@media(max-width: 785px)': {
+            justifyContent: "space-around"
         }
     },
+    noTeamImage: {
+        width: "400px",
+        height: "86%",
+        '@media(max-width: 928px)': {
+            width: "350px"
+        },
+        '@media(max-width: 710px)': {
+            width: "280px"
+        },
+        '@media(max-width: 375px)': {
+            width: "250px",
+            height: "80 %"
+        }
+    }
 }));
 
 function TeamsList(props) {
@@ -69,7 +86,7 @@ function TeamsList(props) {
                 })}
                 {myTeams.length == 0 &&
                     <div style={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                        <img src="https://cdn.dribbble.com/users/132658/screenshots/14228126/media/1489a46d460a08048999d40ac44f3491.gif" style={{ borderRadius: "10%", width: "25%" }} />
+                        <img src="https://cdn.dribbble.com/users/132658/screenshots/14228126/media/1489a46d460a08048999d40ac44f3491.gif" style={{ borderRadius: "2%", }} className={classes.noTeamImage} />
                         <div style={{ color: "gray", fontWeight: "bold" }}>Create a team or join a team to start!</div>
                     </div>
                 }
