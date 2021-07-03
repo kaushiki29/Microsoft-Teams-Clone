@@ -294,8 +294,8 @@ export default function ChatContent(props) {
 
         <div className="blocks">
           <div className="settings">
-            <button className="btn-nobg">
-              <p onClick={startCall}><VideoCallIcon /></p>
+            <button className="btn-nobg" >
+              <p onClick={startCall}><VideoCallIcon style={{ fontSize: "30px" }} /></p>
             </button>
           </div>
         </div>

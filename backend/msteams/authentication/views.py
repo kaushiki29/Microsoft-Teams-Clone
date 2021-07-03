@@ -11,6 +11,7 @@ from django.core.mail import send_mail
 from .models import userData
 from random import randint
 import uuid
+import requests
 from fcm_django.models import FCMDevice
 
 
@@ -44,11 +45,8 @@ def user_login(request):
         else: 
             print("Device token is none")
         token = Token.objects.get_or_create(user=user)[0]
-        # user_data = userData.objects.get(user=user)
-        # is_verified = user_data.is_verified
         return Response({
             'token': token.key,
-            # 'is_verified':is_verified
         })
 
 
@@ -94,6 +92,16 @@ def signup(request):
     first_name = request.data.get('first_name')
     last_name = request.data.get('last_name')
     password = request.data.get('password')
+    response = requests.get("https://emailvalidation.abstractapi.com/v1/?api_key=f1e531e417d24f13a53ce89631f28edf&email="+email)
+    deliverability = response.json().get('deliverability')
+    is_valid_format = response.json().get('is_valid_format')
+    is_role_email = response.json().get('is_role_email')
+
+    if deliverability!='DELIVERABLE' or is_valid_format==False or is_role_email==True:
+        return Response({
+            'error':True,
+            'message':"Enter a valid email address"
+        })
     user_present = User.objects.filter(email = email)
     if user_present:
         return Response({
@@ -105,8 +113,9 @@ def signup(request):
         user.first_name = first_name
         user.last_name = last_name
         user.save()
-        # send_mail('Email Verification - MS Teams Clone',
-        # 'Hello '+first_name+' '+last_name+' , please click on the link to verify your email: https://www.msteams.games/verify/'+user_verification.email_uuid+'.',
+        
+        # send_mail('Welcome to MS Teams Clone',
+        # 'Hello '+first_name+' '+last_name+', thank you for taking out team and registering. We offer features like XYZ',
         # 'msteamsclone@gmail.com',
         # [email],
         # fail_silently=False

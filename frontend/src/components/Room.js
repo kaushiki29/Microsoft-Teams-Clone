@@ -18,6 +18,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Fade from '@material-ui/core/Fade';
 import SendIcon from '@material-ui/icons/Send';
 import { io } from "socket.io-client";
@@ -52,6 +53,7 @@ const Room = ({ roomName, room, handleLogout }) => {
   const msgs = [];
   const socket = io("https://msteams.games:5000");
   const [sharing, setSharing] = useState(false);
+  const isMobile = useMediaQuery('(max-width:550px)')
   useEffect(() => {
     if (showChat) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -74,8 +76,8 @@ const Room = ({ roomName, room, handleLogout }) => {
     });
 
     // }
-    socket.on('updatechat', function (data, name,time) {
-      console.log(data, name,time);
+    socket.on('updatechat', function (data, name, time) {
+      console.log(data, name, time);
       msgs.push({ username: name, msg: data, timestamp: time });
       setAllMsg([...msgs]);
       scrollToBottom();
@@ -135,7 +137,7 @@ const Room = ({ roomName, room, handleLogout }) => {
         publication.unpublish();
       });
       // setSharing(!sharing);
-      if(sharing){
+      if (sharing) {
         setSharing(false);
       }
     }
@@ -237,7 +239,7 @@ const Room = ({ roomName, room, handleLogout }) => {
     const sendMessage = () => {
       if (msg != '') {
         setMsg('');
-        socket.emit('sendchat', roomName, msg, room.localParticipant.identity.split("!!!")[0],new Date().getTime());
+        socket.emit('sendchat', roomName, msg, room.localParticipant.identity.split("!!!")[0], new Date().getTime());
       }
 
     }
@@ -302,7 +304,7 @@ const Room = ({ roomName, room, handleLogout }) => {
         <h2>Room: {roomName}</h2>
       </div>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', padding: 30, justifyContent: 'center' }}>
+        <div style={{ display: isMobile && (showPart || showChat) ? 'none' : 'flex', flexWrap: 'wrap', padding: 30, justifyContent: 'center' }}>
           <div className="local-participant" style={{ marginTop: "0px" }}>
             {room ? (
               <Participant
@@ -342,7 +344,7 @@ const Room = ({ roomName, room, handleLogout }) => {
         <button onClick={handleShowChat} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer" }}>
           <ChatIcon />
         </button>
-        <button onClick={handleShare} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer" }}>
+        <button onClick={handleShare} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer", display: isMobile ? 'none' : '' }}>
           {!sharing ? <ScreenShareIcon /> : <StopScreenShareIcon />}
         </button>
         <button onClick={handleLogout} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white" }}>
