@@ -131,6 +131,39 @@ const useStyles = makeStyles((theme) => ({
         alignItems: "center"
     },
 
+    footer1: {
+        paddingTop: "25px",
+        paddingLeft: "10%",
+        paddingRight: "10%",
+        '@media(max-width: 468px)': {
+            paddingLeft: "0%"
+        },
+        '@media(max-width: 378px)': {
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            paddingTop: "10px"
+        },
+    },
+
+    startMediaQuery: {
+        width: "150px",
+        marginRight: "2%",
+        fontSize: "12px",
+        backgroundColor: "#464775",
+        color: "white",
+        '&:hover': {
+            backgroundColor: "#53548a"
+        },
+        width: "150px",
+        height: "35px",
+        '@media(max-width: 378px)': {
+            marginRight: 0,
+            width: "150px",
+            marginBottom: "2px"
+        }
+    },
+
 }));
 
 function TabPanel(props) {
@@ -491,8 +524,8 @@ export default function TeamsNav(props) {
 
             <div className={classes.footer}>
                 <Divider style={{ width: "80%" }} />
-                <div style={{ paddingTop: "25px", paddingLeft: "10%", paddingRight: "10%" }}>
-                    <Button size="small" style={{ width: "150px", marginRight: "2%" }} className={classes.meetingStart} onClick={handleOpenStart}>Start Meeting </Button>
+                <div style={{}} className={classes.footer1}>
+                    <Button size="small" className={classes.startMediaQuery} onClick={handleOpenStart}>Start Meeting </Button>
                     <Button size="small" style={{ width: "150px" }} className={classes.meetingStart} onClick={handleOpenSchedule}>Schedule Meeting </Button>
                 </div>
             </div>
