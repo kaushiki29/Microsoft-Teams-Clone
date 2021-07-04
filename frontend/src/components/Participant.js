@@ -190,7 +190,6 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth, dominantSpeake
         <div style={{ display: 'flex', position: 'absolute', margin: 'auto', top: "10px", right: "10px", color: "gray" }}>
           {isMute ? <MicOffIcon /> : <MicIcon />}
         </div>
-        {/* {!removed && dominantSpeaker && <video onClick={handleClick} ref={videoRef} autoPlay={true} style={st ? st : { border: "blue", borderStyle: "solid", borderWidth: "2px", borderRadius: "2%", width: width1, height: height1 }} />} */}
         {!removed && <video onClick={handleClick} ref={videoRef} autoPlay={true} style={st ? st : { border: (dominantSpeaker && participant.sid == dominantSpeaker.sid) ? "6px solid green" : "2px solid rgb(232, 205, 65)", borderRadius: "2%", width: width1, height: height1 }} />}
         {removed && <div style={{ width: width1, height: height1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'black', borderStyle: "solid", borderWidth: "2px", borderColor: "#e8cd41", borderRadius: "2%" }}>
           <div style={{ height: "200px", width: "200px", display: "flex", justifyContent: "center", alignItems: "center", borderStyle: "solid", borderRadius: "50%", backgroundColor: "#4470445c" }}>
