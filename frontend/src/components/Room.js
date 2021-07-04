@@ -42,6 +42,7 @@ const Room = ({ roomName, room, handleLogout }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [participants, setParticipants] = useState([]);
+  const [dominantSpeaker, setDominantSpeaker] = useState();
   const messagesEndRef = useRef(null);
   const [isMuted, setMuted] = useState(false);
   const [isVideo, setVideo] = useState(true);
@@ -87,10 +88,12 @@ const Room = ({ roomName, room, handleLogout }) => {
 
   useEffect(() => {
     const participantConnected = (participant) => {
+      console.log(participant)
       setParticipants((prevParticipants) => [...prevParticipants, participant]);
     };
 
     const participantDisconnected = (participant) => {
+      console.log(participant)
       setParticipants((prevParticipants) =>
         prevParticipants.filter((p) => p !== participant)
       );
@@ -98,6 +101,9 @@ const Room = ({ roomName, room, handleLogout }) => {
 
     room.on("participantConnected", participantConnected);
     room.on("participantDisconnected", participantDisconnected);
+    room.on('dominantSpeakerChanged', participant => {
+      handleSpeakerChange(participant);
+    });
     room.participants.forEach(participantConnected);
     return () => {
       room.off("participantConnected", participantConnected);
@@ -106,12 +112,29 @@ const Room = ({ roomName, room, handleLogout }) => {
 
   }, [room]);
 
+  function removeDominantSpeaker() {
+    console.log("Dominant speaker removed")
+    setDominantSpeaker();
+  }
+
+  function assignDominantSpeaker(participant) {
+    console.log("Dominant speaker assigned")
+    setDominantSpeaker(participant)
+    console.log(participant.sid)
+  }
+
+  function handleSpeakerChange(participant) {
+    removeDominantSpeaker();
+    if (participant != null)
+      assignDominantSpeaker(participant);
+  }
+
   useEffect(() => {
     console.log(participants.length);
   }, [participants]);
 
   const remoteParticipants = participants.map((participant) => (
-    <Participant noPart={participants.length} key={participant.sid} participant={participant} reduceWidth={showPart || showChat} />
+    <Participant noPart={participants.length} key={participant.sid} participant={participant} reduceWidth={showPart || showChat} dominantSpeaker={dominantSpeaker} />
   ));
 
   const handleAudio = () => {
@@ -186,7 +209,7 @@ const Room = ({ roomName, room, handleLogout }) => {
       return (
         <div style={{ display: 'flex', alignItems: 'center', marginTop: 15, }} key={index}>
           <Avatar
-            image={"http://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png"}
+            image={"https://simg.nicepng.com/png/small/128-1280406_view-user-icon-png-user-circle-icon-png.png"}
             isOnline={true}
           />
           <p style={{ margin: 0, marginLeft: 0, }}>{i.identity.split('!!!')[0]}</p>
@@ -313,6 +336,7 @@ const Room = ({ roomName, room, handleLogout }) => {
                 isMuted={isMuted}
                 noPart={participants.length}
                 reduceWidth={showPart || showChat}
+                dominantSpeaker={dominantSpeaker}
               />
 
             ) : (

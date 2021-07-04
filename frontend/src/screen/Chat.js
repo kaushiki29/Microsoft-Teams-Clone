@@ -180,13 +180,13 @@ function Chat() {
     }
 
     const setCurrChatuuid = (uuid) => {
-        if (!allChatUsers.find(i => i.thread_id == uuid).active) {
-            setChatuuid(uuid);
-            setOtherUserName("");
-            history.push('/chat/' + uuid);
+            if(uuid!=chatuuid){
+                setChatuuid(uuid);
+                setOtherUserName("");
+                history.push('/chat/' + uuid);
 
-        }
-        fetchChatList();
+            }
+        // fetchChatList();
     }
 
     return (

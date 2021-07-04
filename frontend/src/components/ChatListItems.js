@@ -25,7 +25,7 @@ export default function ChatListItems(props) {
     >
       <Avatar
         image={
-          props.image ? props.image : "http://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png"
+          props.image ? props.image : "https://simg.nicepng.com/png/small/128-1280406_view-user-icon-png-user-circle-icon-png.png"
         }
         isOnline={props.isOnline}
       />

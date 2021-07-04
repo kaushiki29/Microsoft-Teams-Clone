@@ -83,6 +83,7 @@ function LoginComp(props) {
             })
         }
         if (email.value && password.value) {
+            console.log(email.value,password.value)
             axios({
                 method: 'post',
                 url: api + "auth/user_login",

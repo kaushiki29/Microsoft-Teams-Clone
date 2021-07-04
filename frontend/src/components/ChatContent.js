@@ -105,18 +105,18 @@ export default function ChatContent(props) {
     div.addEventListener('drop', handleDrop)
     return () => {
       socket.disconnect();
-      axios({
-        method: 'post',
-        url: api + 'communication/get_thread_messages',
-        data: { 'thread_id': props.thread_id },
-        headers: { Authorization: 'Token ' + localStorage.getItem('token') }
-      })
-        .then(res => {
-          console.log(res.data);
-        })
-        .catch(err => {
-          console.log(err);
-        })
+      // axios({
+      //   method: 'post',
+      //   url: api + 'communication/get_thread_messages',
+      //   data: { 'thread_id': props.thread_id },
+      //   headers: { Authorization: 'Token ' + localStorage.getItem('token') }
+      // })
+      //   .then(res => {
+      //     console.log(res.data);
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //   })
     }
   }, [])
 
@@ -285,7 +285,7 @@ export default function ChatContent(props) {
           <div className="current-chatting-user">
             <Avatar
               isOnline="active"
-              image="http://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png"
+              image="https://simg.nicepng.com/png/small/128-1280406_view-user-icon-png-user-circle-icon-png.png"
             />
             <p >{props.name}</p>
 
@@ -311,7 +311,7 @@ export default function ChatContent(props) {
                 msg={itm.msg_text}
                 type={itm.type1}
                 img={itm.img}
-                image={"http://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png"}
+                image={"https://simg.nicepng.com/png/small/128-1280406_view-user-icon-png-user-circle-icon-png.png"}
                 sent_time={itm.sent_time}
               />
             );

@@ -158,7 +158,7 @@ const Room = ({ roomName, room, handleLogout }) => {
       return (
         <div style={{ display: 'flex', alignItems: 'center', marginTop: 15, }} key={index}>
           <Avatar
-            image={"http://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png"}
+            image={"https://simg.nicepng.com/png/small/128-1280406_view-user-icon-png-user-circle-icon-png.png"}
             isOnline={true}
           />
           <p style={{ margin: 0, marginLeft: 0, }}>{i.identity.split('!!!')[0]}</p>

@@ -42,6 +42,7 @@ export default function TwilioCall() {
 
                     Video.connect(res.data.access_token, {
                         name: res.data.meeting_slug,
+                        dominantSpeaker: true
                     })
                         .then((room) => {
                             //   setConnecting(false);
