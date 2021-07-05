@@ -40,7 +40,13 @@ io.on("connection", socket => {
         socket.room = room;
         console.log(socket.room,"sendchat");
 		    io.sockets.in(socket.room).emit('updatechat', data,name,type);
-	});
+	  });
+    socket.on('seen',function(room,name){
+      socket.room = room;
+      console.log(socket.room,"seen");
+      io.sockets.in(socket.room).emit('updateSeen', name);
+    }
+    );
   
 });
 

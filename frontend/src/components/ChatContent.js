@@ -32,12 +32,29 @@ export default function ChatContent(props) {
   const [image, setImage] = useState();
   const [imgFile, setImgFile] = useState();
   const dropRef = useRef();
+  const [tabActive,setTabActive] = useState(true);
   const chatItms = props.chatItms;
   const socket = io("https://msteams.games:5000");
   useEffect(() => {
     setChat(props.chatItms);
   }, [props])
 
+  useEffect(()=>{
+    if(tabActive){
+      socket.emit('seen',props.thread_id, props.name);
+    }
+  },[tabActive])
+
+  const onFocus=()=>{
+    setTabActive(true);
+    
+    // console.log('focus');
+  }
+
+  const onBlur = () => {
+    setTabActive(false);
+    console.log('Tab is blurred');
+  };
 
   useEffect(() => {
     messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -45,7 +62,6 @@ export default function ChatContent(props) {
 
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    // $("#chat_div").scrollTop($("#chat_div")[0].scrollHeight);
   };
 
   const handleDrag = (e) => {
@@ -75,18 +91,24 @@ export default function ChatContent(props) {
   }
 
   useEffect(() => {
-
+    // console.log(props.chatItms)
+    window.addEventListener("focus", onFocus);
+    window.addEventListener('blur', onBlur);
     scrollToBottom();
     if (props.thread_id && props.thread_id != 'all-conversations') {
       socket.on('connect', function () {
         socket.emit('uuid', props.thread_id);
+        socket.emit('seen',props.thread_id, props.name);
       });
 
     }
     socket.on('updatechat', function (data, name, type) {
-      console.log(data, name);
+      // console.log(data, name);
       if (name != props.name) {
-
+        if(tabActive){
+          console.log(tabActive);
+          socket.emit('seen',props.thread_id, props.name);
+        }
         chatItms.push({
           type: "other",
           msg_text: type == 'txt' ? data : null,
@@ -96,7 +118,36 @@ export default function ChatContent(props) {
         });
         setChat([...chatItms])
       }
+      socket.on('updateSeen',function(name){
+        if(chatItms.some(el => el.has_seen !== true)){
+          if(name!=props.name){
+            for(let i=0;i<chatItms.length;i++){
+              chatItms[i].has_seen = true;
+            }
+            setChat([...chatItms]);
+            setMsgSeenServer();
+          }
+        }
+      })
     });
+
+    const setMsgSeenServer=()=>{
+      const token = localStorage.getItem('token');
+      axios({
+        method: 'post',
+        url: api + 'communication/set_msg_seen',
+        data: {
+          thread_id: props.thread_id,
+        },
+        headers: { Authorization: 'Token ' + token }
+      })
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    }
 
     let div = dropRef.current
     div.addEventListener('dragenter', handleDragIn)
@@ -105,18 +156,8 @@ export default function ChatContent(props) {
     div.addEventListener('drop', handleDrop)
     return () => {
       socket.disconnect();
-      // axios({
-      //   method: 'post',
-      //   url: api + 'communication/get_thread_messages',
-      //   data: { 'thread_id': props.thread_id },
-      //   headers: { Authorization: 'Token ' + localStorage.getItem('token') }
-      // })
-      //   .then(res => {
-      //     console.log(res.data);
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //   })
+      window.removeEventListener("focus", onFocus);
+      window.removeEventListener('blur', onBlur);
     }
   }, [])
 
@@ -313,6 +354,7 @@ export default function ChatContent(props) {
                 img={itm.img}
                 image={"https://simg.nicepng.com/png/small/128-1280406_view-user-icon-png-user-circle-icon-png.png"}
                 sent_time={itm.sent_time}
+                hasSeen = {itm.has_seen}
               />
             );
           })}

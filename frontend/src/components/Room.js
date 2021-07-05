@@ -24,6 +24,8 @@ import SendIcon from '@material-ui/icons/Send';
 import { io } from "socket.io-client";
 
 
+const videoType = 'video/webm';
+
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: 'flex',
@@ -54,7 +56,12 @@ const Room = ({ roomName, room, handleLogout }) => {
   const msgs = [];
   const socket = io("https://msteams.games:5000");
   const [sharing, setSharing] = useState(false);
+  const [recording, setRecording] = useState(false);
+  // const [recording, setRecording] = useState(false);
+  // const [recordedVideos, setRecordedVideos] = useState([])
   const isMobile = useMediaQuery('(max-width:600px)')
+
+
   useEffect(() => {
     if (showChat) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -66,6 +73,73 @@ const Room = ({ roomName, room, handleLogout }) => {
     }
   };
 
+
+  // useEffect(() => {
+
+  // async function recordVideo(){
+  // const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+  //   video.srcObject = stream;
+  //   video.play();
+
+  //   // init recording
+  //   mediaRecorder = new MediaRecorder(stream, {
+  //     mimeType: videoType,
+  //   });
+  //   // init data storage for video chunks
+  //   chunks = [];
+  //   // listen for data from media recorder
+  //   mediaRecorder.ondataavailable = e => {
+  //     if (e.data && e.data.size > 0) {
+  //       chunks.push(e.data);
+  //     }
+  //   };
+
+  // }
+
+  //recordVideo();
+  //   
+  // }, [])
+
+
+
+  // const startRecording = (e) => {
+  //   e.preventDefault();
+  //   // wipe old data chunks
+  //   chunks = [];
+  //   // start recorder with 10ms buffer
+  //   mediaRecorder.start(10);
+  //   // say that we're recording
+  //   setRecording(true);
+  // }
+
+
+  // const stopRecording = (e) => {
+  //   e.preventDefault();
+  //   // stop the recorder
+  //   mediaRecorder.stop();
+  //   // say that we're not recording
+  //   setRecording(false)
+  //   // save the video to memory
+  //   saveVideo();
+  // }
+
+
+  // const saveVideo = () => {
+  //   // convert saved chunks to blob
+  //   const blob = new Blob(chunks, { type: videoType });
+  //   // generate video url from blob
+  //   const videoURL = window.URL.createObjectURL(blob);
+  //   // append videoURL to list of saved videos for rendering
+  //   const videos = recordedVideos.concat([videoURL]);
+  //   setRecordedVideos(videos)
+  // }
+
+
+  // const deleteVideo = (videoURL) => {
+  //   // filter out current videoURL from the list of saved videos
+  //   const videos = recordedVideos.filter(v => v !== videoURL);
+  //   setRecordedVideos(videos)
+  // }
 
 
   useEffect(() => {
@@ -229,6 +303,10 @@ const Room = ({ roomName, room, handleLogout }) => {
     )
   }
 
+  const handleRecord = () => {
+    console.log("Recordng reached")
+  }
+
 
   const chatList = () => {
     const formatAMPM = (date) => {
@@ -352,27 +430,43 @@ const Room = ({ roomName, room, handleLogout }) => {
           </div>
         }
       </div>
-      <div style={{ backgroundColor: "#f1f1f1", left: 0, position: "fixed", bottom: 0, height: "65px", width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <button onClick={handleOpen} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white", justifyContent: 'flex-start' }}>
-          <PersonAddIcon />
+      {/* <div>
+        <h3>Recorded videos:</h3>
+        {videos.map((videoURL, i) => (
+          <div key={`video_${i}`}>
+            <video style={{ width: 200 }} src={videoURL} autoPlay loop />
+            <div>
+              <button onClick={() => this.deleteVideo(videoURL)}>Delete</button>
+              <a href={videoURL}>Download</a>
+            </div>
+          </div>
+        ))}
+      </div> */}
+      <div style={{ backgroundColor: "#f1f1f1", left: 0, position: "fixed", bottom: 0, height: "65px", width: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
+        <button onClick={handleOpen} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white", justifyContent: 'flex-start' }}>
+          <PersonAddIcon style={{ fontSize: "20px" }} /> <div style={{ fontSize: "10px" }}>Invite</div>
         </button>
-        <button onClick={handleAudio} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white" }}>
-          {isMuted ? <MicOffIcon /> : <MicIcon />}
+        <button onClick={handleAudio} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white" }}>
+          {isMuted ? <MicOffIcon style={{ fontSize: "20px" }} /> : <MicIcon style={{ fontSize: "20px" }} />} <div style={{ fontSize: "10px" }}>Mic</div>
         </button>
-        <button onClick={handleVideo} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white" }}>
-          {isVideo ? <VideocamIcon /> : <VideocamOffIcon />}
+        <button onClick={handleVideo} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white" }}>
+          {isVideo ? <VideocamIcon style={{ fontSize: "20px" }} /> : <VideocamOffIcon style={{ fontSize: "20px" }} />} <div style={{ fontSize: "10px" }}>Video</div>
         </button>
-        <button onClick={handleShowParticipants} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer" }}>
-          <PeopleIcon />
+        <button onClick={handleShowParticipants} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer" }}>
+          <PeopleIcon style={{ fontSize: "20px" }} /> <div style={{ fontSize: "10px" }}>Participants</div>
         </button>
-        <button onClick={handleShowChat} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer" }}>
-          <ChatIcon />
+        {/* <div>
+          {!recording && <button onClick={e => startRecording(e)}>Record</button>}
+          {recording && <button onClick={e => stopRecording(e)}>Stop</button>}
+        </div> */}
+        <button onClick={handleShowChat} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer" }}>
+          <ChatIcon style={{ fontSize: "20px" }} /> <div style={{ fontSize: "10px" }}>Chat</div>
         </button>
-        <button onClick={handleShare} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer", display: isMobile ? 'none' : '' }}>
-          {!sharing ? <ScreenShareIcon /> : <StopScreenShareIcon />}
+        <button onClick={handleShare} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer", }}>
+          {!sharing ? <ScreenShareIcon style={{ fontSize: "20px" }} /> : <StopScreenShareIcon style={{ fontSize: "20px" }} />} <div style={{ fontSize: "10px" }}>ScreenShare</div>
         </button>
-        <button onClick={handleLogout} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white" }}>
-          <ExitToAppIcon />
+        <button onClick={handleLogout} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white" }}>
+          <ExitToAppIcon style={{ fontSize: "20px" }} /> <div style={{ fontSize: "10px" }}>Leave</div>
         </button>
       </div>
       <div>

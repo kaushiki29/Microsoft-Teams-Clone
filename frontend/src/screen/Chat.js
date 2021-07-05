@@ -13,6 +13,9 @@ import { unmountComponentAtNode, useParams, useHistory } from 'react-router-dom'
 import axios from 'axios';
 import { api } from './Helper';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { messaging } from '../components/Firebase';
+import CallerTune from '../static/telephone-ring-02.mp3';
+import CallModal from '../components/CallModal';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -113,13 +116,35 @@ function Chat() {
     const [otherUserName, setOtherUserName] = useState('');
     const [allChatUsers, setAllChatUsers] = useState([]);
     const [uName, setUName] = useState('');
+    const [change,setChange] = useState(0);
     const { chat_uuid } = useParams();
+    const [open, setOpen] = useState(false);
+    const [audio, setAudio] = useState(new Audio(CallerTune));
+    const [callUUID, setCallUUID] = useState();
+    const [person, setPerson] = useState();
     useEffect(() => {
         fetchChatList();
 
         setChatuuid(chat_uuid);
     }, []);
-
+    messaging.onMessage((payload) => {
+        console.log(payload);
+        if (payload.data.type === 'msg') {
+            fetchChatList();
+        }
+        else if(payload.data.type === 'call'){
+            setPerson(payload.data.person);
+            setCallUUID(payload.data.uuid);
+            setOpen(true);
+            audio.play();
+            setTimeout(() => {
+                setOpen(false);
+                setPerson();
+                setCallUUID();
+                audio.pause();
+            }, 20000)
+        }
+    })
     useEffect(() => {
         setChatItms([]);
         fetchMsgs();
@@ -145,9 +170,12 @@ function Chat() {
                 })
         }
     }
-
+    const handleClose = () => {
+        setOpen(false);
+        audio.pause();
+    }
     const fetchChatList = () => {
-
+        console.log('here fetch')
         axios({
             method: 'post',
             url: api + 'communication/get_all_threads',
@@ -163,10 +191,11 @@ function Chat() {
                             has_unseen_messages: i.has_unseen_messages,
                             other_user: i.other_user,
                             thread_id: i.thread_id,
-                            unseen_messages_count: i.unseen_messages_count,
+                            unseen_messages_count: 0,
                             other_user_name: i.other_user_name
                         }
                         return obj;
+                        setChange(change+1);
                     }
                     else {
                         return i;
@@ -184,16 +213,24 @@ function Chat() {
                 setChatuuid(uuid);
                 setOtherUserName("");
                 history.push('/chat/' + uuid);
-
+                let users = [...allChatUsers];
+                for(let i=0;i<users.length;i++){
+                    if(users[i].thread_id === uuid){
+                        users[i].unseen_messages_count=0;
+                        setChange(change+1);
+                    }
+                }
+                setAllChatUsers([...users]);
             }
         // fetchChatList();
     }
+    
 
     return (
         <div>
             <Navbar />
             <div style={{ display: 'flex', height: '100%', backgroundColor: "#f5f5f5" }}>
-                <Sidebar />
+                <Sidebar change={change} />
             </div>
             <div style={{ overflowX: 'hidden' }} className={classes.subComponent} >
                 {(isMobile && chat_uuid !== 'all-conversations') && <Button color="primary" style={{ height: "33px", position: 'absolute', top: 59, right: 0, display: "flex", justifyContent: "center", alignItems: "center", paddingBottom: "2%", marginRight: "10px" }} onClick={() => { history.push('/chat/all-conversations') }}><ArrowBackIcon style={{ fontSize: "1rem" }} /> Go Back </Button>}
@@ -207,6 +244,7 @@ function Chat() {
                         <div className={classes.message}>Please stay connected and continue chatting. </div>
                     </div>}
             </div>
+            <CallModal open={open} handleClose={handleClose} text={`Incoming call from ${person}`} answer={`/call/${callUUID}`} />
         </div>
     )
 }

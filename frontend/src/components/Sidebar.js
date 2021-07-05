@@ -4,10 +4,12 @@ import ChatIcon from '@material-ui/icons/Chat';
 import PeopleIcon from '@material-ui/icons/People';
 import ListAltRoundedIcon from '@material-ui/icons/ListAltRounded';
 import CallIcon from '@material-ui/icons/Call';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { api } from '../screen/Helper';
-
+import { messaging } from './Firebase';
+import CallerTune from '../static/telephone-ring-02.mp3';
+import CallModal from './CallModal';
 const useStyles = makeStyles((theme) => ({
     sidebar: {
         width: "68px",
@@ -77,7 +79,36 @@ function Sidebar() {
     const classes = useStyles();
     const history = useHistory();
     const [count,setCount] = useState(0);
+    const [open, setOpen] = useState(false);
+    const [audio, setAudio] = useState(new Audio(CallerTune));
+    const [callUUID, setCallUUID] = useState();
+    const [person, setPerson] = useState();
+    const params = useParams();
     useEffect(()=>{
+        fetchCount();
+    },[]);
+    if(!params.chat_uuid){
+        messaging.onMessage((payload) => {
+            console.log(payload);
+            if (payload.data.type === 'msg') {
+                fetchCount();
+            }
+            else if(payload.data.type === 'call'){
+                setPerson(payload.data.person);
+                setCallUUID(payload.data.uuid);
+                setOpen(true);
+                audio.play();
+                setTimeout(() => {
+                    setOpen(false);
+                    setPerson();
+                    setCallUUID();
+                    audio.pause();
+                }, 20000)
+            }
+        })
+    }
+
+    const fetchCount=()=>{
         axios({
             method: 'post',
             url: api + 'communication/get_unseen_count',
@@ -90,7 +121,8 @@ function Sidebar() {
         .catch(err => {
             console.log(err);
         })
-    },[])
+    }
+
     const handleTeams = () => {
         history.push('/home')
     }
@@ -98,7 +130,10 @@ function Sidebar() {
     const handleChat = () => {
         history.push('/chat/all-conversations')
     }
-
+    const handleClose = () => {
+        setOpen(false);
+        audio.pause();
+    }
     return (
         <div className={classes.sidebar}>
             <div className={classes.sidediv} onClick={handleTeams}>
@@ -108,10 +143,11 @@ function Sidebar() {
             <div className={classes.sidediv} onClick={handleChat}>
                 <div style={{display: 'flex',alignItems: 'flex-start'}}>
                     <ChatIcon style={{ fontSize: "1.5rem", }} />
-                    {count>0 && <div style={{width: 15,height: 15, backgroundColor: 'red',borderRadius: 100, display: 'flex', alignItems: 'center',justifyContent: 'center'}}><p style={{margin: 0, color: 'white', fontSize: 10}}>{count>99?'99+':count}</p></div>}
+                    {count>0 && !params.chat_uuid && <div style={{width: 15,height: 15, backgroundColor: 'red',borderRadius: 100, display: 'flex', alignItems: 'center',justifyContent: 'center'}}><p style={{margin: 0, color: 'white', fontSize: 10}}>{count>99?'99+':count}</p></div>}
                 </div>
                 <p className={classes.p}>Chitchat</p>
             </div>
+            <CallModal open={open} handleClose={handleClose} text={`Incoming call from ${person}`} answer={`/call/${callUUID}`} />
         </div>
     )
 }

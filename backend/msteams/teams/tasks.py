@@ -1,5 +1,5 @@
 from celery import Celery
-from communication.models import Videocall,VideoCallParticipant
+from communication.models import Videocall
 app = Celery('tasks', broker='redis://localhost')
 
 # from celery.decorators import task
@@ -28,7 +28,8 @@ def clear_video_calls():
             c.is_completed = True
             c.is_active = False
             c.save()
-    return "Ran successfully"        
+    return "Ran successfully" 
+   
 
 def get_status(s_id):
     client = Client(settings.ACCOUNT_SID, settings.ORIGINAL_AUTH_TOKEN)

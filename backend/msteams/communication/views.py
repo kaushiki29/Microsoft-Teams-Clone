@@ -1,3 +1,4 @@
+from django.core.checks import messages
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
@@ -353,7 +354,7 @@ def send_message(request):
     new_mailbox_for_receiver.thread_id = thread_uuid
     new_mailbox_for_receiver.has_seen = False
     new_mailbox_for_receiver.save()
-
+    send_msg_notification(receiver,user)
     return Response({
         'msg': 'message sent successfully'
     })
@@ -470,6 +471,7 @@ def get_thread_messages(request):
             'msg_text': msg.message.msg_text,
             'type': 'other' if sender == otheruser else "",
             'type1': msg.message.type,
+            'has_seen': UserMailbox.objects.get(mail_box_user = otheruser,message = msg.message).has_seen,
             'img': msg.message.img.url if msg.message.img else '',
         }
         all_msgs.append(m)
@@ -480,7 +482,18 @@ def get_thread_messages(request):
         'username': otheruser.username
     })
 
-
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def set_msg_seen(request):
+    user = request.user
+    thread_id = request.data.get('thread_id')
+    make_seen = UserMailbox.objects.filter(thread_id__thread_id = thread_id, mail_box_user = user, has_seen = False)
+    for i in make_seen:
+        i.has_seen = True
+        i.save()
+    return Response({
+        'msg':'SUCCESS'
+    })
 
 
 
@@ -569,4 +582,11 @@ def call(other_user,user,slug):
         'person': user.get_full_name(),
         'type': 'call',
         'uuid': slug,
+    })
+
+def send_msg_notification(other_user,user):
+    devices = FCMDevice.objects.filter(user = other_user)
+    title = "Message from " + user.get_full_name()
+    devices.send_message(title=title, data={
+        'type': 'msg',
     })
