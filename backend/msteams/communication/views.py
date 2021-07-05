@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 
-from .models import Videocall,VideoCallParticipant,Message,UserMailbox,ChatUUID, P2PVideocall
+from .models import Videocall,VideoCallParticipant,Message,UserMailbox,ChatUUID, P2PVideocall, TeamMailBox
 from time import time
 from teams.models import Teams, TeamParticipants
 import random
@@ -493,6 +493,82 @@ def set_msg_seen(request):
         i.save()
     return Response({
         'msg':'SUCCESS'
+    })
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def send_team_msg(request):
+    user = request.user
+    msg_text = request.data.get('msg_text')
+    team_slug = request.data.get('team_slug')
+    team = Teams.objects.get(team_slug = team_slug)
+    message = Message()
+    message.msg_text = msg_text
+    message.type = 'txt'
+    message.img = None
+    message.sender = user
+    message.save()
+
+    team_mail_box = TeamMailBox()
+    team_mail_box.team = team
+    team_mail_box.message = message
+    team_mail_box.save()
+    return Response({
+        'msg': 'message sent successfully'
+    })
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def get_team_msg(request):
+    team_slug = request.data.get('team_slug')
+    print(team_slug)
+    user = request.user
+    if not TeamParticipants.objects.filter(user = user, team__team_slug = team_slug).exists():
+        return Response({
+            'msg': 'You are not authorised for this request'
+        })
+
+    team = Teams.objects.get(team_slug=team_slug)
+    mail_box = TeamMailBox.objects.filter(team = team)
+    all_msgs = []
+    for msg in mail_box:
+        m = {
+            'sender_name': msg.message.sender.get_full_name(),
+            'sent_time': msg.message.created_at,
+            'msg_text': msg.message.msg_text,
+            'type': 'other' if msg.message.sender != user else "",
+            'type1': msg.message.type,
+            'img': msg.message.img.url if msg.message.img else '',
+        }
+        all_msgs.append(m)
+    return Response({
+        'all_msgs': all_msgs,
+        'name': user.get_full_name()
+    })
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def send_team_img(request):
+    user = request.user
+    img = request.data.get('img')
+    team_slug = request.data.get('team_slug')
+    team = Teams.objects.get(team_slug = team_slug)
+    message = Message()
+    message.msg_text = None
+    message.type = 'img'
+    message.img = img
+    message.sender = user
+    message.save()
+
+    team_mail_box = TeamMailBox()
+    team_mail_box.team = team
+    team_mail_box.message = message
+    team_mail_box.save()
+    return Response({
+        'msg': 'message sent successfully',
+        'imgUrl': message.img.url,
     })
 
 

@@ -19,5 +19,8 @@ urlpatterns = [
     path('get_p2p_twilio_token',views.get_p2p_twilio_token,name='get_p2p_twilio_token'),
     path('send_img',views.send_img,name='send_img'),
     path('get_unseen_count',views.get_unseen_count,name='get_unseen_count'),
-    path('set_msg_seen',views.set_msg_seen,name='set_msg_seen')
+    path('set_msg_seen',views.set_msg_seen,name='set_msg_seen'),
+    path('send_team_msg',views.send_team_msg,name = 'send_team_msg'),
+    path('send_team_img',views.send_team_img,name='send_team_img'),
+    path('get_team_msg',views.get_team_msg,name='get_team_msg')
 ]

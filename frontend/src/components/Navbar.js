@@ -76,6 +76,7 @@ const useStyles = makeStyles((theme) => ({
   profile: {
     marginLeft: "auto",
     cursor: "pointer",
+    backgroundColor: "#343458"
     // minWidth: "125px"
   },
   button: {
@@ -161,7 +162,7 @@ function Navbar(props) {
       </div>
       <div className={classes.profile}>
         <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} className={classes.button}>
-          {username}
+          {username || "User"}
         </Button>
         <Menu
           id="simple-menu"

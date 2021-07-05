@@ -179,6 +179,18 @@ CELERY_BEAT_SCHEDULE = {
         'schedule' : timedelta(seconds=300),
         'args': ()
     },
+
+    'meeting_reminder':{
+        'task':'teams.tasks.meeting_reminder',
+        'schedule': timedelta(seconds=1800),
+        'args' : ()
+    },
+
+    'start_meeting':{
+        'task':'teams.tasks.start_meeting',
+        'schedule':timedelta(seconds=120),
+        'args':()
+    }
 }
 
 # celery -A msteams worker -l info

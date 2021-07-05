@@ -4,7 +4,6 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
 import TodoList from './TodoList';
 import Box from '@material-ui/core/Box';
 import GeneralCard from '../components/GeneralCard';
@@ -12,6 +11,13 @@ import ScheduledCalls from './ScheduledCalls';
 import Invite from '../components/Invite';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import MuiDialogActions from '@material-ui/core/DialogActions';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
@@ -19,6 +25,49 @@ import TextField from '@material-ui/core/TextField';
 import { useHistory } from 'react-router-dom';
 import { api } from '../screen/Helper';
 import axios from 'axios';
+import TeamChat from './TeamChat';
+
+
+const styles = (theme) => ({
+    root: {
+        margin: 0,
+        padding: theme.spacing(2),
+    },
+    closeButton: {
+        position: 'absolute',
+        right: theme.spacing(1),
+        top: theme.spacing(1),
+        color: theme.palette.grey[500],
+    },
+});
+
+const DialogTitle = withStyles(styles)((props) => {
+    const { children, classes, onClose, ...other } = props;
+    return (
+        <MuiDialogTitle disableTypography className={classes.root} {...other}>
+            <Typography variant="h6">{children}</Typography>
+            {onClose ? (
+                <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+                    <CloseIcon />
+                </IconButton>
+            ) : null}
+        </MuiDialogTitle>
+    );
+});
+
+const DialogContent = withStyles((theme) => ({
+    root: {
+        padding: theme.spacing(2),
+    },
+}))(MuiDialogContent);
+
+const DialogActions = withStyles((theme) => ({
+    root: {
+        margin: 0,
+        padding: theme.spacing(1),
+    },
+}))(MuiDialogActions);
+
 
 const CssTextField = withStyles({
     root: {
@@ -204,6 +253,7 @@ export default function TeamsNav(props) {
     const classes = useStyles();
     const history = useHistory();
     const [value, setValue] = React.useState(0);
+    const [username, setUsername] = useState();
     const [meetName, setMeetName] = useState({
         value: "",
         error: false,
@@ -241,11 +291,37 @@ export default function TeamsNav(props) {
                 console.log(err);
             })
     }, [val])
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        axios({
+            method: 'get',
+            url: api + "auth/get_username",
+            headers: {
+                Authorization: "Token " + token
+            }
+        })
+            .then(res => {
+                console.log(res.data);
+                setUsername(res.data.username)
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }, [])
     const reloadValue = () => {
         setVal(val + 1)
     }
     const [openScheduleModal, isScheduleModalOpen] = React.useState(false);
     const [openStartModal, isStartModalOpen] = useState(false);
+    const [errorOpen, setErrorOpen] = useState(false);
+
+    const handleErrorOpen = () => {
+        setErrorOpen(true);
+    };
+    const handleErrorClose = () => {
+        setErrorOpen(false);
+    };
+
 
     const handleStart = () => {
 
@@ -290,8 +366,9 @@ export default function TeamsNav(props) {
 
         if (meetName.value && date.value && time.value) {
             console.log(date.value + " " + time.value);
-            handleCloseScheduleModal();
             schedule();
+            handleCloseScheduleModal();
+
         }
     }
 
@@ -350,25 +427,31 @@ export default function TeamsNav(props) {
     const schedule = () => {
         const token = localStorage.getItem("token");
         const scheduleTime = new Date(date.value + " " + time.value).getTime();
-        axios({
-            method: 'post',
-            data: {
-                team_slug: props.team_slug,
-                name: meetName.value,
-                schedule_time: scheduleTime
-            },
-            url: api + "communication/schedule_call",
-            headers: {
-                Authorization: "Token " + token
-            }
-        })
-            .then(res => {
-                console.log(res.data);
-                reloadScheduleCalls();
+        if (scheduleTime - new Date().getTime() > 0) {
+            axios({
+                method: 'post',
+                data: {
+                    team_slug: props.team_slug,
+                    name: meetName.value,
+                    schedule_time: scheduleTime
+                },
+                url: api + "communication/schedule_call",
+                headers: {
+                    Authorization: "Token " + token
+                }
             })
-            .catch(err => {
-                console.log(err);
-            })
+                .then(res => {
+                    console.log(res.data);
+                    reloadScheduleCalls();
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        else {
+            console.log("error")
+            handleErrorOpen()
+        }
     }
 
     const [scheduleVal, setScheduleVal] = useState(1);
@@ -477,6 +560,7 @@ export default function TeamsNav(props) {
                     className={classes.tabsPhone}
                     aria-label="scrollable auto tabs example"
                 >
+                    <Tab label="Chat" className={classes.tab} />
                     <Tab label="General" className={classes.tab} />
                     <Tab label="Scheduled Calls" className={classes.tab} />
                     <Tab label="Tasks" className={classes.tab} />
@@ -485,6 +569,9 @@ export default function TeamsNav(props) {
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0} className={classes.tabPanel}>
+                {username && <TeamChat name={username} />}
+            </TabPanel>
+            <TabPanel value={value} index={1} className={classes.tabPanel}>
                 {props.allCalls.length > 0 && props.allCalls.map(i =>
                     <GeneralCard call={i} />
                 )}
@@ -495,7 +582,7 @@ export default function TeamsNav(props) {
                     </div>
                 }
             </TabPanel>
-            <TabPanel value={value} index={1} className={classes.tabPanel}>
+            <TabPanel value={value} index={2} className={classes.tabPanel}>
                 {scheduledCalls.map(i => <ScheduledCalls call={i} scheduleVal={scheduleVal} setScheduleVal={setScheduleVal} />)}
                 {scheduledCalls.length == 0 &&
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -504,14 +591,14 @@ export default function TeamsNav(props) {
                     </div>
                 }
             </TabPanel>
-            <TabPanel value={value} index={2} className={classes.tabPanel}>
+            <TabPanel value={value} index={3} className={classes.tabPanel}>
                 <div style={{ display: "flex", flexDirection: "column", width: "100%", }}>
                     <div style={{ backgroundColor: "white", borderRadius: "2%", paddingBottom: "4%" }}>
                         <TodoList allUsers={allUsers} team_slug={props.team_slug} />
                     </div>
                 </div>
             </TabPanel>
-            <TabPanel value={value} index={3} className={classes.tabPanel}>
+            <TabPanel value={value} index={4} className={classes.tabPanel}>
                 <Invite team_slug={props.team_slug} allUsers={allUsers} reloadValue={reloadValue} isAdmin={props.isAdmin} uniqueCode={props.uniqueCode} />
             </TabPanel>
 
@@ -607,6 +694,18 @@ export default function TeamsNav(props) {
                     </div>
                 </Fade>
             </Modal>
+            <Dialog onClose={handleErrorClose} aria-labelledby="customized-dialog-title" open={errorOpen}>
+                <DialogContent dividers>
+                    <Typography gutterBottom>
+                        You are selecting a past date or time, please try again with different date or time!
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button autoFocus onClick={handleErrorClose} color="primary">
+                        Ok
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }

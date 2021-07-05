@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from teams.models import Teams
 import uuid
+from teams.models import Teams
 # Create your models here.
 
 class ChatUUID(models.Model):
@@ -27,6 +28,12 @@ class UserMailbox(models.Model):
     has_seen = models.BooleanField(null=True, blank=True, default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
+
+class TeamMailBox(models.Model):
+    team = models.ForeignKey(Teams, on_delete=models.CASCADE)
+    message = models.ForeignKey(Message, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 class Videocall(models.Model):
     unique_code = models.CharField(max_length=50)

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import InputLabel from '@material-ui/core/InputLabel';
 import Button from '@material-ui/core/Button';
@@ -11,6 +11,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { api } from '../screen/Helper';
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import MuiDialogActions from '@material-ui/core/DialogActions';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -34,10 +41,59 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const styles = (theme) => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(2),
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
+  },
+});
+
+
+const DialogTitle = withStyles(styles)((props) => {
+  const { children, classes, onClose, ...other } = props;
+  return (
+    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+      <Typography variant="h6">{children}</Typography>
+      {onClose ? (
+        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </MuiDialogTitle>
+  );
+});
+
+const DialogContent = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
+
+const DialogActions = withStyles((theme) => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(1),
+  },
+}))(MuiDialogActions);
+
 function TodoForm({ allUsers, pendingTodos, setPendingTodos, task, setTask, assigned, setAssigned, expectedTime, setExpectedTime, team_slug, reloadTodos, id, setId }) {
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
+
+  const handleErrorOpen = () => {
+    setErrorOpen(true);
+  };
+  const handleErrorClose = () => {
+    setErrorOpen(false);
+  };
 
   const handleOpen = () => {
     setOpen(true);
@@ -65,34 +121,41 @@ function TodoForm({ allUsers, pendingTodos, setPendingTodos, task, setTask, assi
   const handleSubmit = () => {
     const token = localStorage.getItem("token");
     // const id = (todos.length) ? todos[todos.length - 1].id + 1 : 0;
-    axios({
-      method: 'post',
-      data: {
-        team_slug: team_slug,
-        todo_item: task,
-        is_completed: false,
-        expected_completion_unix_time: new Date(expectedTime).getTime(),
-        email_assigned_to: assigned,
-      },
-      url: api + "teams/add_todos_teams",
-      headers: {
-        Authorization: "Token " + token
-      }
-    })
-      .then(res => {
-        console.log(res.data)
-        const td = res.data;
-        setPendingTodos([...pendingTodos, { id: td.id, task: td.todo_item, assigned: td.assigned_to, expectedTime: td.expected_time, done: td.is_completed }]);
-        setTask("");
-        setAssigned("")
-        setExpectedTime("")
-        document.getElementById('datetime-local').value = "";
-        reloadTodos();
-        handleClose()
+    if (new Date(expectedTime).getTime() - new Date().getTime() > 0) {
+      axios({
+        method: 'post',
+        data: {
+          team_slug: team_slug,
+          todo_item: task,
+          is_completed: false,
+          expected_completion_unix_time: new Date(expectedTime).getTime(),
+          email_assigned_to: assigned,
+        },
+        url: api + "teams/add_todos_teams",
+        headers: {
+          Authorization: "Token " + token
+        }
       })
-      .catch(err => {
-        console.log(err);
-      })
+        .then(res => {
+          console.log(res.data)
+          const td = res.data;
+          setPendingTodos([...pendingTodos, { id: td.id, task: td.todo_item, assigned: td.assigned_to, expectedTime: td.expected_time, done: td.is_completed }]);
+          setTask("");
+          setAssigned("")
+          setExpectedTime("")
+          document.getElementById('datetime-local').value = "";
+          reloadTodos();
+          handleClose()
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
+    else {
+      console.log("Error")
+      handleErrorOpen();
+      // alert("Please enter a valid date and time")
+    }
   }
 
   return (
@@ -166,6 +229,19 @@ function TodoForm({ allUsers, pendingTodos, setPendingTodos, task, setTask, assi
           </div>
         </Fade>
       </Modal>
+      <Dialog onClose={handleErrorClose} aria-labelledby="customized-dialog-title" open={errorOpen}>
+        <DialogContent dividers>
+          <Typography gutterBottom>
+            You are selecting a past date or time, please try again with different date or time!
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleErrorClose} color="primary">
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </div>
 
   );
