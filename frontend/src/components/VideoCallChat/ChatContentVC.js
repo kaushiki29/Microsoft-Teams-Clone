@@ -1,19 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import "../css/ChatContent.css";
-import Avatar from "../components/Avatar";
+import "../../css/ChatContent.css";
 import AddIcon from '@material-ui/icons/Add';
-import ChatItemTeam from "./ChatItemTeam";
 import SendIcon from '@material-ui/icons/Send';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-import { api } from "../screen/Helper";
-import { useHistory, useParams } from "react-router-dom";
+import { api } from "../../screen/Helper";
+import { useHistory,useParams } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import { io } from "socket.io-client";
 import { Modal } from "@material-ui/core";
-import VideoCallIcon from '@material-ui/icons/VideoCall';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-
+import ChatItemTeam from "../ChatItemTeam";
+import WarningModal from "../WarningModal";
 const useStyles = makeStyles({
   input: {
     display: "none"
@@ -21,8 +19,8 @@ const useStyles = makeStyles({
 })
 
 
-export default function ChatContent(props) {
-  const { team_slug } = useParams();
+export default function ChatContentVC(props) {
+  const {meeting_slug} = useParams();
   const history = useHistory();
   const isMobile = useMediaQuery('(max-width:600px)')
   const classes = useStyles();
@@ -33,19 +31,22 @@ export default function ChatContent(props) {
   const [image, setImage] = useState();
   const [imgFile, setImgFile] = useState();
   const dropRef = useRef();
-  const [tabActive, setTabActive] = useState(true);
+  const [tabActive,setTabActive] = useState(true);
   const socket = io("https://msteams.games:5000");
+  const [openError,setOpenError] = useState(false);
+  const [error,setError] = useState(true);
+  const [errorMsg,setErrorMsg] = useState();
   const chatItms = [];
-  useEffect(() => {
+  useEffect(()=>{
     console.log(props.name);
-  }, [props.name])
+  },[props.name])
   useEffect(() => {
     const token = localStorage.getItem("token");
     axios({
       method: 'post',
-      url: api + "communication/get_team_msg",
+      url: api + "communication/get_video_msg",
       data: {
-        team_slug: team_slug,
+          meeting_slug: meeting_slug,
       },
       headers: {
         Authorization: "Token " + token
@@ -53,7 +54,14 @@ export default function ChatContent(props) {
     })
       .then(res => {
         console.log(res.data);
-        setChat(res.data.all_msgs);
+        if(res.data.error){
+            setOpenError(true);
+            setErrorMsg(res.data.msg);
+        }
+        else{
+            setChat(res.data.all_msgs);
+            setError(false);
+        }
       })
       .catch(err => {
         console.log(err);
@@ -61,7 +69,7 @@ export default function ChatContent(props) {
   }, [])
 
 
-  const onFocus = () => {
+  const onFocus=()=>{
     setTabActive(true);
   }
 
@@ -71,11 +79,11 @@ export default function ChatContent(props) {
   };
 
   useEffect(() => {
-    messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   });
 
   const scrollToBottom = () => {
-    messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleDrag = (e) => {
@@ -108,37 +116,37 @@ export default function ChatContent(props) {
     window.addEventListener("focus", onFocus);
     window.addEventListener('blur', onBlur);
     scrollToBottom();
-    if (team_slug && team_slug != 'all-conversations') {
+    if (meeting_slug && meeting_slug != 'all-conversations') {
       socket.on('connect', function () {
-        socket.emit('uuid', team_slug);
+        socket.emit('uuid', meeting_slug);
       });
 
     }
     socket.on('updatechat', function (data, name1, type) {
-      console.log(data, name1, props.name);
+      console.log(data, name1,props.name);
       if (props.name != name1) {
-
+        
         const x = {
-          type: "other",
-          msg_text: type == 'txt' ? data : null,
-          type1: type,
-          img: type == 'img' ? data : null,
-          sent_time: new Date(),
-          sender_name: name1,
-        }
-
-        setChat(c => [...c, x]);
+            type: "other",
+            msg_text: type == 'txt' ? data : null,
+            type1: type,
+            img: type == 'img' ? data : null,
+            sent_time: new Date(),
+            sender_name: name1,
+          }
+        
+        setChat(c=> [...c, x]);
       }
-
+      
     });
 
-
+    
 
     let div = dropRef.current
-    div.addEventListener('dragenter', handleDragIn)
-    div.addEventListener('dragleave', handleDragOut)
-    div.addEventListener('dragover', handleDrag)
-    div.addEventListener('drop', handleDrop)
+    div?.addEventListener('dragenter', handleDragIn)
+    div?.addEventListener('dragleave', handleDragOut)
+    div?.addEventListener('dragover', handleDrag)
+    div?.addEventListener('drop', handleDrop)
     return () => {
       socket.disconnect();
       window.removeEventListener("focus", onFocus);
@@ -154,14 +162,14 @@ export default function ChatContent(props) {
   const sendMessage = () => {
 
     if (msg != "") {
-      socket.emit('sendchat', team_slug, msg, props.name, 'txt');
+      socket.emit('sendchat', meeting_slug, msg, props.name, 'txt');
       const token = localStorage.getItem('token');
       axios({
         method: 'post',
-        url: api + 'communication/send_team_msg',
+        url: api + 'communication/send_video_msg',
         data: {
           msg_text: msg,
-          team_slug: team_slug,
+          meeting_slug: meeting_slug,
         },
         headers: { Authorization: 'Token ' + token }
       })
@@ -223,16 +231,16 @@ export default function ChatContent(props) {
       )
     }
     form_data.append('img', imgFile);
-    form_data.append('team_slug', team_slug);
+    form_data.append('meeting_slug', meeting_slug);
     handleClose();
     axios({
       method: 'post',
-      url: api + 'communication/send_team_img',
+      url: api + 'communication/send_video_img',
       data: form_data,
       headers: { Authorization: 'Token ' + localStorage.getItem('token') }
     })
       .then(res => {
-        socket.emit('sendchat', team_slug, res.data.imgUrl, props.name, 'img');
+        socket.emit('sendchat', meeting_slug, res.data.imgUrl, props.name, 'img');
         chatItms.push({
           type: "",
           msg_text: null,
@@ -242,13 +250,13 @@ export default function ChatContent(props) {
         });
         let c = [...chat];
         c.push({
-          type: "",
-          msg_text: null,
-          type1: "img",
-          img: res.data.imgUrl,
-          sent_time: new Date(),
-          sender_name: props.name
-        })
+            type: "",
+            msg_text: null,
+            type1: "img",
+            img: res.data.imgUrl,
+            sent_time: new Date(),
+            sender_name: props.name
+          })
         setChat([...c]);
         scrollToBottom();
         setImage();
@@ -277,9 +285,14 @@ export default function ChatContent(props) {
       setImgFile(e.clipboardData.files[0]);
     }
   }
-  return (
-    <div style={{ paddingLeft: isMobile ? '10px' : '20px', paddingBottom: 0, padding: 0 }} className="main__chatcontent">
+  const handleCloseError=()=>{
 
+  }
+  return (
+    
+    <div style={{ paddingLeft: isMobile ? '10px' : '20px', marginTop: 100,marginLeft: 68 }} className="main__chatcontent">
+      {!error &&
+      <React.Fragment>
       <div className="content__body" >
         <div className="chat__items" >
           {chat.map((itm, index) => {
@@ -294,7 +307,7 @@ export default function ChatContent(props) {
                 image={"https://simg.nicepng.com/png/small/128-1280406_view-user-icon-png-user-circle-icon-png.png"}
                 sent_time={itm.sent_time}
                 // hasSeen = {itm.has_seen}
-                sender_name={itm.sender_name}
+                sender_name = {itm.sender_name}
               />
             );
           })}
@@ -342,6 +355,9 @@ export default function ChatContent(props) {
           </div>
         </div>
       </Modal>
+      </React.Fragment>
+      }
+      {error && <WarningModal open={openError} handleClose={handleCloseError} text={errorMsg} redirect={"/home"} />}
     </div>
 
   );

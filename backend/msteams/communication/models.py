@@ -35,6 +35,7 @@ class TeamMailBox(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
 class Videocall(models.Model):
     unique_code = models.CharField(max_length=50)
     meeting_slug = models.CharField(max_length=100)
@@ -47,6 +48,13 @@ class Videocall(models.Model):
     schedule_duration = models.IntegerField()
     is_completed= models.BooleanField(default=False)
     s_id = models.CharField(max_length=500, blank=True,null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class VideoCallMailBox(models.Model):
+    video = models.ForeignKey(Videocall, on_delete=models.CASCADE)
+    message = models.ForeignKey(Message, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -27,10 +27,10 @@ const useStyles = makeStyles((theme) => ({
         alignItems: "center",
         textAlign: "center",
         '@media(max-width: 1108px)': {
-            minWidth: 220
+            minWidth: 240
         },
         '@media(max-width: 1008px)': {
-            minWidth: 205
+            minWidth: 240
         },
         '@media(max-width: 651px)': {
 

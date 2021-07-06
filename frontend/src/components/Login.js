@@ -16,6 +16,7 @@ import { api } from '../screen/Helper';
 import CallerTune from '../static/telephone-ring-02.mp3';
 import { withRouter } from 'react-router-dom';
 import Tasks from './../screen/Tasks'
+import VideoCallChat from '../screen/VideoCallChat';
 
 function Login() {
     const [token, setToken] = useState();
@@ -58,6 +59,7 @@ function Login() {
                 {(localStorage.getItem("token") || token) ? <Route path="/home" component={LandingPage} /> : <Redirect to="/login" />}
                 <Route path="/chat/:chat_uuid" component={Chat} />
                 <Route path="/videocall/:meeting_slug" component={TwilioCall} />
+                <Route path="/meeting/conversation/:meeting_slug" component={VideoCallChat} />
                 <Route path="/call/:meeting_slug" component={Call} />
                 <Route path="*">
                     <Redirect to="/login" />

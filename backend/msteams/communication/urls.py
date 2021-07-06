@@ -22,5 +22,8 @@ urlpatterns = [
     path('set_msg_seen',views.set_msg_seen,name='set_msg_seen'),
     path('send_team_msg',views.send_team_msg,name = 'send_team_msg'),
     path('send_team_img',views.send_team_img,name='send_team_img'),
-    path('get_team_msg',views.get_team_msg,name='get_team_msg')
+    path('get_team_msg',views.get_team_msg,name='get_team_msg'),
+    path('get_video_msg',views.get_video_msg,name='get_video_msg'),
+    path('send_video_msg',views.send_video_msg,name='send_video_msg'),
+    path('send_video_img',views.send_video_img, name='send_video_img')
 ]

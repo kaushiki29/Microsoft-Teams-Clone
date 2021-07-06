@@ -53,9 +53,10 @@ const useStyles = makeStyles({
         fontSize: "12px",
         backgroundColor: "#464775",
         color: "white",
-        width: "100px",
-        height: "35px",
+        width: "125px",
+        height: "40px",
         marginTop: 20,
+
         '&:hover': {
             backgroundColor: "#53548a"
         },
@@ -65,6 +66,7 @@ const useStyles = makeStyles({
 function ScheduledCalls(props) {
     const classes = useStyles();
     const history = useHistory();
+
 
     var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
     const formatAMPM = (date) => {
@@ -78,25 +80,8 @@ function ScheduledCalls(props) {
         return strTime;
     }
 
-    const handleDelete = () => {
-        const token = localStorage.getItem("token");
-        axios({
-            method: 'post',
-            url: api + "communication/delete_call",
-            data: {
-                meeting_slug: props.call.meeting_slug
-            },
-            headers: {
-                Authorization: "Token " + token
-            }
-        })
-            .then(res => {
-                console.log(res.data)
-                props.setScheduleVal(props.scheduleVal + 1)
-            })
-            .catch(err => {
-                console.log(err)
-            })
+    const handleChat = () => {
+        history.push('/meeting/conversation/'+props.call.meeting_slug)
     }
 
     return (
@@ -109,15 +94,15 @@ function ScheduledCalls(props) {
                 </div>
                 <div className={classes.header}>
                     <Typography className={classes.time}>
-                        Time : {formatAMPM(new Date(props.call.time))}, {new Date(props.call.time).getDate()} {month[new Date(props.call.time).getMonth()]} {new Date(props.call.time).getFullYear()}
+                        Started at: {formatAMPM(new Date(props.call.time))}, {new Date(props.call.time).getDate()} {month[new Date(props.call.time).getMonth()]} {new Date(props.call.time).getFullYear()} <span style={{marginLeft: 10, color: 'gainsboro', fontSize: 14}}>(Meeting ended)</span>
                     </Typography>
                 </div>
                 <Divider className={classes.divider} />
             </CardContent>
             <CardActions>
-                <Button size="small" className={classes.button} onClick={handleDelete}>Delete call</Button>
+                <Button className={classes.button} onClick={handleChat}>Conversation</Button>
             </CardActions>
-        </Card>
+        </Card> 
 
     )
 

@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 
-from .models import Videocall,VideoCallParticipant,Message,UserMailbox,ChatUUID, P2PVideocall, TeamMailBox
+from .models import Videocall,VideoCallParticipant,Message,UserMailbox,ChatUUID, P2PVideocall, TeamMailBox, VideoCallMailBox
 from time import time
 from teams.models import Teams, TeamParticipants
 import random
@@ -118,7 +118,7 @@ def get_scheduled_calls(request):
     team = Teams.objects.get(team_slug=team_slug)
     calls = Videocall.objects.filter(team_associated=team)
     scheduled_calls = []
-
+    old_calls = []
     for c in calls:
         if c.is_active == False and c.is_scheduled==True and c.is_completed==False:
             temp={
@@ -127,8 +127,17 @@ def get_scheduled_calls(request):
                 'time':c.schedule_time
             }
             scheduled_calls.append(temp)
+    for c in calls:
+        if c.is_completed == True:
+            temp={
+                'meeting_slug':c.meeting_slug,
+                'name':c.name,
+                'time':c.started_at
+            }
+            old_calls.append(temp)
     return Response({
-        'scheduled_calls':scheduled_calls
+        'scheduled_calls':scheduled_calls,
+        'old_calls': old_calls
     })
 
 
@@ -566,6 +575,90 @@ def send_team_img(request):
     team_mail_box.team = team
     team_mail_box.message = message
     team_mail_box.save()
+    return Response({
+        'msg': 'message sent successfully',
+        'imgUrl': message.img.url,
+    })
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def send_video_msg(request):
+    user = request.user
+    msg_text = request.data.get('msg_text')
+    meeting_slug = request.data.get('meeting_slug')
+    video = Videocall.objects.get(meeting_slug = meeting_slug)
+    message = Message()
+    message.msg_text = msg_text
+    message.type = 'txt'
+    message.img = None
+    message.sender = user
+    message.save()
+
+    video_mail_box = VideoCallMailBox()
+    video_mail_box.video = video
+    video_mail_box.message = message
+    video_mail_box.save()
+    return Response({
+        'msg': 'message sent successfully'
+    })
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def get_video_msg(request):
+    meeting_slug = request.data.get('meeting_slug')
+    print(meeting_slug)
+    user = request.user
+    video = Videocall.objects.filter(meeting_slug = meeting_slug)
+    if not video.exists():
+        return Response({
+            'error': True,
+            'msg': 'Video call does not exists'
+        })
+    video = video.get()
+    team = video.team_associated
+    if not TeamParticipants.objects.filter(user = user, team = team).exists():
+        return Response({
+            'error': True,
+            'msg': 'You are not authorised for this call'
+        })
+
+    mail_box = VideoCallMailBox.objects.filter(video = video)
+    all_msgs = []
+    for msg in mail_box:
+        m = {
+            'sender_name': msg.message.sender.get_full_name(),
+            'sent_time': msg.message.created_at,
+            'msg_text': msg.message.msg_text,
+            'type': 'other' if msg.message.sender != user else "",
+            'type1': msg.message.type,
+            'img': msg.message.img.url if msg.message.img else '',
+        }
+        all_msgs.append(m)
+    return Response({
+        'all_msgs': all_msgs,
+        'name': user.get_full_name()
+    })
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def send_video_img(request):
+    user = request.user
+    img = request.data.get('img')
+    meeting_slug = request.data.get('meeting_slug')
+    video = Videocall.objects.get(meeting_slug = meeting_slug)
+    message = Message()
+    message.msg_text = None
+    message.type = 'img'
+    message.img = img
+    message.sender = user
+    message.save()
+
+    video_mail_box = VideoCallMailBox()
+    video_mail_box.video = video
+    video_mail_box.message = message
+    video_mail_box.save()
     return Response({
         'msg': 'message sent successfully',
         'imgUrl': message.img.url,

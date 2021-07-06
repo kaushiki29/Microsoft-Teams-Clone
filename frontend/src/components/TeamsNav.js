@@ -26,6 +26,7 @@ import { useHistory } from 'react-router-dom';
 import { api } from '../screen/Helper';
 import axios from 'axios';
 import TeamChat from './TeamChat';
+import OldCalls from './OldCalls';
 
 
 const styles = (theme) => ({
@@ -97,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         width: '100%',
         // display: "flex",
-        paddingBottom: "6%",
+        // paddingBottom: "6%",
         // flexDirection: "column",
     },
     tabPanelFrame: {
@@ -129,8 +130,9 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "rgb(245, 245, 245)",
         paddingLeft: "10%",
         paddingRight: "10%",
-        marginTop: "112px",
-        paddingBottom: "6%",
+        marginTop: "108px",
+        marginBottom: "91px",
+        // paddingBottom: "6%",
         '@media(max-width: 550px)': {
             paddingLeft: 0,
             paddingRight: 0,
@@ -456,6 +458,7 @@ export default function TeamsNav(props) {
 
     const [scheduleVal, setScheduleVal] = useState(1);
     const [scheduledCalls, setScheduledCalls] = useState([])
+    const [oldCalls, setOldCalls] = useState([]);
     useEffect(() => {
         const token = localStorage.getItem("token");
         axios({
@@ -470,7 +473,8 @@ export default function TeamsNav(props) {
         })
             .then(res => {
                 console.log(res.data.scheduled_calls);
-                setScheduledCalls(res.data.scheduled_calls)
+                setScheduledCalls(res.data.scheduled_calls);
+                setOldCalls(res.data.old_calls);
             })
             .catch(err => {
                 console.log(err);
@@ -562,6 +566,7 @@ export default function TeamsNav(props) {
                 >
                     <Tab label="Chat" className={classes.tab} />
                     <Tab label="General" className={classes.tab} />
+                    <Tab label="Old Calls" className={classes.tab} />
                     <Tab label="Scheduled Calls" className={classes.tab} />
                     <Tab label="Tasks" className={classes.tab} />
                     <Tab label="Team Participants" className={classes.tab} />
@@ -583,6 +588,15 @@ export default function TeamsNav(props) {
                 }
             </TabPanel>
             <TabPanel value={value} index={2} className={classes.tabPanel}>
+                {oldCalls.map(i => <OldCalls call={i} scheduleVal={scheduleVal} setScheduleVal={setScheduleVal} />)}
+                {oldCalls.length == 0 &&
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                        <img src="https://envoy.com/wp-content/uploads/2020/01/USED-FOR_-_4-Ways-to-Improve-Conference-Room-Experience_-SEO-21_17.-video-conferencing_v1-1200x630.png" style={{ width: "210px" }} />
+                        <div style={{ paddingTop: "2%", color: "gray" }}>No Old meeting!</div>
+                    </div>
+                }
+            </TabPanel>
+            <TabPanel value={value} index={3} className={classes.tabPanel}>
                 {scheduledCalls.map(i => <ScheduledCalls call={i} scheduleVal={scheduleVal} setScheduleVal={setScheduleVal} />)}
                 {scheduledCalls.length == 0 &&
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -591,14 +605,14 @@ export default function TeamsNav(props) {
                     </div>
                 }
             </TabPanel>
-            <TabPanel value={value} index={3} className={classes.tabPanel}>
+            <TabPanel value={value} index={4} className={classes.tabPanel}>
                 <div style={{ display: "flex", flexDirection: "column", width: "100%", }}>
                     <div style={{ backgroundColor: "white", borderRadius: "2%", paddingBottom: "4%" }}>
                         <TodoList allUsers={allUsers} team_slug={props.team_slug} />
                     </div>
                 </div>
             </TabPanel>
-            <TabPanel value={value} index={4} className={classes.tabPanel}>
+            <TabPanel value={value} index={5} className={classes.tabPanel}>
                 <Invite team_slug={props.team_slug} allUsers={allUsers} reloadValue={reloadValue} isAdmin={props.isAdmin} uniqueCode={props.uniqueCode} />
             </TabPanel>
 
