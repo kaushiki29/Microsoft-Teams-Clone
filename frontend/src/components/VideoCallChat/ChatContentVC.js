@@ -137,7 +137,20 @@ export default function ChatContentVC(props) {
         
         setChat(c=> [...c, x]);
       }
+      else{
+        const x = {
+          type: "",
+          msg_text: type == 'txt' ? data : null,
+          type1: type,
+          img: type == 'img' ? data : null,
+          sent_time: new Date(),
+          sender_name: name1,
+        }
       
+        setChat(c=> [...c, x]);
+      }
+      scrollToBottom();
+
     });
 
     
@@ -180,23 +193,17 @@ export default function ChatContentVC(props) {
           console.log(err);
         })
 
-      chatItms.push({
-        type: "",
-        msg_text: msg,
-        type1: "txt",
-        img: null,
-        sent_time: new Date(),
-      });
-      let c = [...chat];
-      c.push({
-        type: "",
-        msg_text: msg,
-        type1: "txt",
-        img: null,
-        sent_time: new Date(),
-        sender_name: props.name,
-      })
-      setChat([...c])
+      
+      // let c = [...chat];
+      // c.push({
+      //   type: "",
+      //   msg_text: msg,
+      //   type1: "txt",
+      //   img: null,
+      //   sent_time: new Date(),
+      //   sender_name: props.name,
+      // })
+      // setChat([...c])
       scrollToBottom();
       setMsg('');
     }

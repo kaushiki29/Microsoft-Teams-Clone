@@ -1,9 +1,10 @@
 # from backend.msteams.teams.models import Teams
+# from backend.msteams.teams.models import TeamTodo
 from celery import Celery
 import time
 from django.core.mail import send_mail
 from communication.models import Videocall,VideoCallParticipant
-from teams.models import Teams, TeamParticipants
+from teams.models import Teams, TeamParticipants, TeamTodo
 app = Celery('tasks', broker='redis://localhost')
 
 # from celery.decorators import task
@@ -65,6 +66,24 @@ def start_meeting():
         c.s_id = create_twilio_call(c.meeting_slug)
         c.save()
     return "Scheduled call changed to Active call successfully"
+
+
+
+@app.task
+def task_reminder():
+    tasks = TeamTodo.objects.filter(is_completed=False, expected_completion_unix_time__lt = time.time()*1000+43200000)
+    for t in tasks:
+        email = t.assigned_to.email
+        team = t.associated_team.team_name
+        created_by = t.created_by.first_name+" "+t.created_by.last_name
+        send_mail('Task Deadline Approaching',
+            'Hello '+t.assigned_to.first_name+' '+t.assigned_to.last_name+', this is a gentle reminder of the task deadline created by '+created_by+' in the team named '+team+'. Your task deadline is in 12 hours.',
+            'msteamsclone@gmail.com',
+            [email],
+            fail_silently=False
+            )
+    return "Task reminder mail sent successfully"
+
 
 
 def get_status(s_id):

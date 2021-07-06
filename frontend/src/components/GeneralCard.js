@@ -101,6 +101,11 @@ export default function SimpleCard(props) {
 
         return (hour + ":" + min + ":" + sec);
     }
+
+    const handleChat=()=>{
+        history.push('/meeting/conversation/' + props.call.meeting_slug);
+    }
+
     return (
         <Card className={classes.root}>
             <CardContent className={classes.header}>
@@ -116,6 +121,7 @@ export default function SimpleCard(props) {
             </CardContent>
             <CardActions>
                 <Button size="small" className={classes.button} onClick={handleJoin} >Join Now </Button>
+                <Button size="small" className={classes.button} style={{width: 125, }} onClick={handleChat} >Conversation </Button>
             </CardActions>
         </Card>
     );

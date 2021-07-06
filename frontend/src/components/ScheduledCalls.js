@@ -99,6 +99,10 @@ function ScheduledCalls(props) {
             })
     }
 
+    const handleChat=()=>{
+        history.push('/meeting/conversation/' + props.call.meeting_slug);
+    }
+
     return (
         <Card className={classes.root}>
             <CardContent className={classes.header}>
@@ -116,6 +120,7 @@ function ScheduledCalls(props) {
             </CardContent>
             <CardActions>
                 <Button size="small" className={classes.button} onClick={handleDelete}>Delete call</Button>
+                <Button size="small" className={classes.button} style={{width: 125, }} onClick={handleChat} >Conversation </Button>
             </CardActions>
         </Card>
 

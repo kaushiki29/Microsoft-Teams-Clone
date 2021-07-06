@@ -3,11 +3,11 @@ import Navbar from '../components/Navbar';
 import Navbar2 from '../components/Navbar2';
 import Sidebar from '../components/Sidebar';
 import TeamsList from '../components/TeamsList';
-import ChatIcon from '@material-ui/icons/Chat';
-import PeopleIcon from '@material-ui/icons/People';
-import CallIcon from '@material-ui/icons/Call';
 import { makeStyles } from '@material-ui/core/styles';
 import { messaging } from '../components/Firebase';
+
+
+//CSS Styles
 
 
 const useStyles = makeStyles((theme) => ({

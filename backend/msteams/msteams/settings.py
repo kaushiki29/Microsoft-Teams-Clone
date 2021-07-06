@@ -190,6 +190,12 @@ CELERY_BEAT_SCHEDULE = {
         'task':'teams.tasks.start_meeting',
         'schedule':timedelta(seconds=120),
         'args':()
+    },
+
+    'task_reminder':{
+        'task':'teams.tasks.task_reminder',
+        'schedule':timedelta(seconds=43200000),
+        'args':()
     }
 }
 

@@ -22,6 +22,8 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Fade from '@material-ui/core/Fade';
 import SendIcon from '@material-ui/icons/Send';
 import { io } from "socket.io-client";
+import axios from "axios";
+import { api } from "../screen/Helper";
 
 
 const videoType = 'video/webm';
@@ -151,12 +153,38 @@ const Room = ({ roomName, room, handleLogout }) => {
     });
 
     // }
-    socket.on('updatechat', function (data, name, time) {
-      console.log(data, name, time);
-      msgs.push({ username: name, msg: data, timestamp: time });
-      setAllMsg([...msgs]);
+    socket.on('updatechat', function (data, name, type) {
+      console.log(data, name, type);
+      let a;
+      if (type == 'txt') {
+        a = { sender_name: name, msg_text: data, sent_time: new Date(), type1: type }
+      }
+      else if (type == 'img') {
+        a = { sender_name: name, img: data, sent_time: new Date(), type1: type }
+      }
+      setAllMsg(x => [...x, a]);
       scrollToBottom();
     });
+
+    const token = localStorage.getItem("token");
+    axios({
+      method: 'post',
+      url: api + "communication/get_video_msg",
+      data: {
+        meeting_slug: roomName,
+      },
+      headers: {
+        Authorization: "Token " + token
+      }
+    })
+      .then(res => {
+        console.log(res.data);
+        setAllMsg(res.data.all_msgs)
+
+      })
+      .catch(err => {
+        console.log(err);
+      })
     return () => socket.disconnect();
   }, [])
 
@@ -323,8 +351,9 @@ const Room = ({ roomName, room, handleLogout }) => {
       const date = new Date(i.timestamp);
       return (
         <div key={index} style={{ margin: 0, }}>
-          <p style={{ marginLeft: 0, marginTop: 20, fontWeight: 'normal' }}><b>{i.username}</b> &nbsp; {formatAMPM(date)} </p>
-          <p style={{ marginLeft: 0, marginTop: 5, maxWidth: 250 }}>{i.msg}</p>
+          <p style={{ marginLeft: 0, marginTop: 20, fontWeight: 'normal' }}><b>{i.sender_name}</b> &nbsp; {formatAMPM(new Date(i.sent_time))} </p>
+          {i.type1 === 'txt' && <p style={{ marginLeft: 0, marginTop: 5, maxWidth: 250 }}>{i.msg_text}</p>}
+          {i.type1 === 'img' && <img src={'https://msteams.games:9000' + i.img} style={{ width: 150, height: 150, objectFit: 'contain', border: "1px solid rgb(232, 205, 65)", borderRadius: '10px' }} />}
         </div>
       )
     }
@@ -339,8 +368,24 @@ const Room = ({ roomName, room, handleLogout }) => {
     }
     const sendMessage = () => {
       if (msg != '') {
+        const token = localStorage.getItem('token');
+        axios({
+          method: 'post',
+          url: api + 'communication/send_video_msg',
+          data: {
+            msg_text: msg,
+            meeting_slug: roomName,
+          },
+          headers: { Authorization: 'Token ' + token }
+        })
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        })
         setMsg('');
-        socket.emit('sendchat', roomName, msg, room.localParticipant.identity.split("!!!")[0], new Date().getTime());
+        socket.emit('sendchat', roomName, msg, room.localParticipant.identity.split("!!!")[0], 'txt');
       }
 
     }

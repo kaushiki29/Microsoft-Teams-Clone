@@ -301,7 +301,7 @@ export default function ChatContent(props) {
           <div ref={messagesEndRef} />
         </div>
       </div>
-      <div className="content__footer">
+      <div className="content__footer" style={{ position: "sticky", bottom: "92px" }}>
         <div className="sendNewMessage" onPaste={handlePaste} ref={dropRef}>
           <button className="addFiles" onClick={openModal}>
             <AddIcon style={{ color: "white" }} />

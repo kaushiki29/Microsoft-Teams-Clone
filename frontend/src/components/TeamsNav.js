@@ -574,7 +574,7 @@ export default function TeamsNav(props) {
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0} className={classes.tabPanel}>
-                {username && <TeamChat name={username} />}
+                {username && <TeamChat name={username} style={{ paddingBottom: "10px" }} />}
             </TabPanel>
             <TabPanel value={value} index={1} className={classes.tabPanel}>
                 {props.allCalls.length > 0 && props.allCalls.map(i =>

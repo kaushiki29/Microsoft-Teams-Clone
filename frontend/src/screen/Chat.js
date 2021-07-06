@@ -18,6 +18,10 @@ import CallerTune from '../static/telephone-ring-02.mp3';
 import CallModal from '../components/CallModal';
 
 
+
+//CSS styles
+
+
 const useStyles = makeStyles((theme) => ({
     sidebar: {
         width: "68px",
@@ -106,6 +110,11 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
+
+//Chat function
+
+
+
 function Chat() {
     const isMobile = useMediaQuery('(max-width:600px)');
     const classes = useStyles();
@@ -116,23 +125,28 @@ function Chat() {
     const [otherUserName, setOtherUserName] = useState('');
     const [allChatUsers, setAllChatUsers] = useState([]);
     const [uName, setUName] = useState('');
-    const [change,setChange] = useState(0);
+    const [change, setChange] = useState(0);
     const { chat_uuid } = useParams();
     const [open, setOpen] = useState(false);
     const [audio, setAudio] = useState(new Audio(CallerTune));
     const [callUUID, setCallUUID] = useState();
     const [person, setPerson] = useState();
+
+
     useEffect(() => {
         fetchChatList();
 
         setChatuuid(chat_uuid);
     }, []);
+
+
+
     messaging.onMessage((payload) => {
         console.log(payload);
         if (payload.data.type === 'msg') {
             fetchChatList();
         }
-        else if(payload.data.type === 'call'){
+        else if (payload.data.type === 'call') {
             setPerson(payload.data.person);
             setCallUUID(payload.data.uuid);
             setOpen(true);
@@ -145,10 +159,15 @@ function Chat() {
             }, 20000)
         }
     })
+
+
+
     useEffect(() => {
         setChatItms([]);
         fetchMsgs();
     }, [chatuuid]);
+
+
 
     const fetchMsgs = () => {
         if (chatuuid && chatuuid !== 'all-conversations') {
@@ -170,10 +189,15 @@ function Chat() {
                 })
         }
     }
+
+
+
     const handleClose = () => {
         setOpen(false);
         audio.pause();
     }
+
+
     const fetchChatList = () => {
         console.log('here fetch')
         axios({
@@ -195,7 +219,7 @@ function Chat() {
                             other_user_name: i.other_user_name
                         }
                         return obj;
-                        setChange(change+1);
+                        setChange(change + 1);
                     }
                     else {
                         return i;
@@ -208,23 +232,27 @@ function Chat() {
             })
     }
 
+
+
     const setCurrChatuuid = (uuid) => {
-            if(uuid!=chatuuid){
-                setChatuuid(uuid);
-                setOtherUserName("");
-                history.push('/chat/' + uuid);
-                let users = [...allChatUsers];
-                for(let i=0;i<users.length;i++){
-                    if(users[i].thread_id === uuid){
-                        users[i].unseen_messages_count=0;
-                        setChange(change+1);
-                    }
+        if (uuid != chatuuid) {
+            setChatuuid(uuid);
+            setOtherUserName("");
+            history.push('/chat/' + uuid);
+            let users = [...allChatUsers];
+            for (let i = 0; i < users.length; i++) {
+                if (users[i].thread_id === uuid) {
+                    users[i].unseen_messages_count = 0;
+                    setChange(change + 1);
                 }
-                setAllChatUsers([...users]);
             }
+            setAllChatUsers([...users]);
+        }
         // fetchChatList();
     }
-    
+
+
+
 
     return (
         <div>

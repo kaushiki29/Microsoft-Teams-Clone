@@ -12,12 +12,15 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { api } from '../screen/Helper';
 import Dialog from '@material-ui/core/Dialog';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
+
+//
+//
+// CSS files
+//
+//
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -54,21 +57,6 @@ const styles = (theme) => ({
   },
 });
 
-
-const DialogTitle = withStyles(styles)((props) => {
-  const { children, classes, onClose, ...other } = props;
-  return (
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
-      {onClose ? (
-        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </MuiDialogTitle>
-  );
-});
-
 const DialogContent = withStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
@@ -82,11 +70,23 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 
+
+//
+//
+// Todo Form function for taking User Input of Tasks
+//
+//
+
 function TodoForm({ allUsers, pendingTodos, setPendingTodos, task, setTask, assigned, setAssigned, expectedTime, setExpectedTime, team_slug, reloadTodos, id, setId }) {
   const classes = useStyles();
-
   const [open, setOpen] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
+
+  //
+  //
+  // Error Modal open and close
+  //
+  //
 
   const handleErrorOpen = () => {
     setErrorOpen(true);
@@ -95,6 +95,11 @@ function TodoForm({ allUsers, pendingTodos, setPendingTodos, task, setTask, assi
     setErrorOpen(false);
   };
 
+  //
+  //
+  // Task Modal Open and close
+  //
+  //
   const handleOpen = () => {
     setOpen(true);
   };
@@ -107,16 +112,41 @@ function TodoForm({ allUsers, pendingTodos, setPendingTodos, task, setTask, assi
     document.getElementById('datetime-local').value = "";
   };
 
+  //
+  //
+  //Handling task
+  //
+  //
+
   const handleTask = (e) => {
     setTask(e.target.value);
   }
+
+  //
+  //
+  //Handling time
+  //
+  //
   const handleTime = (e) => {
     // const t = new Date(e.target.value).getTime()
     setExpectedTime(e.target.value);
   }
+
+  //
+  //
+  //Handing Assigned to
+  //
+  //
   const handleAssigned = e => {
     setAssigned(e.target.value)
   }
+
+
+  //
+  //
+  //Handling Submit
+  //
+  //
 
   const handleSubmit = () => {
     const token = localStorage.getItem("token");
@@ -158,11 +188,18 @@ function TodoForm({ allUsers, pendingTodos, setPendingTodos, task, setTask, assi
     }
   }
 
+
+
   return (
     <div style={{ textAlign: "center", paddingTop: "3%", paddingBottom: "3%" }}>
       <Button variant="outlined" color="primary" onClick={handleOpen} style={{ height: "33px" }}>
         Create a new task
       </Button>
+
+
+      {/* Input Modal */}
+
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -229,6 +266,11 @@ function TodoForm({ allUsers, pendingTodos, setPendingTodos, task, setTask, assi
           </div>
         </Fade>
       </Modal>
+
+
+      {/* Error Modal */}
+
+
       <Dialog onClose={handleErrorClose} aria-labelledby="customized-dialog-title" open={errorOpen}>
         <DialogContent dividers>
           <Typography gutterBottom>
