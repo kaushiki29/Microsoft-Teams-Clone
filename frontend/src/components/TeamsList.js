@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: "2%",
         minHeight: "250px",
         flexWrap: "wrap",
-        // justifyContent: "space-between",
+        justifyContent: "space-between",
         '@media(max-width: 600px)': {
             justifyContent: "space-around"
         },

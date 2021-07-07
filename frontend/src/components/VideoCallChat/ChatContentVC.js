@@ -5,22 +5,79 @@ import SendIcon from '@material-ui/icons/Send';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import { api } from "../../screen/Helper";
-import { useHistory,useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import { io } from "socket.io-client";
 import { Modal } from "@material-ui/core";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import ChatItemTeam from "../ChatItemTeam";
 import WarningModal from "../WarningModal";
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import OldCalls from '../OldCalls';
+
+
 const useStyles = makeStyles({
   input: {
     display: "none"
+  },
+  root: {
+    minWidth: 275,
+    marginBottom: "7%",
+    '@media(max-width: 389px)': {
+      minWidth: 200
+    },
+  },
+  header: {
+    backgroundColor: "rgb(70, 71, 117)",
+  },
+  head: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bolder',
+    paddingBottom: '13px',
+    color: '#FFFFFF',
+    flex: 1,
+  },
+  time: {
+    fontSize: 18,
+    fontWeight: 'normal',
+    paddingBottom: '13px',
+    color: '#FFFFFF'
+  },
+  pos: {
+    marginBottom: 12,
+  },
+  divider: {
+    backgroundColor: 'white'
+  },
+  button: {
+    fontSize: "12px",
+    backgroundColor: "#464775",
+    color: "white",
+    width: "100px",
+    height: "35px",
+    marginTop: 20,
+    '&:hover': {
+      backgroundColor: "#53548a"
+    },
   }
 })
 
 
 export default function ChatContentVC(props) {
-  const {meeting_slug} = useParams();
+  const { meeting_slug } = useParams();
   const history = useHistory();
   const isMobile = useMediaQuery('(max-width:600px)')
   const classes = useStyles();
@@ -31,22 +88,22 @@ export default function ChatContentVC(props) {
   const [image, setImage] = useState();
   const [imgFile, setImgFile] = useState();
   const dropRef = useRef();
-  const [tabActive,setTabActive] = useState(true);
+  const [tabActive, setTabActive] = useState(true);
   const socket = io("https://msteams.games:5000");
-  const [openError,setOpenError] = useState(false);
-  const [error,setError] = useState(true);
-  const [errorMsg,setErrorMsg] = useState();
+  const [openError, setOpenError] = useState(false);
+  const [error, setError] = useState(true);
+  const [errorMsg, setErrorMsg] = useState();
   const chatItms = [];
-  useEffect(()=>{
+  useEffect(() => {
     console.log(props.name);
-  },[props.name])
+  }, [props.name])
   useEffect(() => {
     const token = localStorage.getItem("token");
     axios({
       method: 'post',
       url: api + "communication/get_video_msg",
       data: {
-          meeting_slug: meeting_slug,
+        meeting_slug: meeting_slug,
       },
       headers: {
         Authorization: "Token " + token
@@ -54,13 +111,13 @@ export default function ChatContentVC(props) {
     })
       .then(res => {
         console.log(res.data);
-        if(res.data.error){
-            setOpenError(true);
-            setErrorMsg(res.data.msg);
+        if (res.data.error) {
+          setOpenError(true);
+          setErrorMsg(res.data.msg);
         }
-        else{
-            setChat(res.data.all_msgs);
-            setError(false);
+        else {
+          setChat(res.data.all_msgs);
+          setError(false);
         }
       })
       .catch(err => {
@@ -69,7 +126,7 @@ export default function ChatContentVC(props) {
   }, [])
 
 
-  const onFocus=()=>{
+  const onFocus = () => {
     setTabActive(true);
   }
 
@@ -123,21 +180,21 @@ export default function ChatContentVC(props) {
 
     }
     socket.on('updatechat', function (data, name1, type) {
-      console.log(data, name1,props.name);
+      console.log(data, name1, props.name);
       if (props.name != name1) {
-        
+
         const x = {
-            type: "other",
-            msg_text: type == 'txt' ? data : null,
-            type1: type,
-            img: type == 'img' ? data : null,
-            sent_time: new Date(),
-            sender_name: name1,
-          }
-        
-        setChat(c=> [...c, x]);
+          type: "other",
+          msg_text: type == 'txt' ? data : null,
+          type1: type,
+          img: type == 'img' ? data : null,
+          sent_time: new Date(),
+          sender_name: name1,
+        }
+
+        setChat(c => [...c, x]);
       }
-      else{
+      else {
         const x = {
           type: "",
           msg_text: type == 'txt' ? data : null,
@@ -146,14 +203,14 @@ export default function ChatContentVC(props) {
           sent_time: new Date(),
           sender_name: name1,
         }
-      
-        setChat(c=> [...c, x]);
+
+        setChat(c => [...c, x]);
       }
       scrollToBottom();
 
     });
 
-    
+
 
     let div = dropRef.current
     div?.addEventListener('dragenter', handleDragIn)
@@ -193,7 +250,7 @@ export default function ChatContentVC(props) {
           console.log(err);
         })
 
-      
+
       // let c = [...chat];
       // c.push({
       //   type: "",
@@ -214,6 +271,25 @@ export default function ChatContentVC(props) {
     }
   }
 
+  const [meetingName, setMeetingName] = useState("")
+  const [team_slug, setTeamSlug] = useState("")
+  useEffect(() => {
+    axios({
+      method: 'post',
+      url: api + 'communication/get_meet_name',
+      data: {
+        meeting_slug: meeting_slug
+      },
+      headers: { Authorization: 'Token ' + localStorage.getItem('token') }
+    })
+      .then(res => {
+        setMeetingName(res.data.name)
+        setTeamSlug(res.data.team_slug)
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }, [])
 
 
   const onImageChange = (event) => {
@@ -257,13 +333,13 @@ export default function ChatContentVC(props) {
         });
         let c = [...chat];
         c.push({
-            type: "",
-            msg_text: null,
-            type1: "img",
-            img: res.data.imgUrl,
-            sent_time: new Date(),
-            sender_name: props.name
-          })
+          type: "",
+          msg_text: null,
+          type1: "img",
+          img: res.data.imgUrl,
+          sent_time: new Date(),
+          sender_name: props.name
+        })
         setChat([...c]);
         scrollToBottom();
         setImage();
@@ -292,77 +368,139 @@ export default function ChatContentVC(props) {
       setImgFile(e.clipboardData.files[0]);
     }
   }
-  const handleCloseError=()=>{
+  const handleCloseError = () => {
 
   }
+
+
+  var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+  const formatAMPM = (date) => {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+  }
+
+  const handleDelete = () => {
+    const token = localStorage.getItem("token");
+    axios({
+      method: 'post',
+      url: api + "communication/delete_call",
+      data: {
+        meeting_slug: meeting_slug
+      },
+      headers: {
+        Authorization: "Token " + token
+      }
+    })
+      .then(res => {
+        console.log(res.data)
+        // props.setScheduleVal(props.scheduleVal + 1)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+  const handleGoBack = () => {
+    history.push("/teams/" + team_slug)
+  }
+
   return (
-    
-    <div style={{ paddingLeft: isMobile ? '10px' : '20px', marginTop: 100,marginLeft: 68 }} className="main__chatcontent">
+
+    <div style={{ paddingLeft: isMobile ? '10px' : '20px', marginTop: 71, marginLeft: 68 }} className="main__chatcontent">
+      {/* <div><Button variant="outlined" color="primary" onClick={handleGoBack} style={{ height: 33 }}>Go back</Button></div> */}
+      {/* <div><OldCalls call={{}}  /></div> */}
+      <div style={{ justifyContent: "center", alignItems: "center", height: "56px", textAlign: "center", position: "sticky", top: "56px", fontSize: "24px", padding: 12, }}>
+        {/* Meeting Name: {meetingName.toUpperCase()} */}
+        <Card className={classes.root}>
+          <CardContent className={classes.header}>
+            <div className={classes.head}>
+              <Typography className={classes.title}>
+                Meeting Name :
+              </Typography>
+            </div>
+            <div className={classes.header}>
+              <Typography className={classes.time}>
+                {/* Time : {formatAMPM(new Date(props.call.time))}, {new Date(props.call.time).getDate()} {month[new Date(props.call.time).getMonth()]} {new Date(props.call.time).getFullYear()} */}
+              </Typography>
+            </div>
+            <Divider className={classes.divider} />
+          </CardContent>
+          <CardActions>
+            <Button size="small" className={classes.button} onClick={handleDelete}>Delete call</Button>
+          </CardActions>
+        </Card>
+      </div>
       {!error &&
-      <React.Fragment>
-      <div className="content__body" >
-        <div className="chat__items" >
-          {chat.map((itm, index) => {
-            return (
-              <ChatItemTeam
-                animationDelay={index + 2}
-                key={index}
-                user={itm.type ? itm.type : "me"}
-                msg={itm.msg_text}
-                type={itm.type1}
-                img={itm.img}
-                image={"https://simg.nicepng.com/png/small/128-1280406_view-user-icon-png-user-circle-icon-png.png"}
-                sent_time={itm.sent_time}
-                // hasSeen = {itm.has_seen}
-                sender_name = {itm.sender_name}
+        <React.Fragment>
+          <div className="content__body" >
+            <div className="chat__items" >
+              {chat.map((itm, index) => {
+                return (
+                  <ChatItemTeam
+                    animationDelay={index + 2}
+                    key={index}
+                    user={itm.type ? itm.type : "me"}
+                    msg={itm.msg_text}
+                    type={itm.type1}
+                    img={itm.img}
+                    image={"https://simg.nicepng.com/png/small/128-1280406_view-user-icon-png-user-circle-icon-png.png"}
+                    sent_time={itm.sent_time}
+                    // hasSeen = {itm.has_seen}
+                    sender_name={itm.sender_name}
+                  />
+                );
+              })}
+              <div ref={messagesEndRef} />
+            </div>
+          </div>
+          <div className="content__footer">
+            <div className="sendNewMessage" onPaste={handlePaste} ref={dropRef}>
+              <button className="addFiles" onClick={openModal}>
+                <AddIcon style={{ color: "white" }} />
+              </button>
+              <input
+                type="text"
+                placeholder="Type a message here"
+                onChange={onStateChange}
+                onKeyDown={handleKeyDown}
+                value={msg}
               />
-            );
-          })}
-          <div ref={messagesEndRef} />
-        </div>
-      </div>
-      <div className="content__footer">
-        <div className="sendNewMessage" onPaste={handlePaste} ref={dropRef}>
-          <button className="addFiles" onClick={openModal}>
-            <AddIcon style={{ color: "white" }} />
-          </button>
-          <input
-            type="text"
-            placeholder="Type a message here"
-            onChange={onStateChange}
-            onKeyDown={handleKeyDown}
-            value={msg}
-          />
-          <button className="btnSendMsg" id="sendMsgBtn" onClick={sendMessage}>
-            <SendIcon style={{ color: "white" }} />
-          </button>
-        </div>
-      </div>
-      <Modal open={open} onClose={handleClose} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 'auto' }}>
-        <div style={{ width: 400, height: 400, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', borderRadius: "2%" }}>
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <div>Preview Image</div>
-            <div style={{ display: "flex" }}>
-              <div style={{ width: 205, height: 205, borderRadius: "2%", borderColor: "#464775", borderStyle: "solid", backgroundColor: "#f1f1f1" }}>
-                <img src={image} style={{ width: 202, height: 202, objectFit: 'contain' }} />
+              <button className="btnSendMsg" id="sendMsgBtn" onClick={sendMessage}>
+                <SendIcon style={{ color: "white" }} />
+              </button>
+            </div>
+          </div>
+          <Modal open={open} onClose={handleClose} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 'auto' }}>
+            <div style={{ width: 400, height: 400, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', borderRadius: "2%" }}>
+              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                <div>Preview Image</div>
+                <div style={{ display: "flex" }}>
+                  <div style={{ width: 205, height: 205, borderRadius: "2%", borderColor: "#464775", borderStyle: "solid", backgroundColor: "#f1f1f1" }}>
+                    <img src={image} style={{ width: 202, height: 202, objectFit: 'contain' }} />
+                  </div>
+                </div>
+                {!imgFile ? <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose an Image</div> : <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose Some Other Image</div>}
+
+                <input type="file" name="myImage" id="contained-button-file" onChange={onImageChange} className={classes.input} />
+                <label htmlFor="contained-button-file" style={{ paddingBottom: "15%" }}>
+                  <Button variant="contained" color="primary" component="span" style={{ backgroundColor: "#464775", height: "33px" }}>
+                    Upload
+                  </Button>
+                </label>
+                {/* <button style={{ width: 200 }} >Done!</button> */}
+                <Button variant="outlined" color="primary" onClick={handleUploadImage} style={{ height: "33px", color: "#464775" }}>
+                  Done!
+                </Button>
               </div>
             </div>
-            {!imgFile ? <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose an Image</div> : <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose Some Other Image</div>}
-
-            <input type="file" name="myImage" id="contained-button-file" onChange={onImageChange} className={classes.input} />
-            <label htmlFor="contained-button-file" style={{ paddingBottom: "15%" }}>
-              <Button variant="contained" color="primary" component="span" style={{ backgroundColor: "#464775", height: "33px" }}>
-                Upload
-              </Button>
-            </label>
-            {/* <button style={{ width: 200 }} >Done!</button> */}
-            <Button variant="outlined" color="primary" onClick={handleUploadImage} style={{ height: "33px", color: "#464775" }}>
-              Done!
-            </Button>
-          </div>
-        </div>
-      </Modal>
-      </React.Fragment>
+          </Modal>
+        </React.Fragment>
       }
       {error && <WarningModal open={openError} handleClose={handleCloseError} text={errorMsg} redirect={"/home"} />}
     </div>

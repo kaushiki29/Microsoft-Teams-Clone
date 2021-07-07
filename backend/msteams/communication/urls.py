@@ -25,5 +25,6 @@ urlpatterns = [
     path('get_team_msg',views.get_team_msg,name='get_team_msg'),
     path('get_video_msg',views.get_video_msg,name='get_video_msg'),
     path('send_video_msg',views.send_video_msg,name='send_video_msg'),
-    path('send_video_img',views.send_video_img, name='send_video_img')
+    path('send_video_img',views.send_video_img, name='send_video_img'),
+    path('get_meet_name', views.get_meet_name, name='get_meet_name')
 ]

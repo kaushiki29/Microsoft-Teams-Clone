@@ -279,7 +279,6 @@ export default function ChatContent(props) {
   }
   return (
     <div style={{ paddingLeft: isMobile ? '10px' : '20px', paddingBottom: 0, padding: 0 }} className="main__chatcontent">
-
       <div className="content__body" >
         <div className="chat__items" >
           {chat.map((itm, index) => {

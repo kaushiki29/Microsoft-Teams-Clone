@@ -112,11 +112,21 @@ def schedule_call(request):
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
+def get_meet_name(request):
+    meeting_slug = request.data.get('meeting_slug')
+    videocall = Videocall.objects.get(meeting_slug=meeting_slug)
+    return Response({
+        'name':videocall.name,
+        'team_slug':videocall.team_associated.team_slug,
+    })
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def get_scheduled_calls(request):
     user = request.user
     team_slug = request.data.get('team_slug')
     team = Teams.objects.get(team_slug=team_slug)
-    calls = Videocall.objects.filter(team_associated=team)
+    calls = Videocall.objects.filter(team_associated=team).order_by('-created_at')
     scheduled_calls = []
     old_calls = []
     for c in calls:
@@ -327,6 +337,12 @@ def send_message(request):
 
     msg_text = request.data.get('msg_text')
     thread_id = request.data.get('thread_id')
+    meeting_thread = request.data.get('meeting_thread')
+    if meeting_thread is not None:
+        call = P2PVideocall.objects.get(meeting_slug = meeting_thread)
+        user_a = call.user_a
+        user_b = call.user_b
+        thread_id = ChatUUID.objects.get(Q(user_a = user_a, user_b = user_b)| Q(user_a = user_b,user_b = user_a)).thread_id
     thread_uuid = ChatUUID.objects.get(thread_id = thread_id)
     if user == thread_uuid.user_a:
         receiver = thread_uuid.user_b
@@ -375,6 +391,12 @@ def send_img(request):
 
     img = request.data.get('img')
     thread_id = request.data.get('thread_id')
+    meeting_thread = request.data.get('meeting_thread')
+    if meeting_thread is not None:
+        call = P2PVideocall.objects.get(meeting_slug = meeting_thread)
+        user_a = call.user_a
+        user_b = call.user_b
+        thread_id = ChatUUID.objects.get(Q(user_a = user_a, user_b = user_b)| Q(user_a = user_b,user_b = user_a)).thread_id
     thread_uuid = ChatUUID.objects.get(thread_id = thread_id)
     if user == thread_uuid.user_a:
         receiver = thread_uuid.user_b
@@ -460,7 +482,14 @@ def get_all_threads(request):
 @permission_classes([IsAuthenticated])
 def get_thread_messages(request):
     user = request.user
+    
     thread_id = request.data.get('thread_id')
+    meeting_thread = request.data.get('meeting_thread')
+    if meeting_thread is not None:
+        call = P2PVideocall.objects.get(meeting_slug = meeting_thread)
+        user_a = call.user_a
+        user_b = call.user_b
+        thread_id = ChatUUID.objects.get(Q(user_a = user_a, user_b = user_b)| Q(user_a = user_b,user_b = user_a)).thread_id
     thread_msgs = UserMailbox.objects.filter(thread_id__thread_id = thread_id, mail_box_user = user)
     make_seen = UserMailbox.objects.filter(thread_id__thread_id = thread_id, mail_box_user = user, has_seen = False)
     for i in make_seen:

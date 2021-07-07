@@ -14,6 +14,11 @@ import PeopleIcon from '@material-ui/icons/People';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import SendIcon from '@material-ui/icons/Send';
 import { io } from "socket.io-client";
+import axios from 'axios';
+import {api} from '../../screen/Helper'
+import Modal from '@material-ui/core/Modal';
+import Button from '@material-ui/core/Button';
+
 
 
 const Room = ({ roomName, room, handleLogout }) => {
@@ -51,12 +56,40 @@ const Room = ({ roomName, room, handleLogout }) => {
     });
 
     // }
-    socket.on('updatechat', function (data, name) {
-      console.log(data, name);
-      msgs.push({ username: name, msg: data });
-      setAllMsg([...msgs]);
+    socket.on('updatechat', function (data, name,type) {
+       console.log(data, name, type);
+      let a;
+      if (type == 'txt') {
+        a = { sender_name: name, msg_text: data, sent_time: new Date(), type1: type }
+      }
+      else if (type == 'img') {
+        a = { sender_name: name, img: data, sent_time: new Date(), type1: type }
+      }
+      setAllMsg(x => [...x, a]);
       scrollToBottom();
     });
+
+    const token = localStorage.getItem("token");
+    axios({
+      method: 'post',
+      url: api + "communication/get_thread_messages",
+      data: {
+        meeting_thread: roomName,
+      },
+      headers: {
+        Authorization: "Token " + token
+      }
+    })
+      .then(res => {
+        console.log(res.data);
+        setAllMsg([...res.data.all_msgs])
+
+      })
+      .catch(err => {
+        console.log(err);
+      })
+
+
     return () => socket.disconnect();
   }, [])
 
@@ -180,12 +213,23 @@ const Room = ({ roomName, room, handleLogout }) => {
 
 
   const chatList = () => {
-
+    const formatAMPM = (date) => {
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      var strTime = hours + ':' + minutes + ' ' + ampm;
+      return strTime;
+    }
     const chatItem = (i, index) => {
+      const date = new Date(i.timestamp);
       return (
         <div key={index} style={{ margin: 0, }}>
-          <p style={{ marginLeft: 0, marginTop: 20, fontWeight: 'bold' }}>{i.username}</p>
-          <p style={{ marginLeft: 0, marginTop: 5, maxWidth: 250 }}>{i.msg}</p>
+          <p style={{ marginLeft: 0, marginTop: 20, fontWeight: 'normal' }}><b>{i.sender_name}</b> &nbsp; {formatAMPM(new Date(i.sent_time))} </p>
+          {i.type1 === 'txt' &&  <p style={{ marginLeft: 0, marginTop: 5, maxWidth: 250, wordBreak: 'break-all' }}>{i.msg_text}</p>}
+          {i.type1 === 'img' && <img src={'https://msteams.games:9000' + i.img} style={{ width: 150, height: 150, objectFit: 'contain', border: "1px solid rgb(232, 205, 65)", borderRadius: '10px' }} />}
         </div>
       )
     }
@@ -198,12 +242,38 @@ const Room = ({ roomName, room, handleLogout }) => {
         sendMessage();
       }
     }
-    const sendMessage = () => {
-      if (msg != '') {
-        setMsg('');
-        socket.emit('sendchat', roomName, msg, room.localParticipant.identity.split("!!!")[0]);
-      }
+    // const sendMessage = () => {
+    //   if (msg != '') {
+    //     setMsg('');
+    //     socket.emit('sendchat', roomName, msg, room.localParticipant.identity.split("!!!")[0]);
+    //   }
 
+    // }
+    const sendMessage = () => {
+
+      if (msg != "") {
+        socket.emit('sendchat', roomName, msg, room.localParticipant.identity.split("!!!")[0], 'txt');
+        const token = localStorage.getItem('token');
+        axios({
+          method: 'post',
+          url: api + 'communication/send_message',
+          data: {
+            msg_text: msg,
+            meeting_thread: roomName,
+          },
+          headers: { Authorization: 'Token ' + token }
+        })
+          .then(res => {
+            console.log(res.data);
+          })
+          .catch(err => {
+            console.log(err);
+          })
+  
+        
+        scrollToBottom();
+        setMsg('');
+      }
     }
     return (
       <div style={{ marginLeft: 20, marginRight: 20 }}>
@@ -216,7 +286,7 @@ const Room = ({ roomName, room, handleLogout }) => {
           }
           <div ref={messagesEndRef} />
         </div >
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }} onPaste={handlePaste} ref = {dropRef} >
           <input
             style={{ height: 45, borderRadius: 100, padding: 10, borderWidth: '0.5px', outline: 'none', marginTop: 10, width: '100%' }}
             type="text"
@@ -240,8 +310,128 @@ const Room = ({ roomName, room, handleLogout }) => {
       room.localParticipant.publishTrack(screenTrack);
     }
     setSharing(!sharing);
-
   }
+
+  const [openImg, setOpenImg] = useState(false);
+  const [image, setImage] = useState();
+  const [imgFile, setImgFile] = useState();
+  const dropRef = useRef();
+  const handleCloseImg=()=>{
+    setOpenImg(false);
+  }
+  const onImageChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      let img = event.target.files[0];
+      setImgFile(img);
+      setImage(URL.createObjectURL(img))
+    }
+    
+  }
+  const handlePaste = (e) => {
+    if (e.clipboardData.files.length) {
+      console.log(e.clipboardData.files[0]);
+      setOpenImg(true);
+      setMsg('');
+      setImage(URL.createObjectURL(e.clipboardData.files[0]));
+      setImgFile(e.clipboardData.files[0]);
+    }
+  }
+  const handleUploadImage = () => {
+    console.log('upload');
+    let form_data = new FormData();
+    if (!imgFile) {
+      return (
+        alert("Please attach a media first.")
+      )
+    }
+    form_data.append('img', imgFile);
+    form_data.append('meeting_thread', roomName);
+    handleCloseImg();
+    axios({
+      method: 'post',
+      url: api + 'communication/send_img',
+      data: form_data,
+      headers: { Authorization: 'Token ' + localStorage.getItem('token') }
+    })
+      .then(res => {
+        socket.emit('sendchat', roomName, res.data.imgUrl, room.localParticipant.identity.split("!!!")[0], 'img');
+        scrollToBottom();
+        setImage();
+        setImgFile();
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
+  const handleDrag = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+  const handleDragIn = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+  const handleDragOut = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+  const handleDrop = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      console.log(e.dataTransfer.files)
+      let img = e.dataTransfer.files[0];
+      console.log(img);
+      setOpenImg(true);
+      setImage(URL.createObjectURL(img));
+      setImgFile(img);
+      e.dataTransfer.clearData();
+    }
+  }
+  useEffect(()=>{
+    if(showChat){
+      let div = dropRef.current
+      div.addEventListener('dragenter', handleDragIn)
+      div.addEventListener('dragleave', handleDragOut)
+      div.addEventListener('dragover', handleDrag)
+      div.addEventListener('drop', handleDrop)
+    }
+    
+  },[showChat])
+
+  const imgUploadModal=()=>{
+
+    return(
+      <Modal open={openImg} onClose={handleCloseImg} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 'auto' }}>
+        <div style={{ width: 400, height: 400, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', borderRadius: "2%" }}>
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <div>Preview Image</div>
+            <div style={{ display: "flex" }}>
+              <div style={{ width: 205, height: 205, borderRadius: "2%", borderColor: "#464775", borderStyle: "solid", backgroundColor: "#f1f1f1" }}>
+                <img src={image} style={{ width: 202, height: 202, objectFit: 'contain' }} />
+              </div>
+            </div>
+            {!imgFile ? <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose an Image</div> : <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose Some Other Image</div>}
+
+            <input type="file" name="myImage" id="contained-button-file" onChange={onImageChange} style={{display: 'none'}} />
+            <label htmlFor="contained-button-file" style={{ paddingBottom: "15%" }}>
+              <Button variant="contained" color="primary" component="span" style={{ backgroundColor: "#464775", height: "33px" }}>
+                Choose
+              </Button>
+            </label>
+            {/* <button style={{ width: 200 }} >Done!</button> */}
+            <Button variant="outlined" color="primary" onClick={handleUploadImage} style={{ height: "33px", color: "#464775" }}>
+              Upload!
+            </Button>
+          </div>
+        </div>
+      </Modal>
+    )
+  }
+
+
   return (
     <div className="room" style={{ backgroundColor: "#302e2e", height: "100%" }}>
       <div style={{ height: "45px", backgroundColor: "#f1f1f1", display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -295,6 +485,7 @@ const Room = ({ roomName, room, handleLogout }) => {
           <ExitToAppIcon />
         </button>
       </div>
+      {imgUploadModal()}
     </div>
   );
 };

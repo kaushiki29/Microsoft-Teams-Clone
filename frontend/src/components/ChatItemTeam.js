@@ -22,7 +22,7 @@ export default class ChatItemTeam extends Component {
   componentDidMount() {
     this.time = new Date(this.props.sent_time);
     this.day = 'Today';
-    if (new Date().getTime() - this.time.getTime() > 24 * 60 * 60 * 1000) {
+    if (new Date().getTime() - this.time.getTime() >(new Date().getHours()*1000*60*60 + new Date().getMinutes()*1000*60)) {
       this.day = this.time.getDate() + '-' + this.month[this.time.getMonth()] + '-' + this.time.getFullYear();
     }
     this.setState({

@@ -218,6 +218,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function TabPanel(props) {
+
     const { children, value, index, ...other } = props;
 
     return (
@@ -250,7 +251,14 @@ function a11yProps(index) {
     };
 }
 export default function TeamsNav(props) {
-
+    const options = {
+        chat: 0,
+        general: 1,
+        old_calls: 2,
+        scheduled_calls: 3,
+        tasks: 4,
+        participants: 5,
+    }
     const [val, setVal] = useState(1)
     const classes = useStyles();
     const history = useHistory();
@@ -276,6 +284,9 @@ export default function TeamsNav(props) {
     const [allUsers, setAllUsers] = useState([])
     useEffect(() => {
         const token = localStorage.getItem("token");
+        if (window.location.hash.substr(1) && options[window.location.hash.substr(1)]) {
+            setValue(options[window.location.hash.substr(1)]);
+        }
         axios({
             method: 'post',
             data: {
@@ -310,8 +321,12 @@ export default function TeamsNav(props) {
                 console.log(err);
             })
     }, [])
+
+    const getKeyByValue = (object, value) => {
+        return Object.keys(object).find(key => object[key] === value);
+    }
     const reloadValue = () => {
-        setVal(val + 1)
+        setVal(val + 1);
     }
     const [openScheduleModal, isScheduleModalOpen] = React.useState(false);
     const [openStartModal, isStartModalOpen] = useState(false);
@@ -473,7 +488,7 @@ export default function TeamsNav(props) {
         })
             .then(res => {
                 console.log(res.data.scheduled_calls);
-                setScheduledCalls(res.data.scheduled_calls);
+                setScheduledCalls(res.data.scheduled_calls.reverse());
                 setOldCalls(res.data.old_calls);
             })
             .catch(err => {
@@ -495,6 +510,10 @@ export default function TeamsNav(props) {
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
+        var url_ob = new URL(document.URL);
+        url_ob.hash = '#' + getKeyByValue(options, newValue);
+        var new_url = url_ob.href;
+        document.location.href = new_url;
     }
 
 
@@ -564,7 +583,7 @@ export default function TeamsNav(props) {
                     className={classes.tabsPhone}
                     aria-label="scrollable auto tabs example"
                 >
-                    <Tab label="Chat" className={classes.tab} />
+                    <Tab label="Conversation" className={classes.tab} />
                     <Tab label="General" className={classes.tab} />
                     <Tab label="Old Calls" className={classes.tab} />
                     <Tab label="Scheduled Calls" className={classes.tab} />

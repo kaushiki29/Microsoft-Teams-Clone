@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import Avatar from "../components/Avatar";
 import Linkify from 'react-linkify';
+import ImageModal from "./ImageModal";
 export default class ChatItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      day: 'Today'
+      day: 'Today',
+      open: false,
     }
     this.month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
   }
@@ -22,13 +24,23 @@ export default class ChatItem extends Component {
   componentDidMount() {
     this.time = new Date(this.props.sent_time);
     this.day = 'Today';
-    if (new Date().getTime() - this.time.getTime() > 24 * 60 * 60 * 1000) {
+    if (new Date().getTime() - this.time.getTime() > (new Date().getHours()*1000*60*60 + new Date().getMinutes()*1000*60)) {
       this.day = this.time.getDate() + '-' + this.month[this.time.getMonth()] + '-' + this.time.getFullYear();
     }
     this.setState({
       day: this.day,
     })
 
+  }
+  setOpen=()=>{
+    this.setState({
+      open: true,
+    })
+  }
+  handleClose=()=>{
+    this.setState({
+      open: false,
+    })
   }
   render() {
     return (
@@ -38,13 +50,14 @@ export default class ChatItem extends Component {
       >
         <div className="chat__item__content">
         {this.props.type == 'txt' && <Linkify ><div className="chat__msg">{this.props.msg}</div></Linkify>}
-        {this.props.type=='img' && <img src={"https://www.msteams.games:9000" + this.props.img} style={{width: 200,height: 200, objectFit: 'contain'}}></img>}
+        {this.props.type=='img' && <img onClick={this.setOpen} src={"https://www.msteams.games:9000" + this.props.img} style={{width: 200,height: 200, objectFit: 'contain', cursor: 'pointer'}}></img>}
           <div className="chat__meta">
             <span>{this.formatAMPM(new Date(this.props.sent_time))}  &nbsp; {this.state.day} &nbsp; {this.props.hasSeen && this.props.user !== 'other'?'Seen':''}</span>
             {/* <span>Seen 1.03PM</span> */}
           </div>
         </div>
         <Avatar isOnline="active" image={this.props.image} />
+        <ImageModal img={this.props.img} open={this.state.open} setOpen = {this.setOpen} handleClose={this.handleClose} />
       </div>
     );
   }
