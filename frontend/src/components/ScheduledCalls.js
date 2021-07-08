@@ -99,13 +99,18 @@ function ScheduledCalls(props) {
             })
     }
 
-    const handleChat=()=>{
+    const handleChat = () => {
         history.push('/meeting/conversation/' + props.call.meeting_slug);
     }
 
+    const handleGoBack = () => {
+        history.push("/teams/" + props.team_slug)
+    }
+
+
     return (
-        <Card className={classes.root}>
-            <CardContent className={classes.header}>
+        <Card className={classes.root} style={{ height: props.style ? props.style.height : "", marginBottom: props.style ? props.style.marginBottom : "" }}>
+            <CardContent className={classes.header} style={{ padding: props.style ? props.style.padding : "" }}>
                 <div className={classes.head}>
                     <Typography className={classes.title}>
                         Meeting Name : {props.call.name}
@@ -118,9 +123,10 @@ function ScheduledCalls(props) {
                 </div>
                 <Divider className={classes.divider} />
             </CardContent>
-            <CardActions>
-                <Button size="small" className={classes.button} onClick={handleDelete}>Delete call</Button>
-                <Button size="small" className={classes.button} style={{width: 125, }} onClick={handleChat} >Conversation </Button>
+            <CardActions style={{ justifyContent: props.style ? props.style.justifyContent : "" }}>
+                <Button size="small" className={classes.button} onClick={handleDelete} style={{ marginTop: props.style ? props.style.marginTop : "" }}>Delete call</Button>
+                <Button size="small" className={classes.button} style={{ width: 125, marginTop: props.style ? props.style.marginTop : "" }} onClick={handleChat} >Conversation </Button>
+                {props.back_option && <Button size="small" className={classes.button} onClick={handleGoBack} style={{ height: 35, marginTop: props.style ? props.style.marginTop : "" }}>Go back</Button>}
             </CardActions>
         </Card>
 

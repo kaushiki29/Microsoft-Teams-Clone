@@ -12,66 +12,15 @@ import { Modal } from "@material-ui/core";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import ChatItemTeam from "../ChatItemTeam";
 import WarningModal from "../WarningModal";
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import OldCalls from '../OldCalls';
+import ScheduledCalls from "../ScheduledCalls";
 
+
+//CSS Style
 
 const useStyles = makeStyles({
   input: {
     display: "none"
-  },
-  root: {
-    minWidth: 275,
-    marginBottom: "7%",
-    '@media(max-width: 389px)': {
-      minWidth: 200
-    },
-  },
-  header: {
-    backgroundColor: "rgb(70, 71, 117)",
-  },
-  head: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bolder',
-    paddingBottom: '13px',
-    color: '#FFFFFF',
-    flex: 1,
-  },
-  time: {
-    fontSize: 18,
-    fontWeight: 'normal',
-    paddingBottom: '13px',
-    color: '#FFFFFF'
-  },
-  pos: {
-    marginBottom: 12,
-  },
-  divider: {
-    backgroundColor: 'white'
-  },
-  button: {
-    fontSize: "12px",
-    backgroundColor: "#464775",
-    color: "white",
-    width: "100px",
-    height: "35px",
-    marginTop: 20,
-    '&:hover': {
-      backgroundColor: "#53548a"
-    },
   }
 })
 
@@ -87,6 +36,10 @@ export default function ChatContentVC(props) {
   const [open, setOpen] = useState(false);
   const [image, setImage] = useState();
   const [imgFile, setImgFile] = useState();
+  const [call, setCall] = useState([{
+    name: "",
+    time: ""
+  }]);
   const dropRef = useRef();
   const [tabActive, setTabActive] = useState(true);
   const socket = io("https://msteams.games:5000");
@@ -94,9 +47,18 @@ export default function ChatContentVC(props) {
   const [error, setError] = useState(true);
   const [errorMsg, setErrorMsg] = useState();
   const chatItms = [];
+
+
+
+
   useEffect(() => {
     console.log(props.name);
   }, [props.name])
+
+
+
+
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     axios({
@@ -126,6 +88,9 @@ export default function ChatContentVC(props) {
   }, [])
 
 
+
+
+
   const onFocus = () => {
     setTabActive(true);
   }
@@ -135,6 +100,10 @@ export default function ChatContentVC(props) {
     console.log('Tab is blurred');
   };
 
+
+
+  //Handling Chat Scroll
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   });
@@ -142,6 +111,12 @@ export default function ChatContentVC(props) {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
+
+
+
+  //Handling multimedia in chat
+
 
   const handleDrag = (e) => {
     e.preventDefault()
@@ -168,6 +143,9 @@ export default function ChatContentVC(props) {
       e.dataTransfer.clearData();
     }
   }
+
+
+
 
   useEffect(() => {
     window.addEventListener("focus", onFocus);
@@ -229,6 +207,10 @@ export default function ChatContentVC(props) {
   };
 
 
+
+  //Sending new message
+
+
   const sendMessage = () => {
 
     if (msg != "") {
@@ -271,7 +253,11 @@ export default function ChatContentVC(props) {
     }
   }
 
-  const [meetingName, setMeetingName] = useState("")
+
+
+
+  //Handing meeting name
+
   const [team_slug, setTeamSlug] = useState("")
   useEffect(() => {
     axios({
@@ -283,7 +269,10 @@ export default function ChatContentVC(props) {
       headers: { Authorization: 'Token ' + localStorage.getItem('token') }
     })
       .then(res => {
-        setMeetingName(res.data.name)
+        setCall({
+          name: res.data.name,
+          time: res.data.time
+        })
         setTeamSlug(res.data.team_slug)
       })
       .catch(err => {
@@ -359,6 +348,12 @@ export default function ChatContentVC(props) {
     setImgFile();
     setImage();
   }
+
+
+
+  //Handling pasting images from clipboard
+
+
   const handlePaste = (e) => {
     if (e.clipboardData.files.length) {
       console.log(e.clipboardData.files[0]);
@@ -372,40 +367,6 @@ export default function ChatContentVC(props) {
 
   }
 
-
-  var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
-  const formatAMPM = (date) => {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    var strTime = hours + ':' + minutes + ' ' + ampm;
-    return strTime;
-  }
-
-  const handleDelete = () => {
-    const token = localStorage.getItem("token");
-    axios({
-      method: 'post',
-      url: api + "communication/delete_call",
-      data: {
-        meeting_slug: meeting_slug
-      },
-      headers: {
-        Authorization: "Token " + token
-      }
-    })
-      .then(res => {
-        console.log(res.data)
-        // props.setScheduleVal(props.scheduleVal + 1)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }
-
   const handleGoBack = () => {
     history.push("/teams/" + team_slug)
   }
@@ -415,30 +376,12 @@ export default function ChatContentVC(props) {
     <div style={{ paddingLeft: isMobile ? '10px' : '20px', marginTop: 71, marginLeft: 68 }} className="main__chatcontent">
       {/* <div><Button variant="outlined" color="primary" onClick={handleGoBack} style={{ height: 33 }}>Go back</Button></div> */}
       {/* <div><OldCalls call={{}}  /></div> */}
-      <div style={{ justifyContent: "center", alignItems: "center", height: "56px", textAlign: "center", position: "sticky", top: "56px", fontSize: "24px", padding: 12, }}>
-        {/* Meeting Name: {meetingName.toUpperCase()} */}
-        <Card className={classes.root}>
-          <CardContent className={classes.header}>
-            <div className={classes.head}>
-              <Typography className={classes.title}>
-                Meeting Name :
-              </Typography>
-            </div>
-            <div className={classes.header}>
-              <Typography className={classes.time}>
-                {/* Time : {formatAMPM(new Date(props.call.time))}, {new Date(props.call.time).getDate()} {month[new Date(props.call.time).getMonth()]} {new Date(props.call.time).getFullYear()} */}
-              </Typography>
-            </div>
-            <Divider className={classes.divider} />
-          </CardContent>
-          <CardActions>
-            <Button size="small" className={classes.button} onClick={handleDelete}>Delete call</Button>
-          </CardActions>
-        </Card>
+      <div style={{ justifyContent: "center", alignItems: "center", height: "160px", textAlign: "center", position: "sticky", top: "56px", fontSize: "24px",zIndex: 1000 }}>
+        <ScheduledCalls call={call} style={{ height: "150px", marginBottom: 0, marginTop: 0, padding: "10px", justifyContent: "center" }} team_slug={team_slug} back_option={true} />
       </div>
       {!error &&
         <React.Fragment>
-          <div className="content__body" >
+          <div className="content__body" style={{maxHeight: 'calc(113vh - calc(115vh / 2))', minHeight: 'calc(113vh - calc(115vh / 2))'}} >
             <div className="chat__items" >
               {chat.map((itm, index) => {
                 return (
@@ -459,7 +402,7 @@ export default function ChatContentVC(props) {
               <div ref={messagesEndRef} />
             </div>
           </div>
-          <div className="content__footer">
+          <div className="content__footer" style={{ position: "sticky", bottom: 0 }}>
             <div className="sendNewMessage" onPaste={handlePaste} ref={dropRef}>
               <button className="addFiles" onClick={openModal}>
                 <AddIcon style={{ color: "white" }} />

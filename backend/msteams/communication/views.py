@@ -115,10 +115,19 @@ def schedule_call(request):
 def get_meet_name(request):
     meeting_slug = request.data.get('meeting_slug')
     videocall = Videocall.objects.get(meeting_slug=meeting_slug)
-    return Response({
-        'name':videocall.name,
-        'team_slug':videocall.team_associated.team_slug,
-    })
+    if videocall.is_scheduled==True:
+        return Response({
+            'name':videocall.name,
+            'time':videocall.schedule_time,
+            'team_slug':videocall.team_associated.team_slug,
+        })
+    else:
+        return Response({
+            'name':videocall.name,
+            'time':videocall.started_at,
+            'team_slug':videocall.team_associated.team_slug,
+        })
+
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])

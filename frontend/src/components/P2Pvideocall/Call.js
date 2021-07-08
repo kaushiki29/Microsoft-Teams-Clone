@@ -14,9 +14,16 @@ export default function TwilioCall() {
     const [room, setRoom] = useState();
     const [open, setOpen] = useState(false);
     const [warningText, setWarningText] = useState("");
+
+
     useEffect(() => {
         call();
     }, [])
+
+
+    //Handling peer-to-peer Video call initiation
+
+
     const call = () => {
         const token = localStorage.getItem("token");
         axios({
@@ -61,6 +68,10 @@ export default function TwilioCall() {
             })
     }
 
+
+
+    //Handling Leave Room
+
     const handleLogout = () => {
         console.log("logout");
         setRoom((prevRoom) => {
@@ -74,9 +85,16 @@ export default function TwilioCall() {
         });
         history.push("/chat/" + chatThread);
     }
+
+
+    //Handling Close Warning Modal
+
+
     const handleClose = () => {
 
     }
+
+
     return (
         <div style={{ height: "100%" }}>
             <WarningModal open={open} handleClose={handleClose} text={warningText} redirect={"/home"} />

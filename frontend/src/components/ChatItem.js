@@ -57,7 +57,7 @@ export default class ChatItem extends Component {
           </div>
         </div>
         <Avatar isOnline="active" image={this.props.image} />
-        <ImageModal img={this.props.img} open={this.state.open} setOpen = {this.setOpen} handleClose={this.handleClose} />
+        <ImageModal img={this.props.img} open={this.state.open} handleClose={this.handleClose} />
       </div>
     );
   }

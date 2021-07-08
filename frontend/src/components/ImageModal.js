@@ -36,6 +36,12 @@ const useStyles = makeStyles((theme) => ({
         height: 40,
         width: 40,
         cursor: 'pointer'
+    },
+
+    img:{
+        maxWidth: '85vw',
+        maxHeight: '85vh',
+        objectFit: 'contain'
     }
 }));
 
@@ -58,7 +64,7 @@ export default function ImageModal(props) {
                 <div style={{display: 'flex', justifyContent: 'flex-end', width: '100%'}}>
                     <CloseIcon className={classes.close} onClick={props.handleClose} />
                 </div>
-                <img src={"https://www.msteams.games:9000"  + props.img}></img>
+                <img src={"https://www.msteams.games:9000"  + props.img} className={classes.img} ></img>
             </div>
         </Modal>
     )
