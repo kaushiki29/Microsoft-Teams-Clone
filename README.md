@@ -12,8 +12,9 @@ For working prototype of the product, please visit https://msteams.games/
 4. **Video Call Feature** - <br /> 1. Invite option with a link (**only valid for authorized members**) <br /> 2. Mute/Unmute <br /> 3. Video on/off <br /> 4. List of participants in meeting <br /> 5. Chat option <br /> 6. Screen-share option (**single-click zoom in**) <br /> 7. Dominant speaker detection (**Green border for Dominant Speaker - Not valid for peer-to-peer call**) <br /> 8. Leave call option
 5. **Chat feature** -<br /> 1. Media sharing using **clipboard pasting**, **drag and drop** and **upload button** <br /> 2. Message Seen feature (**only for peer-to-peer chat**)
  <br /> 3. Realtime Unread Message count increment (**only for peer-to-peer chat**) <br /> 4. Desktop Notification for incoming call/message (**only for peer-to-peer chat**) <br /> 5. Call Ring Feature for incoming calls (**only for peer-to-peer chat**)
-6. **Persistent Chatting Feature** - Every chat in the application is preserved
-7. **Hosted Website** - Hosted on https port
+6. **Persistent Chatting Feature** - Every chat in the application is persistent
+7. **Scheduler** - <br /> 1. End ongoing calls if no user is present for more than 5 minutes <br/> 2. Send email 30 minutes before meeting <br /> 3. Send email 12 hours before tasks deadline <br /> 4. Start scheduled calls on time
+8. **Hosted Website** - Hosted on https port
 
 
 ## Technology Stack
@@ -28,9 +29,6 @@ For working prototype of the product, please visit https://msteams.games/
 ## Sample User Credentials
 email - kaushikiraj029@gmail.com <br />
 password - pass
-
-
-## Work-flow
 
 ## Instructions to Install and Setup
 
