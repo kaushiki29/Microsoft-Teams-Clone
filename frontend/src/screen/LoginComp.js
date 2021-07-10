@@ -83,7 +83,7 @@ function LoginComp(props) {
             })
         }
         if (email.value && password.value) {
-            console.log(email.value,password.value)
+            console.log(email.value, password.value)
             axios({
                 method: 'post',
                 url: api + "auth/user_login",
@@ -101,7 +101,7 @@ function LoginComp(props) {
                     if (res.data.token) {
                         localStorage.setItem("token", res.data.token);
                         props.refreshToken();
-                        history.push("/chat/all-conversations");
+                        history.push("/home");
                     }
                     else {
                         setEmail({

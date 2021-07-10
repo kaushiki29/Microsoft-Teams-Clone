@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Avatar from "../components/Avatar";
 import Linkify from 'react-linkify';
 import ImageModal from "./ImageModal";
+
+
 export default class ChatItem extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +26,7 @@ export default class ChatItem extends Component {
   componentDidMount() {
     this.time = new Date(this.props.sent_time);
     this.day = 'Today';
-    if (new Date().getTime() - this.time.getTime() > (new Date().getHours()*1000*60*60 + new Date().getMinutes()*1000*60)) {
+    if (new Date().getTime() - this.time.getTime() > (new Date().getHours() * 1000 * 60 * 60 + new Date().getMinutes() * 1000 * 60)) {
       this.day = this.time.getDate() + '-' + this.month[this.time.getMonth()] + '-' + this.time.getFullYear();
     }
     this.setState({
@@ -32,12 +34,12 @@ export default class ChatItem extends Component {
     })
 
   }
-  setOpen=()=>{
+  setOpen = () => {
     this.setState({
       open: true,
     })
   }
-  handleClose=()=>{
+  handleClose = () => {
     this.setState({
       open: false,
     })
@@ -49,10 +51,10 @@ export default class ChatItem extends Component {
         className={`chat__item ${this.props.user ? this.props.user : ""}`}
       >
         <div className="chat__item__content">
-        {this.props.type == 'txt' && <Linkify ><div className="chat__msg">{this.props.msg}</div></Linkify>}
-        {this.props.type=='img' && <img onClick={this.setOpen} src={"https://www.msteams.games:9000" + this.props.img} style={{width: 200,height: 200, objectFit: 'contain', cursor: 'pointer'}}></img>}
+          {this.props.type == 'txt' && <Linkify ><div className="chat__msg">{this.props.msg}</div></Linkify>}
+          {this.props.type == 'img' && <img onClick={this.setOpen} src={"https://www.msteams.games:9000" + this.props.img} style={{ width: 200, height: 200, objectFit: 'contain', cursor: 'pointer' }}></img>}
           <div className="chat__meta">
-            <span>{this.formatAMPM(new Date(this.props.sent_time))}  &nbsp; {this.state.day} &nbsp; {this.props.hasSeen && this.props.user !== 'other'?'Seen':''}</span>
+            <span>{this.formatAMPM(new Date(this.props.sent_time))}  &nbsp; {this.state.day} &nbsp; {this.props.hasSeen && this.props.user !== 'other' ? 'Seen' : ''}</span>
             {/* <span>Seen 1.03PM</span> */}
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import ChatIcon from '@material-ui/icons/Chat';
 import PeopleIcon from '@material-ui/icons/People';
@@ -10,6 +10,10 @@ import { api } from '../screen/Helper';
 import { messaging } from './Firebase';
 import CallerTune from '../static/telephone-ring-02.mp3';
 import CallModal from './CallModal';
+
+
+//CSS 
+
 const useStyles = makeStyles((theme) => ({
     sidebar: {
         width: "68px",
@@ -78,22 +82,29 @@ const useStyles = makeStyles((theme) => ({
 function Sidebar() {
     const classes = useStyles();
     const history = useHistory();
-    const [count,setCount] = useState(0);
+    const [count, setCount] = useState(0);
     const [open, setOpen] = useState(false);
     const [audio, setAudio] = useState(new Audio(CallerTune));
     const [callUUID, setCallUUID] = useState();
     const [person, setPerson] = useState();
     const params = useParams();
-    useEffect(()=>{
+
+
+
+    useEffect(() => {
         fetchCount();
-    },[]);
-    if(!params.chat_uuid){
+    }, []);
+
+
+
+
+    if (!params.chat_uuid) {
         messaging.onMessage((payload) => {
             console.log(payload);
             if (payload.data.type === 'msg') {
                 fetchCount();
             }
-            else if(payload.data.type === 'call'){
+            else if (payload.data.type === 'call') {
                 setPerson(payload.data.person);
                 setCallUUID(payload.data.uuid);
                 setOpen(true);
@@ -108,19 +119,22 @@ function Sidebar() {
         })
     }
 
-    const fetchCount=()=>{
+
+
+
+    const fetchCount = () => {
         axios({
             method: 'post',
             url: api + 'communication/get_unseen_count',
-            headers: { Authorization: 'Token ' + localStorage.getItem('token')}
+            headers: { Authorization: 'Token ' + localStorage.getItem('token') }
         })
-        .then(res => {
-            console.log(res.data);
-            setCount(res.data.count);
-        })
-        .catch(err => {
-            console.log(err);
-        })
+            .then(res => {
+                console.log(res.data);
+                setCount(res.data.count);
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 
     const handleTeams = () => {
@@ -141,9 +155,9 @@ function Sidebar() {
                 <p className={classes.p}>Teams</p>
             </div>
             <div className={classes.sidediv} onClick={handleChat}>
-                <div style={{display: 'flex',alignItems: 'flex-start'}}>
+                <div style={{ display: 'flex', alignItems: 'flex-start' }}>
                     <ChatIcon style={{ fontSize: "1.5rem", }} />
-                    {count>0 && !params.chat_uuid && <div style={{width: 15,height: 15, backgroundColor: 'red',borderRadius: 100, display: 'flex', alignItems: 'center',justifyContent: 'center'}}><p style={{margin: 0, color: 'white', fontSize: 10}}>{count>99?'99+':count}</p></div>}
+                    {count > 0 && !params.chat_uuid && <div style={{ width: 15, height: 15, backgroundColor: 'red', borderRadius: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><p style={{ margin: 0, color: 'white', fontSize: 10 }}>{count > 99 ? '99+' : count}</p></div>}
                 </div>
                 <p className={classes.p}>Chitchat</p>
             </div>

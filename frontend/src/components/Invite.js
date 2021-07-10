@@ -8,7 +8,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import { api } from '../screen/Helper';
-import MailIcon from '@material-ui/icons/Mail';
+import ChatIcon from '@material-ui/icons/Chat';
 import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -209,7 +209,7 @@ function Invite(props) {
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="small" onClick={() => { handleInitChat(i.email) }}><MailIcon /></Button>
+                                    <Button size="small" onClick={() => { handleInitChat(i.email) }}><ChatIcon /></Button>
                                 </CardActions>
                             </Card>
 

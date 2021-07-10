@@ -179,7 +179,7 @@ a{
 }
 
 
-@media  only screen and (max-width: 600px){
+/* @media  only screen and (max-width: 600px){
   .main__chatcontent {
     padding:0;
   }
@@ -193,3 +193,97 @@ a{
     padding-top: 15px;
   }
 }
+
+@media  only screen and (max-height: 1007px){
+  .content__body {
+    max-height: calc(100vh - calc(95vh / 2));
+    min-height: calc(113vh - calc(95vh / 2));
+    overflow: auto;
+  }
+}
+
+@media  only screen and (max-height: 965px){
+  .content__body {
+    max-height: calc(100vh - calc(95vh / 2));
+    min-height: calc(110vh - calc(95vh / 2));
+    overflow: auto;
+  }
+}
+
+@media  only screen and (max-height: 887px), screen and (max-width:770px){
+  .content__body {
+    max-height: calc(100vh - calc(95vh / 2));
+    min-height: calc(107vh - calc(95vh / 2));
+    overflow: auto;
+  }
+}
+
+@media  only screen and (max-height: 821px), screen and (max-width:770px){
+  .content__body {
+    max-height: calc(100vh - calc(95vh / 2));
+    min-height: calc(104vh - calc(95vh / 2));
+    overflow: auto;
+  }
+}
+
+@media  only screen and (max-height: 765px), screen and (max-width:770px){
+  .content__body {
+    max-height: calc(100vh - calc(95vh / 2));
+    min-height: calc(100vh - calc(95vh / 2));
+    overflow: auto;
+  }
+}
+
+
+@media  only screen and (max-height: 701px), screen and (max-width:770px){
+  .content__body {
+    max-height: calc(99vh - calc(95vh / 2));
+    min-height: calc(99vh - calc(95vh / 2));
+    overflow: auto;
+  }
+}
+
+
+@media  only screen and (max-height: 686px), screen and (max-width:770px){
+  .content__body {
+    max-height: calc(97vh - calc(95vh / 2));
+    min-height: calc(97vh - calc(95vh / 2));
+    overflow: auto;
+  }
+}
+
+
+@media  only screen and (max-height: 659px){
+  .content__body {
+    max-height: calc(94vh - calc(95vh / 2));
+    min-height: calc(94vh - calc(95vh / 2));
+    overflow: auto;
+  }
+}
+
+
+@media  only screen and (max-height: 622px){
+  .content__body {
+    max-height: calc(91vh - calc(95vh / 2));
+    min-height: calc(91vh - calc(95vh / 2));
+    overflow: auto;
+  }
+}
+
+
+@media  only screen and (max-height: 589px){
+  .content__body {
+    max-height: calc(88vh - calc(95vh / 2));
+    min-height: calc(88vh - calc(95vh / 2));
+    overflow: auto;
+  }
+}
+
+
+@media  only screen and (max-height: 560px){
+  .content__body {
+    max-height: calc(85vh - calc(95vh / 2));
+    min-height: calc(85vh - calc(95vh / 2));
+    overflow: auto;
+  }
+} */

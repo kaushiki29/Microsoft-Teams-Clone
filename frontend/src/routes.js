@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import SignupComp from '../screen/SignupComp'
-import '../css/Login.css'
+import SignupComp from '../src/screen/SignupComp'
+import '../src/css/Login.css'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import LoginComp from '../screen/LoginComp';
-import TeamScreen from '../screen/TeamScreen';
-import LandingPage from '../screen/LandingPage';
-import Chat from '../screen/Chat'
-import TwilioCall from './TwilioCall';
-import Call from './P2Pvideocall/Call';
-import { messaging } from './Firebase';
-import WarningModal from './WarningModal';
-import CallModal from './CallModal';
+import LoginComp from '../src/screen/LoginComp';
+import TeamScreen from '../src/screen/TeamScreen';
+import LandingPage from '../src/screen/LandingPage';
+import Chat from '../src/screen/Chat'
+import TwilioCall from '../src/components/TwilioCall';
+import Call from '../src/components/P2Pvideocall/Call';
+import { messaging } from '../src/components/Firebase';
+import WarningModal from '../src/components/WarningModal';
+import CallModal from '../src/components/CallModal';
 import axios from 'axios';
-import { api } from '../screen/Helper';
-import CallerTune from '../static/telephone-ring-02.mp3';
+import { api } from '../src/screen/Helper';
+import CallerTune from '../src/static/telephone-ring-02.mp3';
 import { withRouter } from 'react-router-dom';
-import Tasks from './../screen/Tasks'
-import VideoCallChat from '../screen/VideoCallChat';
+import Tasks from '../src/screen/Tasks'
+import VideoCallChat from '../src/screen/VideoCallChat';
 
 function Login() {
     const [token, setToken] = useState();

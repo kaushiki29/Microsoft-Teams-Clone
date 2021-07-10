@@ -42,19 +42,6 @@ const styles = (theme) => ({
     },
 });
 
-const DialogTitle = withStyles(styles)((props) => {
-    const { children, classes, onClose, ...other } = props;
-    return (
-        <MuiDialogTitle disableTypography className={classes.root} {...other}>
-            <Typography variant="h6">{children}</Typography>
-            {onClose ? (
-                <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
-                    <CloseIcon />
-                </IconButton>
-            ) : null}
-        </MuiDialogTitle>
-    );
-});
 
 const DialogContent = withStyles((theme) => ({
     root: {
@@ -131,6 +118,7 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: "10%",
         paddingRight: "10%",
         marginTop: "108px",
+        // paddingTop: "100px",
         marginBottom: "91px",
         // paddingBottom: "6%",
         '@media(max-width: 550px)': {
@@ -585,14 +573,14 @@ export default function TeamsNav(props) {
                 >
                     <Tab label="Conversation" className={classes.tab} />
                     <Tab label="General" className={classes.tab} />
-                    <Tab label="Old Calls" className={classes.tab} />
+                    <Tab label="Call Log" className={classes.tab} />
                     <Tab label="Scheduled Calls" className={classes.tab} />
                     <Tab label="Tasks" className={classes.tab} />
                     <Tab label="Team Participants" className={classes.tab} />
 
                 </Tabs>
             </AppBar>
-            <TabPanel value={value} index={0} className={classes.tabPanel}>
+            <TabPanel value={value} index={0} className={classes.tabPanel} >
                 {username && <TeamChat name={username} style={{ paddingBottom: "10px" }} />}
             </TabPanel>
             <TabPanel value={value} index={1} className={classes.tabPanel}>

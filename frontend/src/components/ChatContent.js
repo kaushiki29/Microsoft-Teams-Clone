@@ -14,6 +14,7 @@ import { Modal } from "@material-ui/core";
 import VideoCallIcon from '@material-ui/icons/VideoCall';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
+
 const useStyles = makeStyles({
   input: {
     display: "none"
@@ -32,22 +33,22 @@ export default function ChatContent(props) {
   const [image, setImage] = useState();
   const [imgFile, setImgFile] = useState();
   const dropRef = useRef();
-  const [tabActive,setTabActive] = useState(true);
+  const [tabActive, setTabActive] = useState(true);
   const chatItms = props.chatItms;
   const socket = io("https://msteams.games:5000");
   useEffect(() => {
     setChat(props.chatItms);
   }, [props])
 
-  useEffect(()=>{
-    if(tabActive){
-      socket.emit('seen',props.thread_id, props.name);
+  useEffect(() => {
+    if (tabActive) {
+      socket.emit('seen', props.thread_id, props.name);
     }
-  },[tabActive])
+  }, [tabActive])
 
-  const onFocus=()=>{
+  const onFocus = () => {
     setTabActive(true);
-    
+
     // console.log('focus');
   }
 
@@ -98,16 +99,16 @@ export default function ChatContent(props) {
     if (props.thread_id && props.thread_id != 'all-conversations') {
       socket.on('connect', function () {
         socket.emit('uuid', props.thread_id);
-        socket.emit('seen',props.thread_id, props.name);
+        socket.emit('seen', props.thread_id, props.name);
       });
 
     }
     socket.on('updatechat', function (data, name, type) {
       // console.log(data, name);
       if (name != props.name) {
-        if(tabActive){
+        if (tabActive) {
           console.log(tabActive);
-          socket.emit('seen',props.thread_id, props.name);
+          socket.emit('seen', props.thread_id, props.name);
         }
         chatItms.push({
           type: "other",
@@ -118,10 +119,10 @@ export default function ChatContent(props) {
         });
         setChat([...chatItms])
       }
-      socket.on('updateSeen',function(name){
-        if(chatItms.some(el => el.has_seen !== true)){
-          if(name!=props.name){
-            for(let i=0;i<chatItms.length;i++){
+      socket.on('updateSeen', function (name) {
+        if (chatItms.some(el => el.has_seen !== true)) {
+          if (name != props.name) {
+            for (let i = 0; i < chatItms.length; i++) {
               chatItms[i].has_seen = true;
             }
             setChat([...chatItms]);
@@ -131,7 +132,7 @@ export default function ChatContent(props) {
       })
     });
 
-    const setMsgSeenServer=()=>{
+    const setMsgSeenServer = () => {
       const token = localStorage.getItem('token');
       axios({
         method: 'post',
@@ -141,12 +142,12 @@ export default function ChatContent(props) {
         },
         headers: { Authorization: 'Token ' + token }
       })
-      .then(res => {
-        console.log(res.data);
-      })
-      .catch(err => {
-        console.log(err);
-      })
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        })
     }
 
     let div = dropRef.current
@@ -320,7 +321,7 @@ export default function ChatContent(props) {
     }
   }
   return (
-    <div style={{ paddingLeft: isMobile ? '10px' : '20px' }} className="main__chatcontent">
+    <div style={{ paddingLeft: isMobile ? '10px' : '20px' }} className="main__chatcontent" >
       <div className="content__header">
         <div className="blocks">
           <div className="current-chatting-user">
@@ -341,8 +342,8 @@ export default function ChatContent(props) {
           </div>
         </div>
       </div>
-      <div className="content__body" >
-        <div className="chat__items" >
+      <div className="content__body" style={{overflowX: "hidden"}} >
+        <div className="chat__items" style={{overflowX: "hidden"}} >
           {chat.map((itm, index) => {
             return (
               <ChatItem
@@ -354,7 +355,7 @@ export default function ChatContent(props) {
                 img={itm.img}
                 image={"https://simg.nicepng.com/png/small/128-1280406_view-user-icon-png-user-circle-icon-png.png"}
                 sent_time={itm.sent_time}
-                hasSeen = {itm.has_seen}
+                hasSeen={itm.has_seen}
               />
             );
           })}
