@@ -17,6 +17,13 @@ For working prototype of the product, please visit https://msteams.games/
 
 
 ## Technology Stack
+1. Backend - Django, ExpressJS (***only for chat***)
+2. Frontend - ReactJS
+3. Redis and Celery
+4. Socket.io
+5. Firebase Cloud Messaging
+6. Twilio Video SDK
+7. Abstract API (***only for email deliverability check***)
 
 
 ## Work-flow
