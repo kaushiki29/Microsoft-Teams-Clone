@@ -14,3 +14,14 @@ For working prototype of the product, please visit https://msteams.games/
  <br /> 3. Realtime Unread Message count increment (**only for peer-to-peer chat**) <br /> 4. Desktop Notification for incoming call/message (**only for peer-to-peer chat**) <br /> 5. Call Ring Feature for incoming calls (**only for peer-to-peer chat**)
 6. **Persistent Chatting Feature** - Every chat in the application is preserved
 7. **Hosted Website** - Hosted on https port
+
+
+## Technology Stack
+
+
+## Work-flow
+
+## Instructions to Install and Setup
+
+
+## Screenshots
