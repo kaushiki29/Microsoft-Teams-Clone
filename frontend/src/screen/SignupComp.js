@@ -8,6 +8,9 @@ import axios from 'axios';
 import { api } from './Helper';
 import ReCAPTCHA from "react-google-recaptcha";
 
+
+// CSS style
+
 const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
@@ -22,10 +25,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+
+
 function SignupComp(props) {
     const classes = useStyles();
     const history = useHistory();
-    // const [isUserVerified, setUserVerified] = useState(false)
+    const [isVerified, setVerified] = useState(false)
     const [firstName, setFirstName] = useState({
         value: "",
         error: false,
@@ -52,6 +57,8 @@ function SignupComp(props) {
         helperText: ""
     });
 
+
+
     const handleFirstName = (e) => {
         setFirstName({
             value: e.target.value,
@@ -60,6 +67,7 @@ function SignupComp(props) {
         })
     }
 
+
     const handleLastName = (e) => {
         setLastName({
             value: e.target.value,
@@ -67,6 +75,7 @@ function SignupComp(props) {
             helperText: ""
         })
     }
+
 
     const handleEmail = (e) => {
         var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
@@ -88,6 +97,8 @@ function SignupComp(props) {
         }
 
     }
+
+
     const handlePassword = (e) => {
         if (confirmPass.value === "") {
             setPassword({
@@ -126,6 +137,7 @@ function SignupComp(props) {
 
     }
 
+
     const handleConfirmPassword = (e) => {
         if (e.target.value === "") {
             setConfirmPass({
@@ -150,6 +162,8 @@ function SignupComp(props) {
         }
 
     }
+
+
 
     const handleSubmit = () => {
         console.log("Reached signup");
@@ -232,15 +246,17 @@ function SignupComp(props) {
         }
     }
 
-    const [isVerified, setVerified] = useState(false)
+
     const handleCaptcha = (value) => {
         // console.log("Captcha value:", value);
         setVerified(true);
     }
 
+
     const handleLogin = () => {
         history.push("/login");
     }
+
 
     return (
         <div className="login">

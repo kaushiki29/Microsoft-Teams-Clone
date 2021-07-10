@@ -6,8 +6,12 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { api } from './Helper';
 import ReCAPTCHA from "react-google-recaptcha";
-
 import { getToken } from '../components/Firebase';
+
+
+//CSS Styles
+
+
 const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
@@ -23,24 +27,13 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+
+
 function LoginComp(props) {
     const classes = useStyles();
     const history = useHistory();
     const [token, setToken] = useState();
     const [isTokenFound, setTokenFound] = useState();
-
-    getToken(setTokenFound);
-
-    useEffect(() => {
-        setToken(localStorage.getItem("token"));
-
-    }, [])
-
-    useEffect(() => {
-        if (token) {
-            history.push("/chat/all-conversations");
-        }
-    }, [token])
     const [isVerified, setVerified] = useState(false);
     const [email, setEmail] = useState({
         value: "",
@@ -52,6 +45,32 @@ function LoginComp(props) {
         error: false,
         helperText: ""
     });
+
+    getToken(setTokenFound);
+
+
+    // Set token on login
+
+    useEffect(() => {
+        setToken(localStorage.getItem("token"));
+
+    }, [])
+
+
+
+    // If token exists, redirect to homepage
+
+    useEffect(() => {
+        if (token) {
+            history.push("/home");
+        }
+    }, [token])
+
+
+
+    // Handle email and password
+
+
     const handleEmail = (e) => {
         setEmail({
             value: e.target.value,
@@ -66,6 +85,10 @@ function LoginComp(props) {
             helperText: ""
         })
     }
+
+
+
+    //Handle login
 
     const handleLogin = () => {
         if (!email.value) {
@@ -135,14 +158,19 @@ function LoginComp(props) {
 
     }
 
+
+    // Handle Captcha
+
     const handleCaptcha = (value) => {
-        // console.log("Captcha value:", value);
         setVerified(true);
     }
 
     const handleSignup = () => {
         history.push('/signup');
     }
+
+
+
     if (!token) {
         return (
             <div className="login">
@@ -187,7 +215,6 @@ function LoginComp(props) {
             </div>
 
         );
-
     }
     else {
         return (

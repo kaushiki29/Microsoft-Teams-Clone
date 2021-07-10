@@ -18,15 +18,21 @@ import { withRouter } from 'react-router-dom';
 import Tasks from '../src/screen/Tasks'
 import VideoCallChat from '../src/screen/VideoCallChat';
 
-function Login() {
+function MainRoute() {
     const [token, setToken] = useState();
     const [open, setOpen] = useState(false);
     const [audio, setAudio] = useState(new Audio(CallerTune));
     const [callUUID, setCallUUID] = useState();
     const [person, setPerson] = useState();
+
+
     useEffect(() => {
         refreshToken();
     }, [])
+
+
+    // Setup of firebase notification
+
     messaging.onMessage((payload) => {
         console.log(payload);
         if (payload.data.type == 'call') {
@@ -42,6 +48,9 @@ function Login() {
             }, 20000)
         }
     })
+
+
+
     const refreshToken = () => {
         setToken(localStorage.getItem("token"));
 
@@ -72,4 +81,4 @@ function Login() {
 
 }
 
-export default withRouter(Login);
+export default withRouter(MainRoute);

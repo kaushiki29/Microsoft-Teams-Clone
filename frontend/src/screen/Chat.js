@@ -107,7 +107,17 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: "10px"
     },
 
-
+    backButton: {
+        height: "33px",
+        position: 'absolute',
+        top: 59,
+        right: 0,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        paddingBottom: "2%",
+        marginRight: "10px"
+    },
 }));
 
 
@@ -141,6 +151,11 @@ function Chat() {
 
 
 
+    // Firebase Cloud Messaging setup to fetch
+    // chatlist
+
+
+
     messaging.onMessage((payload) => {
         console.log(payload);
         if (payload.data.type === 'msg') {
@@ -166,6 +181,11 @@ function Chat() {
         setChatItms([]);
         fetchMsgs();
     }, [chatuuid]);
+
+
+
+    // API call to fetch all the conversations
+    // of a user
 
 
 
@@ -234,6 +254,10 @@ function Chat() {
 
 
 
+
+    // Set currently opened chat
+
+
     const setCurrChatuuid = (uuid) => {
         if (uuid != chatuuid) {
             setChatuuid(uuid);
@@ -261,7 +285,11 @@ function Chat() {
                 <Sidebar change={change} />
             </div>
             <div style={{ overflowX: 'hidden' }} className={classes.subComponent} >
-                {(isMobile && chat_uuid !== 'all-conversations') && <Button color="primary" style={{ height: "33px", position: 'absolute', top: 59, right: 0, display: "flex", justifyContent: "center", alignItems: "center", paddingBottom: "2%", marginRight: "10px" }} onClick={() => { history.push('/chat/all-conversations') }}><ArrowBackIcon style={{ fontSize: "1rem" }} /> Go Back </Button>}
+                {(isMobile && chat_uuid !== 'all-conversations') &&
+                    <Button color="primary" className={classes.backButton} onClick={() => { history.push('/chat/all-conversations') }}>
+                        <ArrowBackIcon style={{ fontSize: "1rem" }} /> Go Back
+                    </Button>
+                }
                 {(!isMobile || chat_uuid === 'all-conversations') && <ChatList allChatUsers={allChatUsers} setCurrChatuuid={setCurrChatuuid} thread_id={chatuuid} />}
                 {otherUserName && (!isMobile || chat_uuid !== 'all-conversations') &&
                     <ChatContent chatItms={chatItms} thread_id={chatuuid} setChatItms={setChatItms} uName={uName} name={otherUserName} />

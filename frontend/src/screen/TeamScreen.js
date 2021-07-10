@@ -13,6 +13,9 @@ import axios from 'axios';
 import WarningModal from '../components/WarningModal';
 
 
+// CSS Styles
+
+
 const useStyles = makeStyles((theme) => ({
     sidebar: {
         width: "68px",
@@ -219,13 +222,22 @@ function TeamScreen() {
     const [uniqueCode, setUniqueCode] = useState("");
     const [allCalls, setAllCalls] = useState([]);
     const [open, setOpen] = useState(false);
+    const { team_slug } = useParams();
+    const [userName, setUserName] = useState("");
+    const [teamSlug, setTeamSlug] = useState("");
+    const [isAdmin, setAdmin] = useState(false)
+    const [permission, setPermission] = useState(false);
+
+
 
     useEffect(() => {
         checkPermissions();
         getAllCalls();
 
     }, []);
-    const { team_slug } = useParams();
+
+
+    // Get all the calls of the team from the database
 
     const getAllCalls = () => {
         axios({
@@ -247,15 +259,14 @@ function TeamScreen() {
                 console.log(err);
             })
     }
-    const [userName, setUserName] = useState("");
-    const [teamSlug, setTeamSlug] = useState("");
-    const [isAdmin, setAdmin] = useState(false)
-    const [permission, setPermission] = useState(false);
+
 
     const handleClose = () => {
         console.log("Close")
     }
 
+
+    // Check permission for entering into a team
 
     const checkPermissions = () => {
         const token = localStorage.getItem("token");
