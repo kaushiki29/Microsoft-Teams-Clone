@@ -1,10 +1,16 @@
 import React, { useEffect } from "react";
 import Avatar from "../components/Avatar";
 
+
 export default function ChatListItems(props) {
   useEffect(() => {
     // console.log(props.active);
   }, [props])
+
+
+  // Select particular chat to render
+
+
   const selectChat = (e) => {
     props.fun(props.thread_id);
     for (
@@ -16,6 +22,7 @@ export default function ChatListItems(props) {
     }
     e.currentTarget.classList.add("active");
   };
+
 
   return (
     <div
@@ -31,9 +38,9 @@ export default function ChatListItems(props) {
       />
 
       <div className="userMeta" >
-        <div style={{display: 'flex', alignItems: 'center'}}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <p>{props.name}</p>
-          {props.unseenMsgCount>0 && <div style={{marginLeft: 7,width: 15,height: 15, backgroundColor: 'red',borderRadius: 100, display: 'flex', alignItems: 'center',justifyContent: 'center'}}><p style={{margin: 0, color: 'white', fontSize: 10}}>{props.unseenMsgCount>99?'99+':props.unseenMsgCount}</p></div>}
+          {props.unseenMsgCount > 0 && <div style={{ marginLeft: 7, width: 15, height: 15, backgroundColor: 'red', borderRadius: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><p style={{ margin: 0, color: 'white', fontSize: 10 }}>{props.unseenMsgCount > 99 ? '99+' : props.unseenMsgCount}</p></div>}
         </div>
         {/* <span className="activeTime">32 mins ago</span> */}
       </div>

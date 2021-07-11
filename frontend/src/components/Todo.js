@@ -7,6 +7,9 @@ import EditIcon from '@material-ui/icons/Edit';
 import axios from 'axios';
 import { api } from '../screen/Helper';
 
+
+// Css style
+
 const useStyles = makeStyles({
   pendingTodos: {
     height: "239px",
@@ -25,10 +28,16 @@ const useStyles = makeStyles({
   },
 })
 
+
+
 function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completedTodos, setCompletedTodos }) {
   const classes = useStyles();
 
   var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+
+
+  // Handle Delete Tasks
+
 
   const handleDelete = ({ id }) => {
     const token = localStorage.getItem("token");
@@ -52,6 +61,10 @@ function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completed
       })
   }
 
+
+  // Handle complete tasks
+
+
   const handleComplete = ({ id }) => {
     const token = localStorage.getItem("token");
     axios({
@@ -73,6 +86,10 @@ function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completed
       })
   }
 
+
+  // Format for specifying date and time
+
+
   const formatAMPM = (date) => {
     var hours = date.getHours();
     var minutes = date.getMinutes();
@@ -84,9 +101,16 @@ function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completed
     return strTime;
   }
 
+
+
   return (
     <div>
       <div style={{ textAlign: "center", fontSize: "20px", fontWeight: "bold" }}>Pending Tasks</div>
+
+
+      {/* Rending pending tasks */}
+
+
       {pendingTodos.length > 0 ?
         pendingTodos.map((item) => (
           <div
@@ -121,6 +145,11 @@ function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completed
         </div>
       }
       <div style={{ textAlign: "center", fontSize: "20px", fontWeight: "bold", paddingTop: "3%" }}>Completed Tasks</div>
+
+
+      {/* Rendering completed tasks */}
+
+
       {completedTodos.length > 0 ? completedTodos.map((item) => (
         <div
           className='todo-row'
@@ -154,4 +183,3 @@ function Todo({ pendingTodos, setPendingTodos, team_slug, reloadTodos, completed
 };
 
 export default Todo;
-// https://media.istockphoto.com/vectors/young-business-woman-relaxing-on-coffee-break-sitting-on-huge-cup-vector-id1161935533?b=1&k=6&m=1161935533&s=170667a&w=0&h=VsFmAhUAQz_7AkGSjJ6jMzphlIf_HKNas375cP6gGuM=

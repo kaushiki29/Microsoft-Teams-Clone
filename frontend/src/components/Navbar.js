@@ -13,6 +13,9 @@ import { useHistory } from 'react-router-dom';
 import { api } from '../screen/Helper';
 import axios from 'axios';
 
+
+// CSS
+
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: '2px 4px',
@@ -87,10 +90,15 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
+
+
 function Navbar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const history = useHistory();
+  const [username, setUsername] = useState("")
+
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -99,7 +107,11 @@ function Navbar(props) {
     setAnchorEl(null);
   };
 
-  const [username, setUsername] = useState("")
+
+
+  // Fetch username from database
+
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     axios({
@@ -117,6 +129,12 @@ function Navbar(props) {
         console.log(err);
       })
   }, [])
+
+
+
+  // Function to handle logout
+
+
 
   const handleLogout = () => {
     const token = localStorage.getItem("token");

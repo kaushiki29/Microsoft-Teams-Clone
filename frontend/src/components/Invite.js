@@ -11,6 +11,9 @@ import { api } from '../screen/Helper';
 import ChatIcon from '@material-ui/icons/Chat';
 import { useHistory } from 'react-router-dom';
 
+
+// CSS files
+
 const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
@@ -67,6 +70,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+
+
+
 function Invite(props) {
     const classes = useStyles();
     const history = useHistory();
@@ -76,6 +82,10 @@ function Invite(props) {
         error: false,
         helperText: ""
     });
+
+
+    // Handle new user to add in team
+
 
     const handleSubmit = () => {
         var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
@@ -133,6 +143,8 @@ function Invite(props) {
         }
     }
 
+
+
     const handleChange = (e) => {
         // console.log(e.target.value);
         var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
@@ -153,6 +165,10 @@ function Invite(props) {
             }
         }
     }
+
+
+    // Handle start p2p chat on button click
+
 
     const handleInitChat = (username) => {
         axios({
@@ -175,8 +191,15 @@ function Invite(props) {
             })
     }
 
+
+
     return (
         <div>
+
+
+            {/* Team Admin - The one who created the team can add participants */}
+
+
             {props.isAdmin && (
                 <div>
                     <TextField
@@ -212,12 +235,6 @@ function Invite(props) {
                                     <Button size="small" onClick={() => { handleInitChat(i.email) }}><ChatIcon /></Button>
                                 </CardActions>
                             </Card>
-
-                            // <div style={{ display: "flex", justifyContent: "space-between", fontSize: "20px" }}>
-                            //     <div>{i.name}</div>
-                            //     <div>{i.email}</div>
-                            //     <div style={{ margin: 0, cursor: 'pointer' }} onClick={() => { handleInitChat(i.email) }}>Message</div>
-                            // </div>
                         )
                     })}
                 </div>

@@ -11,18 +11,26 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth, dominantSpeake
   const [trackName, setTrackName] = useState('');
   const [st, setSt] = useState();
   const [isMute, setIsMute] = useState(false);
+  const [height, setHeight] = useState();
+  const [width, setWidth] = useState();
+
+
+
   const trackpubsToTracks = (trackMap) =>
     Array.from(trackMap.values())
       .map((publication) => publication.track)
       .filter((track) => track !== null);
 
 
+
   useEffect(() => {
     console.log(participant);
     console.log(participant.sid)
   }, [])
-  const [height, setHeight] = useState();
-  const [width, setWidth] = useState();
+
+
+  // Set height according to number of participants 
+
   useEffect(() => {
     console.log(Math.ceil(Math.sqrt(noPart + 1)))
     setWidth(Math.ceil(Math.sqrt(noPart + 1)));
@@ -39,6 +47,13 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth, dominantSpeake
       setHeight(4);
     }
   }, [noPart])
+
+
+
+  // Set audio, video and screen share track
+  // for each participant of the team
+
+
   useEffect(() => {
     setVideoTracks(trackpubsToTracks(participant.videoTracks));
     setAudioTracks(trackpubsToTracks(participant.audioTracks));
@@ -103,6 +118,11 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth, dominantSpeake
     };
   }, [participant]);
 
+
+
+  // Set video track of the participant in video call
+
+
   useEffect(() => {
     const videoTrack = videoTracks[0];
     if (videoTrack) {
@@ -117,6 +137,10 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth, dominantSpeake
     }
 
   }, [videoTracks]);
+
+
+  // Set audio track of the participant in video call
+
 
   useEffect(() => {
     const audioTrack = audioTracks[0];
@@ -136,6 +160,9 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth, dominantSpeake
   //   height1 = `calc((100vh - 170px))`;
   //   width1 = `calc((100vw - 68px))`;
   // }
+
+
+  // CSS for making video call responsive
 
   useEffect(() => {
     if (reduceWidth) {
@@ -159,6 +186,11 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth, dominantSpeake
       }
     }
   }, [reduceWidth])
+
+
+
+  // Css after screen share in on
+
 
   const handleClick = () => {
     console.log("hi");

@@ -90,12 +90,14 @@ function Sidebar() {
     const params = useParams();
 
 
-
     useEffect(() => {
         fetchCount();
     }, []);
 
 
+
+    // Handling firebase notification
+    // of both calls and messages
 
 
     if (!params.chat_uuid) {
@@ -120,6 +122,8 @@ function Sidebar() {
     }
 
 
+    // Function to handle Unseen
+    // message count
 
 
     const fetchCount = () => {
@@ -137,17 +141,23 @@ function Sidebar() {
             })
     }
 
+
     const handleTeams = () => {
         history.push('/home')
     }
 
+
     const handleChat = () => {
         history.push('/chat/all-conversations')
     }
+
+
     const handleClose = () => {
         setOpen(false);
         audio.pause();
     }
+
+
     return (
         <div className={classes.sidebar}>
             <div className={classes.sidediv} onClick={handleTeams}>

@@ -10,6 +10,9 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { api } from '../screen/Helper'
 
+
+// CSS Style
+
 const useStyles = makeStyles({
     root: {
         minWidth: 275,
@@ -81,7 +84,7 @@ function ScheduledCalls(props) {
     }
 
     const handleChat = () => {
-        history.push('/meeting/conversation/'+props.call.meeting_slug)
+        history.push('/meeting/conversation/' + props.call.meeting_slug)
     }
 
     return (
@@ -94,7 +97,7 @@ function ScheduledCalls(props) {
                 </div>
                 <div className={classes.header}>
                     <Typography className={classes.time}>
-                        Started at: {formatAMPM(new Date(props.call.time))}, {new Date(props.call.time).getDate()} {month[new Date(props.call.time).getMonth()]} {new Date(props.call.time).getFullYear()} <span style={{marginLeft: 10, color: 'gainsboro', fontSize: 14}}>(Meeting ended)</span>
+                        Started at: {formatAMPM(new Date(props.call.time))}, {new Date(props.call.time).getDate()} {month[new Date(props.call.time).getMonth()]} {new Date(props.call.time).getFullYear()} <span style={{ marginLeft: 10, color: 'gainsboro', fontSize: 14 }}>(Meeting ended)</span>
                     </Typography>
                 </div>
                 <Divider className={classes.divider} />
@@ -102,7 +105,7 @@ function ScheduledCalls(props) {
             <CardActions>
                 <Button className={classes.button} onClick={handleChat}>Conversation</Button>
             </CardActions>
-        </Card> 
+        </Card>
 
     )
 

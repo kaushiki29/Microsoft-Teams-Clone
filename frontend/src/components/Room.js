@@ -28,6 +28,10 @@ import { api } from "../screen/Helper";
 
 const videoType = 'video/webm';
 
+
+// Css Style
+
+
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: 'flex',
@@ -55,14 +59,21 @@ const Room = ({ roomName, room, handleLogout }) => {
   const [showPart, setShowPart] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [allMsg, setAllMsg] = useState([]);
+  const [openImg, setOpenImg] = useState(false);
+  const [image, setImage] = useState();
+  const [imgFile, setImgFile] = useState();
+  const dropRef = useRef();
   const [msg, setMsg] = useState('');
+  const [linkValue, setLinkValue] = useState("https://www.msteams.games/videocall/")
+  const [isCopied, setCopied] = useState(false)
   const msgs = [];
   const socket = io("https://msteams.games:5000");
   const [sharing, setSharing] = useState(false);
   const [recording, setRecording] = useState(false);
-  // const [recording, setRecording] = useState(false);
-  // const [recordedVideos, setRecordedVideos] = useState([])
   const isMobile = useMediaQuery('(max-width:600px)')
+
+
+  // Handling scroll to bottom on new-message
 
 
   useEffect(() => {
@@ -77,72 +88,9 @@ const Room = ({ roomName, room, handleLogout }) => {
   };
 
 
-  // useEffect(() => {
 
-  // async function recordVideo(){
-  // const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-  //   video.srcObject = stream;
-  //   video.play();
-
-  //   // init recording
-  //   mediaRecorder = new MediaRecorder(stream, {
-  //     mimeType: videoType,
-  //   });
-  //   // init data storage for video chunks
-  //   chunks = [];
-  //   // listen for data from media recorder
-  //   mediaRecorder.ondataavailable = e => {
-  //     if (e.data && e.data.size > 0) {
-  //       chunks.push(e.data);
-  //     }
-  //   };
-
-  // }
-
-  //recordVideo();
-  //   
-  // }, [])
-
-
-
-  // const startRecording = (e) => {
-  //   e.preventDefault();
-  //   // wipe old data chunks
-  //   chunks = [];
-  //   // start recorder with 10ms buffer
-  //   mediaRecorder.start(10);
-  //   // say that we're recording
-  //   setRecording(true);
-  // }
-
-
-  // const stopRecording = (e) => {
-  //   e.preventDefault();
-  //   // stop the recorder
-  //   mediaRecorder.stop();
-  //   // say that we're not recording
-  //   setRecording(false)
-  //   // save the video to memory
-  //   saveVideo();
-  // }
-
-
-  // const saveVideo = () => {
-  //   // convert saved chunks to blob
-  //   const blob = new Blob(chunks, { type: videoType });
-  //   // generate video url from blob
-  //   const videoURL = window.URL.createObjectURL(blob);
-  //   // append videoURL to list of saved videos for rendering
-  //   const videos = recordedVideos.concat([videoURL]);
-  //   setRecordedVideos(videos)
-  // }
-
-
-  // const deleteVideo = (videoURL) => {
-  //   // filter out current videoURL from the list of saved videos
-  //   const videos = recordedVideos.filter(v => v !== videoURL);
-  //   setRecordedVideos(videos)
-  // }
+  // Handling chat update
+  // Inside the video call
 
 
   useEffect(() => {
@@ -188,9 +136,14 @@ const Room = ({ roomName, room, handleLogout }) => {
       })
 
 
-      
+
     return () => socket.disconnect();
   }, [])
+
+
+
+  // Handling participant connected, disconnected, dominant speaker change
+
 
   useEffect(() => {
     const participantConnected = (participant) => {
@@ -218,6 +171,11 @@ const Room = ({ roomName, room, handleLogout }) => {
 
   }, [room]);
 
+
+
+  // Handling dominant speaker
+
+
   function removeDominantSpeaker() {
     console.log("Dominant speaker removed")
     setDominantSpeaker();
@@ -235,13 +193,29 @@ const Room = ({ roomName, room, handleLogout }) => {
       assignDominantSpeaker(participant);
   }
 
+
+
+  // Handling list of participants
+
+
   useEffect(() => {
     console.log(participants.length);
   }, [participants]);
 
+
+
+  // Handling list of remote participants
+  // i.e. other users
+
+
   const remoteParticipants = participants.map((participant) => (
     <Participant noPart={participants.length} key={participant.sid} participant={participant} reduceWidth={showPart || showChat} dominantSpeaker={dominantSpeaker} />
   ));
+
+
+
+  // Handle Audio feature
+
 
   const handleAudio = () => {
     if (!isMuted) {
@@ -257,6 +231,11 @@ const Room = ({ roomName, room, handleLogout }) => {
     }
     setMuted(!isMuted);
   }
+
+
+
+  // Handling Video
+
 
   const handleVideo = () => {
     if (isVideo) {
@@ -284,6 +263,11 @@ const Room = ({ roomName, room, handleLogout }) => {
     }
     setVideo(!isVideo);
   }
+
+
+  // Handle stop screenshare feature
+
+
   const stopScreenShare = () => {
     if (isVideo) {
       room.localParticipant.videoTracks.forEach(publication => {
@@ -298,17 +282,33 @@ const Room = ({ roomName, room, handleLogout }) => {
       setChanges(changes + 1);
     }
   }
+
+
+  // Handle Show Participants
+
+
   const handleShowParticipants = () => {
     console.log('show');
     setShowChat(false);
     setShowPart(!showPart);
   }
+
+
+  // Handle Show chat
+
+
+
   const handleShowChat = () => {
     console.log('show');
     setShowPart(false);
     setShowChat(!showChat);
-
   }
+
+
+
+  // Handle Participant list
+
+
   const partList = () => {
 
     const participantItem = (i, index) => {
@@ -335,12 +335,16 @@ const Room = ({ roomName, room, handleLogout }) => {
     )
   }
 
-  const handleRecord = () => {
-    console.log("Recordng reached")
-  }
 
+
+  // Handle Chat list
 
   const chatList = () => {
+
+
+    // Handle time format
+
+
     const formatAMPM = (date) => {
       var hours = date.getHours();
       var minutes = date.getMinutes();
@@ -351,6 +355,11 @@ const Room = ({ roomName, room, handleLogout }) => {
       var strTime = hours + ':' + minutes + ' ' + ampm;
       return strTime;
     }
+
+
+    // Handle chat messages
+
+
     const chatItem = (i, index) => {
       const date = new Date(i.timestamp);
       return (
@@ -362,14 +371,22 @@ const Room = ({ roomName, room, handleLogout }) => {
       )
     }
 
+
     const handleMsg = (e) => {
       setMsg(e.target.value);
     }
+
+
     const handleKeyDown = (e) => {
       if (e.keyCode === 13) {
         sendMessage();
       }
     }
+
+
+    // Handle Send Message inside video call
+
+
     const sendMessage = () => {
       if (msg != '') {
         const token = localStorage.getItem('token');
@@ -382,12 +399,12 @@ const Room = ({ roomName, room, handleLogout }) => {
           },
           headers: { Authorization: 'Token ' + token }
         })
-        .then(res => {
-          console.log(res.data);
-        })
-        .catch(err => {
-          console.log(err);
-        })
+          .then(res => {
+            console.log(res.data);
+          })
+          .catch(err => {
+            console.log(err);
+          })
         setMsg('');
         socket.emit('sendchat', roomName, msg, room.localParticipant.identity.split("!!!")[0], 'txt');
       }
@@ -417,6 +434,11 @@ const Room = ({ roomName, room, handleLogout }) => {
     )
   }
 
+
+
+  // Handle screen share
+
+
   const handleShare = async () => {
 
     if (sharing) {
@@ -431,6 +453,9 @@ const Room = ({ roomName, room, handleLogout }) => {
 
   }
 
+
+  // Handling Invite Feature of Video call
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -439,31 +464,44 @@ const Room = ({ roomName, room, handleLogout }) => {
     setOpen(false);
   };
 
-  const [linkValue, setLinkValue] = useState("https://www.msteams.games/videocall/")
-  const [isCopied, setCopied] = useState(false)
+
+
+  // Handling copy link to invite participants
+
+
   const onCopy = () => {
     setCopied(true);
     setTimeout(() => {
       setCopied(false);
     }, 1000);
   };
-  
 
-  const [openImg, setOpenImg] = useState(false);
-  const [image, setImage] = useState();
-  const [imgFile, setImgFile] = useState();
-  const dropRef = useRef();
-  const handleCloseImg=()=>{
+
+
+  // Handle Close Image modal
+
+
+  const handleCloseImg = () => {
     setOpenImg(false);
   }
+
+
+  // Handle Image change
+
+
   const onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       let img = event.target.files[0];
       setImgFile(img);
       setImage(URL.createObjectURL(img))
     }
-    
+
   }
+
+
+  // Handle Paste from clipboard
+
+
   const handlePaste = (e) => {
     if (e.clipboardData.files.length) {
       console.log(e.clipboardData.files[0]);
@@ -473,6 +511,11 @@ const Room = ({ roomName, room, handleLogout }) => {
       setImgFile(e.clipboardData.files[0]);
     }
   }
+
+
+  // Handle upload image in chat
+
+
   const handleUploadImage = () => {
     console.log('upload');
     let form_data = new FormData();
@@ -502,6 +545,10 @@ const Room = ({ roomName, room, handleLogout }) => {
       })
   }
 
+
+  // Handle drag and drop feature
+
+
   const handleDrag = (e) => {
     e.preventDefault()
     e.stopPropagation()
@@ -527,20 +574,24 @@ const Room = ({ roomName, room, handleLogout }) => {
       e.dataTransfer.clearData();
     }
   }
-  useEffect(()=>{
-    if(showChat){
+  useEffect(() => {
+    if (showChat) {
       let div = dropRef.current
       div.addEventListener('dragenter', handleDragIn)
       div.addEventListener('dragleave', handleDragOut)
       div.addEventListener('dragover', handleDrag)
       div.addEventListener('drop', handleDrop)
     }
-    
-  },[showChat])
 
-  const imgUploadModal=()=>{
+  }, [showChat])
 
-    return(
+
+
+  // Upload Image Modal in Chat
+
+  const imgUploadModal = () => {
+
+    return (
       <Modal open={openImg} onClose={handleCloseImg} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 'auto' }}>
         <div style={{ width: 400, height: 400, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', borderRadius: "2%" }}>
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
@@ -550,9 +601,15 @@ const Room = ({ roomName, room, handleLogout }) => {
                 <img src={image} style={{ width: 202, height: 202, objectFit: 'contain' }} />
               </div>
             </div>
-            {!imgFile ? <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose an Image</div> : <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose Some Other Image</div>}
+            {!imgFile ?
+              <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>
+                Choose an Image
+              </div> :
+              <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>
+                Choose Some Other Image
+              </div>}
 
-            <input type="file" name="myImage" id="contained-button-file" onChange={onImageChange} className={classes.input} style={{display: 'none'}} />
+            <input type="file" name="myImage" id="contained-button-file" onChange={onImageChange} className={classes.input} style={{ display: 'none' }} />
             <label htmlFor="contained-button-file" style={{ paddingBottom: "15%" }}>
               <Button variant="contained" color="primary" component="span" style={{ backgroundColor: "#464775", height: "33px" }}>
                 Choose
@@ -567,6 +624,7 @@ const Room = ({ roomName, room, handleLogout }) => {
       </Modal>
     )
   }
+
 
   return (
     <div className="room" style={{ backgroundColor: "#302e2e", height: "100%" }}>
@@ -599,18 +657,11 @@ const Room = ({ roomName, room, handleLogout }) => {
           </div>
         }
       </div>
-      {/* <div>
-        <h3>Recorded videos:</h3>
-        {videos.map((videoURL, i) => (
-          <div key={`video_${i}`}>
-            <video style={{ width: 200 }} src={videoURL} autoPlay loop />
-            <div>
-              <button onClick={() => this.deleteVideo(videoURL)}>Delete</button>
-              <a href={videoURL}>Download</a>
-            </div>
-          </div>
-        ))}
-      </div> */}
+
+
+      {/* List of feature buttons in the video call */}
+
+
       <div style={{ backgroundColor: "#f1f1f1", left: 0, position: "fixed", bottom: 0, height: "65px", width: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
         <button onClick={handleOpen} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white", justifyContent: 'flex-start' }}>
           <PersonAddIcon style={{ fontSize: "20px" }} /> <div style={{ fontSize: "10px" }}>Invite</div>
@@ -624,10 +675,6 @@ const Room = ({ roomName, room, handleLogout }) => {
         <button onClick={handleShowParticipants} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer" }}>
           <PeopleIcon style={{ fontSize: "20px" }} /> <div style={{ fontSize: "10px" }}>Participants</div>
         </button>
-        {/* <div>
-          {!recording && <button onClick={e => startRecording(e)}>Record</button>}
-          {recording && <button onClick={e => stopRecording(e)}>Stop</button>}
-        </div> */}
         <button onClick={handleShowChat} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer" }}>
           <ChatIcon style={{ fontSize: "20px" }} /> <div style={{ fontSize: "10px" }}>Chat</div>
         </button>
@@ -638,6 +685,11 @@ const Room = ({ roomName, room, handleLogout }) => {
           <ExitToAppIcon style={{ fontSize: "20px" }} /> <div style={{ fontSize: "10px" }}>Leave</div>
         </button>
       </div>
+
+
+      {/* Invite to call modal */}
+
+
       <div>
         <Modal
           className={classes.modal}

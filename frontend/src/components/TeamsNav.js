@@ -29,6 +29,9 @@ import TeamChat from './TeamChat';
 import OldCalls from './OldCalls';
 
 
+// CSS Styles
+
+
 const styles = (theme) => ({
     root: {
         margin: 0,
@@ -41,6 +44,9 @@ const styles = (theme) => ({
         color: theme.palette.grey[500],
     },
 });
+
+
+// Dialog box styling
 
 
 const DialogContent = withStyles((theme) => ({
@@ -78,6 +84,7 @@ const CssTextField = withStyles({
         },
     },
 })(TextField);
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -205,6 +212,13 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
+
+
+// Function for handling Tabs
+// Taken from Material UI
+
+
+
 function TabPanel(props) {
 
     const { children, value, index, ...other } = props;
@@ -238,6 +252,11 @@ function a11yProps(index) {
         'aria-controls': `scrollable-force-tabpanel-${index}`,
     };
 }
+
+
+// Teams Nav function
+
+
 export default function TeamsNav(props) {
     const options = {
         chat: 0,
@@ -252,6 +271,12 @@ export default function TeamsNav(props) {
     const history = useHistory();
     const [value, setValue] = React.useState(0);
     const [username, setUsername] = useState();
+    const [openScheduleModal, isScheduleModalOpen] = useState(false);
+    const [openStartModal, isStartModalOpen] = useState(false);
+    const [errorOpen, setErrorOpen] = useState(false);
+    const [scheduleVal, setScheduleVal] = useState(1);
+    const [scheduledCalls, setScheduledCalls] = useState([])
+    const [oldCalls, setOldCalls] = useState([]);
     const [meetName, setMeetName] = useState({
         value: "",
         error: false,
@@ -270,6 +295,11 @@ export default function TeamsNav(props) {
     });
 
     const [allUsers, setAllUsers] = useState([])
+
+
+    // Fetch all the users of the team
+
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (window.location.hash.substr(1) && options[window.location.hash.substr(1)]) {
@@ -292,6 +322,13 @@ export default function TeamsNav(props) {
                 console.log(err);
             })
     }, [val])
+
+
+
+    // Fetch username from the backend
+
+
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         axios({
@@ -310,15 +347,23 @@ export default function TeamsNav(props) {
             })
     }, [])
 
+
+
     const getKeyByValue = (object, value) => {
         return Object.keys(object).find(key => object[key] === value);
     }
+
+
+    // Real time rendering for list of users
+
+
     const reloadValue = () => {
         setVal(val + 1);
     }
-    const [openScheduleModal, isScheduleModalOpen] = React.useState(false);
-    const [openStartModal, isStartModalOpen] = useState(false);
-    const [errorOpen, setErrorOpen] = useState(false);
+
+
+    // Handle Error modal
+
 
     const handleErrorOpen = () => {
         setErrorOpen(true);
@@ -326,6 +371,9 @@ export default function TeamsNav(props) {
     const handleErrorClose = () => {
         setErrorOpen(false);
     };
+
+
+    // Handle Start Meeting functionality
 
 
     const handleStart = () => {
@@ -345,6 +393,10 @@ export default function TeamsNav(props) {
         }
 
     }
+
+
+    // Handle Schedule Meeting functionality
+
 
     const handleSchedule = () => {
         if (!meetName.value) {
@@ -379,6 +431,9 @@ export default function TeamsNav(props) {
 
 
 
+    // Handle close Start Meeting Modal
+
+
     const handleClose = () => {
         isStartModalOpen(false);
         setMeetName({
@@ -387,6 +442,11 @@ export default function TeamsNav(props) {
             helperText: ""
         })
     };
+
+
+
+    // Handle close Scheduled meeting modal
+
 
     const handleCloseScheduleModal = () => {
         isScheduleModalOpen(false);
@@ -406,6 +466,13 @@ export default function TeamsNav(props) {
             helperText: ""
         })
     }
+
+
+
+    // Function to create a new call
+    // when start meeting button is clicked
+
+
 
     const call = () => {
         const token = localStorage.getItem("token");
@@ -428,6 +495,10 @@ export default function TeamsNav(props) {
                 console.log(err);
             })
     }
+
+
+    // Function to schedule a call
+
 
     const schedule = () => {
         const token = localStorage.getItem("token");
@@ -459,9 +530,11 @@ export default function TeamsNav(props) {
         }
     }
 
-    const [scheduleVal, setScheduleVal] = useState(1);
-    const [scheduledCalls, setScheduledCalls] = useState([])
-    const [oldCalls, setOldCalls] = useState([]);
+
+
+    // Fetch a list of all the scheduled calls
+
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         axios({
@@ -484,9 +557,16 @@ export default function TeamsNav(props) {
             })
     }, [scheduleVal])
 
+
+
+    // For real-time rendering of scheduled calls
+
     const reloadScheduleCalls = () => {
         setScheduleVal(scheduleVal + 1);
     }
+
+
+
 
     const handleMeetName = (e) => {
         setMeetName({
@@ -503,6 +583,10 @@ export default function TeamsNav(props) {
         var new_url = url_ob.href;
         document.location.href = new_url;
     }
+
+
+
+    // Handle Start Meeting Modal
 
 
     const handleOpenStart = () => {
@@ -523,6 +607,11 @@ export default function TeamsNav(props) {
             helperText: ""
         })
     }
+
+
+    // Handle Schedule Meeting Modal
+
+
 
     const handleOpenSchedule = () => {
         isScheduleModalOpen(!openScheduleModal)
@@ -558,8 +647,13 @@ export default function TeamsNav(props) {
             helperText: ""
         })
     }
+
+
     return (
         <div className={classes.root}>
+
+            {/* Tabs inside the team page */}
+
             <AppBar position="static" color="default" style={{ zIndex: "10", position: "fixed", marginTop: "56px", marginBottom: "2%" }} className={classes.appbar}>
                 <Tabs
                     value={value}
@@ -580,9 +674,19 @@ export default function TeamsNav(props) {
 
                 </Tabs>
             </AppBar>
+
+            {/* List of the tabs, here 5 tabs */}
+
+
+            {/* Conversations Tab */}
+
             <TabPanel value={value} index={0} className={classes.tabPanel} >
                 {username && <TeamChat name={username} style={{ paddingBottom: "10px" }} />}
             </TabPanel>
+
+
+            {/* General Tab */}
+
             <TabPanel value={value} index={1} className={classes.tabPanel}>
                 {props.allCalls.length > 0 && props.allCalls.map(i =>
                     <GeneralCard call={i} />
@@ -594,6 +698,10 @@ export default function TeamsNav(props) {
                     </div>
                 }
             </TabPanel>
+
+
+            {/* Call Logs Tab */}
+
             <TabPanel value={value} index={2} className={classes.tabPanel}>
                 {oldCalls.map(i => <OldCalls call={i} scheduleVal={scheduleVal} setScheduleVal={setScheduleVal} />)}
                 {oldCalls.length == 0 &&
@@ -603,6 +711,10 @@ export default function TeamsNav(props) {
                     </div>
                 }
             </TabPanel>
+
+
+            {/* Scheduled Calls Tab */}
+
             <TabPanel value={value} index={3} className={classes.tabPanel}>
                 {scheduledCalls.map(i => <ScheduledCalls call={i} scheduleVal={scheduleVal} setScheduleVal={setScheduleVal} />)}
                 {scheduledCalls.length == 0 &&
@@ -612,6 +724,11 @@ export default function TeamsNav(props) {
                     </div>
                 }
             </TabPanel>
+
+
+            {/* Tasks tab */}
+
+
             <TabPanel value={value} index={4} className={classes.tabPanel}>
                 <div style={{ display: "flex", flexDirection: "column", width: "100%", }}>
                     <div style={{ backgroundColor: "white", borderRadius: "2%", paddingBottom: "4%" }}>
@@ -619,6 +736,11 @@ export default function TeamsNav(props) {
                     </div>
                 </div>
             </TabPanel>
+
+
+            {/* Team Participants tab */}
+
+
             <TabPanel value={value} index={5} className={classes.tabPanel}>
                 <Invite team_slug={props.team_slug} allUsers={allUsers} reloadValue={reloadValue} isAdmin={props.isAdmin} uniqueCode={props.uniqueCode} />
             </TabPanel>
@@ -627,7 +749,7 @@ export default function TeamsNav(props) {
 
 
 
-
+            {/* Fixed footer inside the teams screen */}
 
 
             <div className={classes.footer}>
@@ -637,6 +759,10 @@ export default function TeamsNav(props) {
                     <Button size="small" style={{ width: "150px" }} className={classes.meetingStart} onClick={handleOpenSchedule}>Schedule Meeting </Button>
                 </div>
             </div>
+
+
+            {/* Schedule call modal */}
+
             <Modal
                 className={classes.modal}
                 open={openScheduleModal}
@@ -690,6 +816,11 @@ export default function TeamsNav(props) {
                     </div>
                 </Fade>
             </Modal>
+
+
+            {/* Start a new call modal */}
+
+
             <Modal
                 className={classes.modal}
                 open={openStartModal}
@@ -715,6 +846,11 @@ export default function TeamsNav(props) {
                     </div>
                 </Fade>
             </Modal>
+
+
+            {/* Invalid date dialog box */}
+
+
             <Dialog onClose={handleErrorClose} aria-labelledby="customized-dialog-title" open={errorOpen}>
                 <DialogContent dividers>
                     <Typography gutterBottom>

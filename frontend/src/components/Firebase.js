@@ -1,6 +1,10 @@
 import firebase from 'firebase/app';
 import 'firebase/messaging';
 
+
+// Setup file for firebase cloud messaging
+
+
 var firebaseConfig = {
     apiKey: "AIzaSyAxgqdIWPQIEnXFyfT8zhwx_rDD7n3UdYM",
     authDomain: "ms-teams-clone-d0fdb.firebaseapp.com",
@@ -16,12 +20,12 @@ export const messaging = firebase.messaging();
 export const getToken = (setTokenFound) => {
 
 
-    return messaging.getToken({vapidKey: 'BBGSBfTemNhcTCOggK7AWjyeSvVdAd4Mf3ix7XQF3fk62bgq2FmKMrBQ9SNUhv0WslsJ1qXNHzvGPQ62P9nRnXc'}).then((currentToken) => {
+    return messaging.getToken({ vapidKey: 'BBGSBfTemNhcTCOggK7AWjyeSvVdAd4Mf3ix7XQF3fk62bgq2FmKMrBQ9SNUhv0WslsJ1qXNHzvGPQ62P9nRnXc' }).then((currentToken) => {
         if (currentToken) {
             console.log('current token for client: ', currentToken);
             setTokenFound(currentToken);
-            
-            } else {
+
+        } else {
             console.log('No registration token available. Request permission to generate one.');
             setTokenFound();
         }
@@ -32,8 +36,8 @@ export const getToken = (setTokenFound) => {
 
 
 
-export const onMessageListener = () =>{
+export const onMessageListener = () => {
     console.log('x');
 }
 //   new Promise((resolve) => {
-    
+

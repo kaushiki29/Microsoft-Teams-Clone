@@ -56,7 +56,8 @@ export default function ChatContentVC(props) {
   }, [props.name])
 
 
-
+  // Fetch messages in the video call
+  // Persistent chatting feature
 
 
   useEffect(() => {
@@ -145,6 +146,7 @@ export default function ChatContentVC(props) {
   }
 
 
+  // Handle new message and list updation
 
 
   useEffect(() => {
@@ -281,6 +283,9 @@ export default function ChatContentVC(props) {
   }, [])
 
 
+  // Handling select different image
+
+
   const onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       let img = event.target.files[0];
@@ -291,6 +296,10 @@ export default function ChatContentVC(props) {
       setImage(URL.createObjectURL(img))
     }
   }
+
+
+  // Handle Upload image
+
 
   const handleUploadImage = () => {
     console.log('upload');
@@ -376,12 +385,12 @@ export default function ChatContentVC(props) {
     <div style={{ paddingLeft: isMobile ? '10px' : '20px', marginTop: 71, marginLeft: 68 }} className="main__chatcontent">
       {/* <div><Button variant="outlined" color="primary" onClick={handleGoBack} style={{ height: 33 }}>Go back</Button></div> */}
       {/* <div><OldCalls call={{}}  /></div> */}
-      <div style={{ justifyContent: "center", alignItems: "center", height: "160px", textAlign: "center", position: "sticky", top: "56px", fontSize: "24px",zIndex: 1000 }}>
+      <div style={{ justifyContent: "center", alignItems: "center", height: "160px", textAlign: "center", position: "sticky", top: "56px", fontSize: "24px", zIndex: 1000 }}>
         <ScheduledCalls call={call} style={{ height: "150px", marginBottom: 0, marginTop: 0, padding: "10px", justifyContent: "center" }} team_slug={team_slug} back_option={true} />
       </div>
       {!error &&
         <React.Fragment>
-          <div className="content__body" style={{maxHeight: 'calc(113vh - calc(115vh / 2))', minHeight: 'calc(113vh - calc(115vh / 2))'}} >
+          <div className="content__body" style={{ maxHeight: 'calc(113vh - calc(115vh / 2))', minHeight: 'calc(113vh - calc(115vh / 2))' }} >
             <div className="chat__items" >
               {chat.map((itm, index) => {
                 return (
@@ -428,7 +437,12 @@ export default function ChatContentVC(props) {
                     <img src={image} style={{ width: 202, height: 202, objectFit: 'contain' }} />
                   </div>
                 </div>
-                {!imgFile ? <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose an Image</div> : <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose Some Other Image</div>}
+                {!imgFile ? <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>
+                  Choose an Image
+                </div> :
+                  <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>
+                    Choose Some Other Image
+                  </div>}
 
                 <input type="file" name="myImage" id="contained-button-file" onChange={onImageChange} className={classes.input} />
                 <label htmlFor="contained-button-file" style={{ paddingBottom: "15%" }}>

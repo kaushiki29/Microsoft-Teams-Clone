@@ -128,7 +128,6 @@ function TodoForm({ allUsers, pendingTodos, setPendingTodos, task, setTask, assi
   //
   //
   const handleTime = (e) => {
-    // const t = new Date(e.target.value).getTime()
     setExpectedTime(e.target.value);
   }
 
@@ -150,7 +149,6 @@ function TodoForm({ allUsers, pendingTodos, setPendingTodos, task, setTask, assi
 
   const handleSubmit = () => {
     const token = localStorage.getItem("token");
-    // const id = (todos.length) ? todos[todos.length - 1].id + 1 : 0;
     if (new Date(expectedTime).getTime() - new Date().getTime() > 0) {
       axios({
         method: 'post',
@@ -184,7 +182,6 @@ function TodoForm({ allUsers, pendingTodos, setPendingTodos, task, setTask, assi
     else {
       console.log("Error")
       handleErrorOpen();
-      // alert("Please enter a valid date and time")
     }
   }
 

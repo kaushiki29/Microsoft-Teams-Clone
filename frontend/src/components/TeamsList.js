@@ -4,6 +4,9 @@ import Cards from './Cards';
 import axios from 'axios';
 import { api } from '../screen/Helper';
 
+
+// Css Style
+
 const useStyles = makeStyles((theme) => ({
     firstTeamList: {
         width: "100%",
@@ -47,10 +50,15 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+
+
+
 function TeamsList(props) {
     const classes = useStyles();
     const [myTeams, setMyTeams] = useState([]);
     const token = localStorage.getItem("token");
+
+
     useEffect(() => {
         getTeams();
     }, [])
@@ -58,6 +66,11 @@ function TeamsList(props) {
     useEffect(() => {
         getTeams();
     }, [props.val])
+
+
+
+    // Get all the teams
+
 
     const getTeams = () => {
         axios({

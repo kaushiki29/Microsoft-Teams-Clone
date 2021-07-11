@@ -2,6 +2,10 @@ import React from 'react'
 import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
+
+
+// Css Style
+
 const useStyles = makeStyles((theme) => ({
 
     modal: {
@@ -37,9 +41,13 @@ const useStyles = makeStyles((theme) => ({
 export default function WarningModal(props) {
     const classes = useStyles();
     const history = useHistory();
+
+
     const handleRedirect = () => {
         history.push(props.redirect);
     }
+
+
     return (
         <Modal
             aria-labelledby="transition-modal-title"

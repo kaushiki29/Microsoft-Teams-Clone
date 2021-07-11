@@ -14,6 +14,9 @@ import { Modal } from "@material-ui/core";
 import VideoCallIcon from '@material-ui/icons/VideoCall';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
+
+// CSS Style
+
 const useStyles = makeStyles({
   input: {
     display: "none"
@@ -42,6 +45,11 @@ export default function ChatContent(props) {
   useEffect(() => {
     console.log(props.name);
   }, [props.name])
+
+
+  // Get all the message of the current team
+
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     axios({
@@ -64,14 +72,19 @@ export default function ChatContent(props) {
   }, [])
 
 
+  // Manage tab change
+
   const onFocus = () => {
     setTabActive(true);
   }
 
   const onBlur = () => {
     setTabActive(false);
-    console.log('Tab is blurred');
   };
+
+
+  // Handle automatic scroll to bottom
+
 
   useEffect(() => {
     messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -80,6 +93,12 @@ export default function ChatContent(props) {
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
   };
+
+
+
+  // Handling Image transfer in the chat
+  // using drag and drop feature
+
 
   const handleDrag = (e) => {
     e.preventDefault()
@@ -106,6 +125,11 @@ export default function ChatContent(props) {
       e.dataTransfer.clearData();
     }
   }
+
+
+
+  // Update teams chat
+
 
   useEffect(() => {
     window.addEventListener("focus", onFocus);
@@ -149,9 +173,14 @@ export default function ChatContent(props) {
     }
   }, [])
 
+
+
   const onStateChange = (e) => {
     setMsg(e.target.value);
   };
+
+
+  // Handle send message
 
 
   const sendMessage = () => {
@@ -196,12 +225,20 @@ export default function ChatContent(props) {
       setMsg('');
     }
   }
+
+
+  // Handling enter key to send
+
   const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
       sendMessage();
     }
   }
 
+
+
+  // Handle selection of different image
+  // from the currently chosen image
 
 
   const onImageChange = (event) => {
@@ -214,6 +251,11 @@ export default function ChatContent(props) {
       setImage(URL.createObjectURL(img))
     }
   }
+
+
+
+  // Handle upload image
+
 
   const handleUploadImage = () => {
     console.log('upload');
@@ -263,6 +305,9 @@ export default function ChatContent(props) {
       })
   }
 
+
+  // Handle upload image modal
+
   const openModal = () => {
     setOpen(true);
   }
@@ -271,6 +316,11 @@ export default function ChatContent(props) {
     setImgFile();
     setImage();
   }
+
+
+  // Handle pasting from clipboard
+
+
   const handlePaste = (e) => {
     if (e.clipboardData.files.length) {
       console.log(e.clipboardData.files[0]);
@@ -280,10 +330,17 @@ export default function ChatContent(props) {
       setImgFile(e.clipboardData.files[0]);
     }
   }
+
+
+
   return (
     <div style={{ paddingLeft: isMobile ? '10px' : '20px', paddingBottom: 0, padding: 0 }} className="main__chatcontent">
       <div className="content__body" >
         <div className="chat__items" >
+
+          {/* Rendering new chat message */}
+
+
           {chat.map((itm, index) => {
             return (
               <ChatItemTeam
@@ -303,6 +360,11 @@ export default function ChatContent(props) {
           <div ref={messagesEndRef} />
         </div>
       </div>
+
+
+      {/* Send Message Input modal */}
+
+
       <div className="content__footer" style={{ position: "sticky", bottom: "92px" }}>
         <div className="sendNewMessage" onPaste={handlePaste} ref={dropRef}>
           <button className="addFiles" onClick={openModal}>
@@ -320,6 +382,11 @@ export default function ChatContent(props) {
           </button>
         </div>
       </div>
+
+
+      {/* Upload image modal */}
+
+
       <Modal open={open} onClose={handleClose} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 'auto' }}>
         <div style={{ width: 400, height: 400, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', borderRadius: "2%" }}>
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
@@ -329,7 +396,13 @@ export default function ChatContent(props) {
                 <img src={image} style={{ width: 202, height: 202, objectFit: 'contain' }} />
               </div>
             </div>
-            {!imgFile ? <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose an Image</div> : <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose Some Other Image</div>}
+            {!imgFile ?
+              <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>
+                Choose an Image
+              </div> :
+              <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>
+                Choose Some Other Image
+              </div>}
 
             <input type="file" name="myImage" id="contained-button-file" onChange={onImageChange} className={classes.input} />
             <label htmlFor="contained-button-file" style={{ paddingBottom: "15%" }}>
@@ -337,7 +410,6 @@ export default function ChatContent(props) {
                 Upload
               </Button>
             </label>
-            {/* <button style={{ width: 200 }} >Done!</button> */}
             <Button variant="outlined" color="primary" onClick={handleUploadImage} style={{ height: "33px", color: "#464775" }}>
               Done!
             </Button>

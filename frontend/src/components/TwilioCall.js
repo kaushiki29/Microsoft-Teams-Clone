@@ -14,16 +14,21 @@ export default function TwilioCall() {
     const [room, setRoom] = useState();
     const [open, setOpen] = useState(false);
     const [warningText, setWarningText] = useState("");
+
+
     useEffect(() => {
         call();
     }, [])
+
+
+    // Initiate Twilio call
+
     const call = () => {
         const token = localStorage.getItem("token");
         axios({
             method: 'post',
             data: {
                 meeting_slug: meeting_slug
-                // name: meetName.value,
             },
             url: api + "communication/get_twilio_token",
             headers: {
@@ -45,13 +50,11 @@ export default function TwilioCall() {
                         dominantSpeaker: true
                     })
                         .then((room) => {
-                            //   setConnecting(false);
                             console.log(room);
                             setRoom(room);
                         })
                         .catch((err) => {
                             console.error(err);
-                            //   setConnecting(false);
                         });
                 }
 
@@ -61,6 +64,9 @@ export default function TwilioCall() {
                 console.log(err);
             })
     }
+
+
+    // Handle leave room / Exit from call
 
     const handleLogout = () => {
         console.log("logout");
@@ -75,9 +81,17 @@ export default function TwilioCall() {
         });
         history.push("/teams/" + teamSlug);
     }
+
+
+    // Handle close left empty for warning model
+    // to disable forced entry in the call
+
+
     const handleClose = () => {
 
     }
+
+
     return (
         <div style={{ height: "100%" }}>
             <WarningModal open={open} handleClose={handleClose} text={warningText} redirect={"/home"} />

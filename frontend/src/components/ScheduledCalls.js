@@ -10,6 +10,10 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { api } from '../screen/Helper'
 
+
+// CSS style
+
+
 const useStyles = makeStyles({
     root: {
         minWidth: 275,
@@ -62,11 +66,18 @@ const useStyles = makeStyles({
     }
 });
 
+
+
 function ScheduledCalls(props) {
     const classes = useStyles();
     const history = useHistory();
 
     var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+
+
+    // Handle Time Format
+
+
     const formatAMPM = (date) => {
         var hours = date.getHours();
         var minutes = date.getMinutes();
@@ -77,6 +88,10 @@ function ScheduledCalls(props) {
         var strTime = hours + ':' + minutes + ' ' + ampm;
         return strTime;
     }
+
+
+    // Handle delete calls
+
 
     const handleDelete = () => {
         const token = localStorage.getItem("token");

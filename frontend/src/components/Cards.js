@@ -6,6 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import { CardActionArea } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 
+// CSS
+
 const useStyles = makeStyles((theme) => ({
   card: {
     maxWidth: "293px",

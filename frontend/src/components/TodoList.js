@@ -13,6 +13,9 @@ function TodoList(props) {
   const [expectedTime, setExpectedTime] = useState();
   const [val, setVal] = useState(1);
 
+
+  // Fetch all the tasks from backend
+
   useEffect(() => {
     const token = localStorage.getItem("token")
     axios({
@@ -35,6 +38,8 @@ function TodoList(props) {
       })
   }, [val])
 
+
+  // For real time rendering
 
   const reloadTodos = () => {
     setVal(val + 1);

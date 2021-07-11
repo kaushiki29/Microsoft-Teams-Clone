@@ -7,6 +7,11 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import { useHistory } from 'react-router-dom';
+
+
+// Css files
+
+
 const useStyles = makeStyles({
     root: {
         minWidth: 275,
@@ -68,20 +73,28 @@ const useStyles = makeStyles({
 export default function SimpleCard(props) {
     const classes = useStyles();
     const history = useHistory();
+    const [time, setTime] = useState();
+
+    // Current ongoing call duration
+
+
     useEffect(() => {
         setInterval(() => updateSec(), 1000)
     }, [])
-    // const bull = <span className={classes.bullet}>•</span>;
-    const [time, setTime] = useState();
+
+    // Handle join video call
+
     const handleJoin = () => {
         console.log(time);
         history.push('/videocall/' + props.call.meeting_slug);
     }
 
+
     const updateSec = () => {
 
         setTime(new Date());
     }
+
 
     const formatTime = () => {
 
@@ -102,7 +115,11 @@ export default function SimpleCard(props) {
         return (hour + ":" + min + ":" + sec);
     }
 
-    const handleChat=()=>{
+
+    // Handle chat (Persistent chat feature)
+
+
+    const handleChat = () => {
         history.push('/meeting/conversation/' + props.call.meeting_slug);
     }
 
@@ -121,7 +138,7 @@ export default function SimpleCard(props) {
             </CardContent>
             <CardActions>
                 <Button size="small" className={classes.button} onClick={handleJoin} >Join Now </Button>
-                <Button size="small" className={classes.button} style={{width: 125, }} onClick={handleChat} >Conversation </Button>
+                <Button size="small" className={classes.button} style={{ width: 125, }} onClick={handleChat} >Conversation </Button>
             </CardActions>
         </Card>
     );

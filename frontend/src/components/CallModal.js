@@ -2,6 +2,10 @@ import React from 'react'
 import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
+
+
+// CSS
+
 const useStyles = makeStyles((theme) => ({
 
     modal: {
@@ -40,12 +44,12 @@ export default function WarningModal(props) {
     const classes = useStyles();
     const history = useHistory();
 
-    const handleAnswer=()=>{
+    const handleAnswer = () => {
         props.handleClose();
         history.push(props.answer);
 
     }
-    const handleDecline=()=>{
+    const handleDecline = () => {
         props.handleClose();
     }
     return (
@@ -58,13 +62,13 @@ export default function WarningModal(props) {
         >
             <div className={classes.modalDiv}>
                 <p style={{ fontSize: 20, margin: 0 }}>{props.text}</p>
-                <div style={{display: 'flex'}}>
-                <button className={classes.button} onClick={handleAnswer}>
-                    <p style={{ margin: 0, fontSize: 15, color: 'white' }}>Answer</p>
-                </button>
-                <button className={classes.button} style={{marginLeft: 20}} onClick={handleDecline}>
-                    <p style={{ margin: 0, fontSize: 15, color: 'white' }}>Decline</p>
-                </button>
+                <div style={{ display: 'flex' }}>
+                    <button className={classes.button} onClick={handleAnswer}>
+                        <p style={{ margin: 0, fontSize: 15, color: 'white' }}>Answer</p>
+                    </button>
+                    <button className={classes.button} style={{ marginLeft: 20 }} onClick={handleDecline}>
+                        <p style={{ margin: 0, fontSize: 15, color: 'white' }}>Decline</p>
+                    </button>
 
                 </div>
             </div>

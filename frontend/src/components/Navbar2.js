@@ -16,6 +16,9 @@ import axios from 'axios';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { api } from '../screen/Helper';
 
+
+// CSS style
+
 const CssTextField = withStyles({
   root: {
     "& label.Mui-focused": {
@@ -148,10 +151,14 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
+
+
+
 function Navbar2(props) {
   const classes = useStyles();
   const [openJoin, setOpenJoin] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const [teamCode, setTeamCode] = useState({
     value: "",
     error: false,
@@ -162,6 +169,9 @@ function Navbar2(props) {
     error: false,
     helperText: ""
   });
+
+
+  // Handle team create and join modals
 
   const changeModalJoin = (e) => {
     setTeamCode({
@@ -180,6 +190,11 @@ function Navbar2(props) {
     });
     // console.log(e.target.value);
   }
+
+
+
+  // Handle join a team
+
 
   const handleJoin = () => {
     const token = localStorage.getItem("token");
@@ -218,6 +233,10 @@ function Navbar2(props) {
     }
 
   }
+
+
+  // Handle create a team
+
 
   const handleCreate = () => {
     const token = localStorage.getItem("token");
@@ -259,6 +278,10 @@ function Navbar2(props) {
     console.log({ teamName });
   }
 
+
+  // Handle Open Join Team Modal
+
+
   const handleOpenJoin = () => {
     setOpenJoin(!openJoin);
     handleClose()
@@ -270,6 +293,10 @@ function Navbar2(props) {
 
   };
 
+
+  // Handle Open Create Team Modal
+
+
   const handleOpenCreate = () => {
     setOpenCreate(!openCreate);
     handleClose()
@@ -280,7 +307,6 @@ function Navbar2(props) {
     });
   };
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -300,6 +326,10 @@ function Navbar2(props) {
       <div className={classes.options}>
         <div className={classes.join} style={{ marginRight: 20 }}>
           <Button variant="outlined" style={{ width: 190 }} onClick={handleOpenJoin} ><PersonAddIcon style={{ paddingRight: "5px" }} /> Join a Team</Button>
+
+          {/* Join a team Modal */}
+
+
           <Modal
             aria-labelledby="transition-modal-title"
             aria-describedby="transition-modal-description"
@@ -334,6 +364,11 @@ function Navbar2(props) {
         </div>
         <div className={classes.create} style={{}}>
           <Button variant="outlined" style={{ width: 190 }} onClick={handleOpenCreate}><CreateIcon style={{ paddingRight: "5px" }} />Create a Team</Button>
+
+
+          {/* Create a team Modal */}
+
+
           <Modal
             aria-labelledby="transition-modal-title"
             aria-describedby="transition-modal-description"

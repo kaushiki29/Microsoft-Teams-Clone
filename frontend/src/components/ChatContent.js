@@ -15,6 +15,9 @@ import VideoCallIcon from '@material-ui/icons/VideoCall';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 
+// CSS
+
+
 const useStyles = makeStyles({
   input: {
     display: "none"
@@ -36,9 +39,18 @@ export default function ChatContent(props) {
   const [tabActive, setTabActive] = useState(true);
   const chatItms = props.chatItms;
   const socket = io("https://msteams.games:5000");
+
+
+  // Render chat items
+
+
   useEffect(() => {
     setChat(props.chatItms);
   }, [props])
+
+
+  // Implentation of seen feature
+
 
   useEffect(() => {
     if (tabActive) {
@@ -48,10 +60,10 @@ export default function ChatContent(props) {
 
   const onFocus = () => {
     setTabActive(true);
-
-    // console.log('focus');
   }
 
+
+  // Handling active tab
   const onBlur = () => {
     setTabActive(false);
     console.log('Tab is blurred');
@@ -64,6 +76,11 @@ export default function ChatContent(props) {
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
   };
+
+
+
+  // Hnadling drag and drop file transfer
+
 
   const handleDrag = (e) => {
     e.preventDefault()
@@ -90,6 +107,10 @@ export default function ChatContent(props) {
       e.dataTransfer.clearData();
     }
   }
+
+
+  // Handling real time chat update
+
 
   useEffect(() => {
     // console.log(props.chatItms)
@@ -132,6 +153,11 @@ export default function ChatContent(props) {
       })
     });
 
+
+
+    // Handling message seen : backend calls
+
+
     const setMsgSeenServer = () => {
       const token = localStorage.getItem('token');
       axios({
@@ -165,6 +191,9 @@ export default function ChatContent(props) {
   const onStateChange = (e) => {
     setMsg(e.target.value);
   };
+
+
+  // Handling new message sent
 
 
   const sendMessage = () => {
@@ -205,6 +234,10 @@ export default function ChatContent(props) {
       sendMessage();
     }
   }
+
+
+  // Handling initiate new call
+
 
   const startCall = () => {
     const token = localStorage.getItem("token");
@@ -253,6 +286,11 @@ export default function ChatContent(props) {
       })
   }
 
+
+
+  // Handling upload new image
+
+
   const onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       let img = event.target.files[0];
@@ -263,6 +301,9 @@ export default function ChatContent(props) {
       setImage(URL.createObjectURL(img))
     }
   }
+
+
+  // Handling upload image
 
   const handleUploadImage = () => {
     console.log('upload');
@@ -303,6 +344,10 @@ export default function ChatContent(props) {
       })
   }
 
+
+  // Handling upload image modal
+
+
   const openModal = () => {
     setOpen(true);
   }
@@ -311,6 +356,11 @@ export default function ChatContent(props) {
     setImgFile();
     setImage();
   }
+
+
+  // Handling paste from clipboard to send image
+
+
   const handlePaste = (e) => {
     if (e.clipboardData.files.length) {
       console.log(e.clipboardData.files[0]);
@@ -320,6 +370,8 @@ export default function ChatContent(props) {
       setImgFile(e.clipboardData.files[0]);
     }
   }
+
+
   return (
     <div style={{ paddingLeft: isMobile ? '10px' : '20px' }} className="main__chatcontent" >
       <div className="content__header">
@@ -342,8 +394,8 @@ export default function ChatContent(props) {
           </div>
         </div>
       </div>
-      <div className="content__body" style={{overflowX: "hidden"}} >
-        <div className="chat__items" style={{overflowX: "hidden"}} >
+      <div className="content__body" style={{ overflowX: "hidden" }} >
+        <div className="chat__items" style={{ overflowX: "hidden" }} >
           {chat.map((itm, index) => {
             return (
               <ChatItem
@@ -388,7 +440,12 @@ export default function ChatContent(props) {
                 <img src={image} style={{ width: 202, height: 202, objectFit: 'contain' }} />
               </div>
             </div>
-            {!imgFile ? <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose an Image</div> : <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>Choose Some Other Image</div>}
+            {!imgFile ? <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>
+              Choose an Image
+            </div> :
+              <div style={{ paddingTop: "5%", paddingBottom: "2%" }}>
+                Choose Some Other Image
+              </div>}
 
             <input type="file" name="myImage" id="contained-button-file" onChange={onImageChange} className={classes.input} />
             <label htmlFor="contained-button-file" style={{ paddingBottom: "15%" }}>

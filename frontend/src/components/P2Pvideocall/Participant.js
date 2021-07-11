@@ -11,7 +11,8 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth }) => {
   const [trackName, setTrackName] = useState('');
   const [st, setSt] = useState();
   const [isMute, setIsMute] = useState(false);
-
+  const [height, setHeight] = useState();
+  const [width, setWidth] = useState();
 
 
 
@@ -20,9 +21,9 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth }) => {
       .map((publication) => publication.track)
       .filter((track) => track !== null);
 
-  const [height, setHeight] = useState();
-  const [width, setWidth] = useState();
 
+
+  // Set height according to number of participants 
 
 
 
@@ -44,6 +45,9 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth }) => {
   }, [noPart])
 
 
+
+  // Set audio, video and screen share track
+  // for each participant of the team
 
 
   useEffect(() => {
@@ -125,6 +129,7 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth }) => {
 
 
 
+  // Set video track of the participant in video call
 
 
 
@@ -145,6 +150,7 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth }) => {
 
 
 
+  // Set audio track of the participant in video call
 
 
   useEffect(() => {
@@ -168,6 +174,7 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth }) => {
 
 
 
+  // CSS for making video call responsive
 
 
   useEffect(() => {
@@ -195,6 +202,8 @@ const Participant = ({ participant, isMuted, noPart, reduceWidth }) => {
 
 
 
+
+  // Css after screen share in on
 
 
   const handleClick = () => {

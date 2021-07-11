@@ -3,6 +3,11 @@ import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import CloseIcon from '@material-ui/icons/Close';
+
+
+// Css
+
+
 const useStyles = makeStyles((theme) => ({
 
     modal: {
@@ -38,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
         cursor: 'pointer'
     },
 
-    img:{
+    img: {
         maxWidth: '85vw',
         maxHeight: '85vh',
         objectFit: 'contain'
@@ -61,10 +66,10 @@ export default function ImageModal(props) {
             onClose={props.handleClose}
         >
             <div className={classes.modalDiv}>
-                <div style={{display: 'flex', justifyContent: 'flex-end', width: '100%'}}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
                     <CloseIcon className={classes.close} onClick={props.handleClose} />
                 </div>
-                <img src={"https://www.msteams.games:9000"  + props.img} className={classes.img} ></img>
+                <img src={"https://www.msteams.games:9000" + props.img} className={classes.img} ></img>
             </div>
         </Modal>
     )
