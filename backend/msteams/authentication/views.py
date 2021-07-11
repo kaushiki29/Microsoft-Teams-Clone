@@ -15,6 +15,9 @@ import requests
 from fcm_django.models import FCMDevice
 
 
+
+# User login API
+
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def user_login(request):
@@ -65,6 +68,9 @@ def user_login(request):
 #         })
 
 
+
+# Api to get username
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_username(request):
@@ -74,6 +80,8 @@ def get_username(request):
     })
 
 
+# Logout API
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def logout(request):
@@ -82,6 +90,8 @@ def logout(request):
         'msg': 'SUCCESS'
     }, status=status.HTTP_200_OK)
 
+
+# Signup API
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
@@ -113,13 +123,6 @@ def signup(request):
         user.first_name = first_name
         user.last_name = last_name
         user.save()
-        
-        # send_mail('Welcome to MS Teams Clone',
-        # 'Hello '+first_name+' '+last_name+', thank you for taking out team and registering. We offer features like XYZ',
-        # 'msteamsclone@gmail.com',
-        # [email],
-        # fail_silently=False
-        # )
         token = Token.objects.get_or_create(user=user)[0]
         return Response({
             'token': token.key,

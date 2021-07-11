@@ -8,7 +8,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
-
 from .models import Videocall,VideoCallParticipant,Message,UserMailbox,ChatUUID, P2PVideocall, TeamMailBox, VideoCallMailBox
 from time import time
 from teams.models import Teams, TeamParticipants
@@ -22,6 +21,11 @@ from django.conf import settings
 import uuid 
 from django.db.models import Q
 from fcm_django.models import FCMDevice
+
+
+
+# API to initiate new group videocall
+
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -53,6 +57,10 @@ def create_call(request):
         'sid': videocall.s_id
     })
 
+
+# Api to initiate peer to peer call
+
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def create_p2p_call(request):
@@ -79,6 +87,11 @@ def create_p2p_call(request):
         'sid': videocall.s_id
     })
 
+
+
+# Api to schedule a call
+
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def schedule_call(request):
@@ -102,12 +115,14 @@ def schedule_call(request):
 
     # add_video_call_participant(user,videocall,"HOST")
 
-    # sends response to frontend and can be accessed by res.data example res.data.team_name
     return Response({
         'meeting_slug': videocall.meeting_slug,
         'name':videocall.name,
         'schedule_time':videocall.schedule_time
     })
+
+
+# API to get meeting name
 
 
 @api_view(["POST"])
@@ -127,6 +142,10 @@ def get_meet_name(request):
             'time':videocall.started_at,
             'team_slug':videocall.team_associated.team_slug,
         })
+
+
+
+# API to fetch all the scheduled calls
 
 
 @api_view(["POST"])
@@ -160,6 +179,10 @@ def get_scheduled_calls(request):
     })
 
 
+
+# API to delete a scheduled call
+
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def delete_call(request):
@@ -173,6 +196,9 @@ def delete_call(request):
         'message':"Call deleted successfully"
     })
     
+
+# API to get all the ongoing
+# calls
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -201,6 +227,10 @@ def get_calls(request):
     })
 
 
+
+# API to check permission for entering a video call
+
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def check_permissions(request):
@@ -218,6 +248,9 @@ def check_permissions(request):
         'meeting_name': videocall.name
     })
 
+
+
+# API to get Twilio token
 
 
 @api_view(["POST"])
@@ -265,6 +298,9 @@ def get_twilio_token(request):
         'user_name': user.get_full_name(),
         'team_slug': team.team_slug
     })
+
+
+# Api to get twilio token for p2p calls
 
 
 @api_view(["POST"])
@@ -315,6 +351,8 @@ def get_p2p_twilio_token(request):
     })
 
 
+# APi for initiating chat
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def init_chat(request):
@@ -338,6 +376,9 @@ def init_chat(request):
     return Response({
         'thread_id': chatuuid.thread_id,
     })
+
+
+# API for sending message
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -392,6 +433,11 @@ def send_message(request):
     return Response({
         'msg': 'message sent successfully'
     })
+
+
+
+# Api to send image files in chat
+
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -448,6 +494,9 @@ def send_img(request):
         'imgUrl': message.img.url,
     })
 
+
+# APi to get unread messages count
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def get_unseen_count(request):
@@ -460,6 +509,10 @@ def get_unseen_count(request):
     return Response({
         'count': count
     })
+
+
+# Get all the messages
+
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -529,6 +582,9 @@ def get_thread_messages(request):
         'username': otheruser.username
     })
 
+
+# Set message as seen
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def set_msg_seen(request):
@@ -541,6 +597,9 @@ def set_msg_seen(request):
     return Response({
         'msg':'SUCCESS'
     })
+
+
+# Send message in team
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -564,6 +623,8 @@ def send_team_msg(request):
         'msg': 'message sent successfully'
     })
 
+
+# Fetch all team messages
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -595,6 +656,8 @@ def get_team_msg(request):
     })
 
 
+# Send image in teams
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def send_team_img(request):
@@ -618,6 +681,9 @@ def send_team_img(request):
         'imgUrl': message.img.url,
     })
 
+
+# Video call message
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def send_video_msg(request):
@@ -640,6 +706,8 @@ def send_video_msg(request):
         'msg': 'message sent successfully'
     })
 
+
+# Fetch all video call messages
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -679,6 +747,8 @@ def get_video_msg(request):
     })
 
 
+# Send image in video call chat
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def send_video_img(request):
@@ -703,6 +773,7 @@ def send_video_img(request):
     })
 
 
+# Get slug for video call
 
 def getSlug(title):
     title = title.lower()
@@ -712,6 +783,8 @@ def getSlug(title):
         c = Videocall.objects.all().last()
         title = title+'-'+str(c.id+1)
     return title
+
+# Get p2p video call slug
 
 def getP2PSlug(title):
     title = str(title)
@@ -724,37 +797,40 @@ def getP2PSlug(title):
     return title
 
 
-@api_view(["POST"])
-@permission_classes([AllowAny])
-def test(request):
-    account_sid = settings.ACCOUNT_SID
-    api_key = 'SK7fa5856d06ccc974ebed83bd84aab5a6'
-    api_secret = 'gnLM14bTiDBhMJr3t7FTWpWV3SEdIvdN'
-    identity = "utkarsh"
+# @api_view(["POST"])
+# @permission_classes([AllowAny])
+# def test(request):
+#     account_sid = settings.ACCOUNT_SID
+#     api_key = 'SK7fa5856d06ccc974ebed83bd84aab5a6'
+#     api_secret = 'gnLM14bTiDBhMJr3t7FTWpWV3SEdIvdN'
+#     identity = ""
 
-    # Create access token with credentials
-    token = AccessToken(account_sid, api_key, api_secret, identity=identity)
+#     # Create access token with credentials
+#     token = AccessToken(account_sid, api_key, api_secret, identity=identity)
 
-    # Create a Video grant and add to token
-    video_grant = VideoGrant(room="test-meet")
-    # print(str(video_grant))
-    token.add_grant(video_grant)
+#     # Create a Video grant and add to token
+#     video_grant = VideoGrant(room="test-meet")
+#     # print(str(video_grant))
+#     token.add_grant(video_grant)
 
 
-    # account_sid = account_sid
-    auth_token = "6442f6f5975efd64445ca4e405c242ff"
-    print(auth_token)
-    client = Client(account_sid, auth_token)
-    # print(str(client.video.rooms.create()))
-    room = client.video.rooms.create(unique_name='DailyStandup1')
-    # room = client.video.rooms('DailyStandup').fetch()
-    print(room.end_time)
-    # Return token info as JSON
-    # print(token.to_jwt())
-    return Response({
-        'error': False,
-        'access_token': token.to_jwt(),
-    })
+#     # account_sid = account_sid
+#     auth_token = "6442f6f5975efd64445ca4e405c242ff"
+#     print(auth_token)
+#     client = Client(account_sid, auth_token)
+#     # print(str(client.video.rooms.create()))
+#     room = client.video.rooms.create(unique_name='DailyStandup1')
+#     # room = client.video.rooms('DailyStandup').fetch()
+#     print(room.end_time)
+#     # Return token info as JSON
+#     # print(token.to_jwt())
+#     return Response({
+#         'error': False,
+#         'access_token': token.to_jwt(),
+#     })
+
+
+# Add participants to video call
 
 def add_video_call_participant(user,videocall,role):
     if VideoCallParticipant.objects.filter(user = user, call=videocall).exists():
@@ -768,6 +844,10 @@ def add_video_call_participant(user,videocall,role):
     participant.save()
     return
 
+
+# Create Twilio call
+
+
 def create_twilio_call(meeting_slug):
     client = Client(settings.ACCOUNT_SID, settings.ORIGINAL_AUTH_TOKEN)
     try:
@@ -777,10 +857,16 @@ def create_twilio_call(meeting_slug):
     return room.sid
 
 
+# Check video call status
+
 def check_room_status(s_id):
     client = Client(settings.ACCOUNT_SID, settings.ORIGINAL_AUTH_TOKEN)
     room = client.video.rooms(s_id).fetch()
     return room.status
+
+
+# FCM Call Modal
+
 
 def call(other_user,user,slug):
     devices = FCMDevice.objects.filter(user = other_user)
@@ -790,6 +876,8 @@ def call(other_user,user,slug):
         'type': 'call',
         'uuid': slug,
     })
+
+# New message notification in FCM
 
 def send_msg_notification(other_user,user):
     devices = FCMDevice.objects.filter(user = other_user)
