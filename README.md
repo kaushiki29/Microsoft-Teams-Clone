@@ -42,8 +42,8 @@ Install celery
 5. Run -> python3 manage.py migrate
 6. Note steps 5 and 6 needs to be run only once while initial setup
 7. Run -> python3 manage.py runsslserver --certificate {PWD}/ms-teams-clone/ssl/mydomain.crt --key {PWD}/ms-teams-clone/ssl/server.key 0.0.0.0:9000
-where {PWD} shall be replace with present working directory
-example - python3 manage.py runsslserver --certificate /home/kaushiki/ms-teams-clone/ssl/mydomain.crt --key /home/kaushiki/ms-teams-clone/ssl/server.key 9000
+8. Where {PWD} shall be replace with present working directory
+9. Example -> python3 manage.py runsslserver --certificate /home/kaushiki/ms-teams-clone/ssl/mydomain.crt --key /home/kaushiki/ms-teams-clone/ssl/server.key 9000
 
 ### Setup and run celery - 
 1. Navigate to /backend/msteams
@@ -58,9 +58,9 @@ example - python3 manage.py runsslserver --certificate /home/kaushiki/ms-teams-c
 1. Navigate to /frontend
 2. npm install
 3. Run -> REACT_APP_DJANGO_URL={YOUR_DJANGO_URL} REACT_APP_SOCKET_URL={YOUR_SOCKET_URL} npm start
-here insert your local django url and socket url, for example ->
-REACT_APP_DJANGO_URL=https://localhost:9000/ REACT_APP_SOCKET_URL=https://localhost:5000 npm start
-This shall run the react server on localhost:3000.
+4. here insert your local django url and socket url, for example ->
+5. REACT_APP_DJANGO_URL=https://localhost:9000/ REACT_APP_SOCKET_URL=https://localhost:5000 npm start
+6. This shall run the react server on localhost:3000.
 
 
 ## Screenshots
