@@ -797,37 +797,37 @@ def getP2PSlug(title):
     return title
 
 
-# @api_view(["POST"])
-# @permission_classes([AllowAny])
-# def test(request):
-#     account_sid = settings.ACCOUNT_SID
-#     api_key = 'SK7fa5856d06ccc974ebed83bd84aab5a6'
-#     api_secret = 'gnLM14bTiDBhMJr3t7FTWpWV3SEdIvdN'
-#     identity = ""
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def test(request):
+    account_sid = settings.ACCOUNT_SID
+    api_key = 'SK7fa5856d06ccc974ebed83bd84aab5a6'
+    api_secret = 'gnLM14bTiDBhMJr3t7FTWpWV3SEdIvdN'
+    identity = "utkarsh"
 
-#     # Create access token with credentials
-#     token = AccessToken(account_sid, api_key, api_secret, identity=identity)
+    # Create access token with credentials
+    token = AccessToken(account_sid, api_key, api_secret, identity=identity)
 
-#     # Create a Video grant and add to token
-#     video_grant = VideoGrant(room="test-meet")
-#     # print(str(video_grant))
-#     token.add_grant(video_grant)
+    # Create a Video grant and add to token
+    video_grant = VideoGrant(room="test-meet")
+    # print(str(video_grant))
+    token.add_grant(video_grant)
 
 
-#     # account_sid = account_sid
-#     auth_token = "6442f6f5975efd64445ca4e405c242ff"
-#     print(auth_token)
-#     client = Client(account_sid, auth_token)
-#     # print(str(client.video.rooms.create()))
-#     room = client.video.rooms.create(unique_name='DailyStandup1')
-#     # room = client.video.rooms('DailyStandup').fetch()
-#     print(room.end_time)
-#     # Return token info as JSON
-#     # print(token.to_jwt())
-#     return Response({
-#         'error': False,
-#         'access_token': token.to_jwt(),
-#     })
+    # account_sid = account_sid
+    auth_token = "6442f6f5975efd64445ca4e405c242ff"
+    print(auth_token)
+    client = Client(account_sid, auth_token)
+    # print(str(client.video.rooms.create()))
+    room = client.video.rooms.create(unique_name='DailyStandup1')
+    # room = client.video.rooms('DailyStandup').fetch()
+    print(room.end_time)
+    # Return token info as JSON
+    # print(token.to_jwt())
+    return Response({
+        'error': False,
+        'access_token': token.to_jwt(),
+    })
 
 
 # Add participants to video call
