@@ -1,3 +1,4 @@
+from django.http import response
 from django.test import TestCase
 from django.contrib.auth.models import User
 from rest_framework import status
@@ -34,6 +35,13 @@ class AuthTests(APITestCase):
         data = {}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+    def test_get_username(self):
+        url = reverse('get_username')
+        data = {}
+        response = self.client.post(url, data, format='json')
+        self.assertIsNotNone(response)
 
     def test_logout_without_login(self):
         url = reverse('logout')
