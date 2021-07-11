@@ -31,6 +31,36 @@ email - kaushikiraj029@gmail.com <br />
 password - pass
 
 ## Instructions to Install and Setup
+Install redis and run it on it's default port
+Install celery
+
+### Setup and run django server - 
+1. Navigate to /backend
+2. run -> pip install -r requirements.txt (Python 2), or pip3 install -r requirements.txt (Python 3)
+3. Navigate to /backend/msteams
+4. Run -> python3 manage.py makemigrations
+5. Run -> python3 manage.py migrate
+6. Note steps 5 and 6 needs to be run only once while initial setup
+7. Run -> python3 manage.py runsslserver --certificate {PWD}/ms-teams-clone/ssl/mydomain.crt --key {PWD}/ms-teams-clone/ssl/server.key 0.0.0.0:9000
+where {PWD} shall be replace with present working directory
+example - python3 manage.py runsslserver --certificate /home/kaushiki/ms-teams-clone/ssl/mydomain.crt --key /home/kaushiki/ms-teams-clone/ssl/server.key 9000
+
+### Setup and run celery - 
+1. Navigate to /backend/msteams
+2. Run -> celery -A msteams worker -l info -B
+
+### Setup and run socket io
+1. Navigate to /socket
+2. npm insatll
+3. node index.js
+
+### Setup and run react app - 
+1. Navigate to /frontend
+2. npm install
+3. Run -> REACT_APP_DJANGO_URL={YOUR_DJANGO_URL} REACT_APP_SOCKET_URL={YOUR_SOCKET_URL} npm start
+here insert your local django url and socket url, for example ->
+REACT_APP_DJANGO_URL=https://localhost:9000/ REACT_APP_SOCKET_URL=https://localhost:5000 npm start
+This shall run the react server on localhost:3000.
 
 
 ## Screenshots
