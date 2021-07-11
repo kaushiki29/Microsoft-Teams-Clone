@@ -65,20 +65,78 @@ Install celery
 
 ## Screenshots
 
-<img src="https://user-images.githubusercontent.com/43745008/125168080-448d9800-e1c1-11eb-92e6-c2c19a7811b5.png" height="40%" width="50%">
-<img src="https://user-images.githubusercontent.com/43745008/125168290-718e7a80-e1c2-11eb-8ce2-69b946d4429a.png" height="40%" width="50%">
-<img src="https://user-images.githubusercontent.com/43745008/125169385-81f52400-e1c7-11eb-8ef3-f1de2454f919.png" height="40%" width="50%">
-<img src="https://user-images.githubusercontent.com/43745008/125169418-b36def80-e1c7-11eb-878a-eb9bc65d1037.png" height="40%" width="50%">
-<img src="https://user-images.githubusercontent.com/43745008/125169463-e31cf780-e1c7-11eb-8eb3-7185b7b02331.png" height="40%" width="50%">
-<img src="https://user-images.githubusercontent.com/43745008/125169477-f16b1380-e1c7-11eb-9b4f-5ccf45a7136c.png" height="40%" width="50%">
-<img src="https://user-images.githubusercontent.com/43745008/125171971-a3a8d800-e1d4-11eb-9f22-0274423d2976.png" height="40%" width="50%">
-<img src="https://user-images.githubusercontent.com/43745008/125171984-b28f8a80-e1d4-11eb-90f7-e012be8b87fa.png" height="40%" width="50%">
-<img src="https://user-images.githubusercontent.com/43745008/125171989-bc18f280-e1d4-11eb-8794-af9b042bd1df.png" height="40%" width="50%">
-<img src="https://user-images.githubusercontent.com/43745008/125171997-c4712d80-e1d4-11eb-9c18-121740bf7df2.png" height="40%" width="50%">
-<img src="https://user-images.githubusercontent.com/43745008/125172007-d0f58600-e1d4-11eb-9bf0-5ed85fe1f47e.png" height="40%" width="50%">
-<img src="https://user-images.githubusercontent.com/43745008/125172033-eff41800-e1d4-11eb-9250-559edd46b8ac.png" height="40%" width="50%">
-<img src="https://user-images.githubusercontent.com/43745008/125185928-10f45180-e245-11eb-844d-0f50c0831242.png" height="40%" width="80%">
-<img src="https://user-images.githubusercontent.com/43745008/125192432-7821fe00-e265-11eb-9c2c-8cde5eb1d823.png" height="40%" width="50%">
+<p>
+ <img src="https://user-images.githubusercontent.com/43745008/125168080-448d9800-e1c1-11eb-92e6-c2c19a7811b5.png" height="40%" width="50%"> 
+ <p>Login Page</p>
+</p>
+<p>
+ <img src="https://user-images.githubusercontent.com/43745008/125168290-718e7a80-e1c2-11eb-8ce2-69b946d4429a.png" height="40%" width="50%">
+ <p>Signup Page </p>
+</p>
+<p>
+ <img src="https://user-images.githubusercontent.com/43745008/125169385-81f52400-e1c7-11eb-8ef3-f1de2454f919.png" height="40%" width="50%">
+ <p>Teams Page - Displays a list of all teams</p>
+</p>
+
+<p>
+ <img src="https://user-images.githubusercontent.com/43745008/125169418-b36def80-e1c7-11eb-878a-eb9bc65d1037.png" height="40%" width="50%">
+ <p>Inside Teams Page : Conversations, General, Call Log, Scheduled calls, Tasks, Team participants </p>
+</p>
+
+<p>
+ <img src="https://user-images.githubusercontent.com/43745008/125169463-e31cf780-e1c7-11eb-8eb3-7185b7b02331.png" height="40%" width="50%">
+ <p>Videocall page</p>
+ </p>
+ 
+ <p>
+ <img src="https://user-images.githubusercontent.com/43745008/125169477-f16b1380-e1c7-11eb-9b4f-5ccf45a7136c.png" height="40%" width="50%">
+ <p>UI changes on clicking chat/participants</p>
+ </p>
+
+<p>
+ <img src="https://user-images.githubusercontent.com/43745008/125171971-a3a8d800-e1d4-11eb-9f22-0274423d2976.png" height="40%" width="50%">
+ <p>Call Log Tab</p>
+ </p>
+ 
+ <p>
+ <img src="https://user-images.githubusercontent.com/43745008/125171984-b28f8a80-e1d4-11eb-90f7-e012be8b87fa.png" height="40%" width="50%">
+ <p>Schedule Meeting Modal</p>
+ </p>
+
+<p>
+ <img src="https://user-images.githubusercontent.com/43745008/125171989-bc18f280-e1d4-11eb-8794-af9b042bd1df.png" height="40%" width="50%">
+ <p>Tasks Section</p>
+ </p>
+
+<p>
+ <img src="https://user-images.githubusercontent.com/43745008/125171997-c4712d80-e1d4-11eb-9c18-121740bf7df2.png" height="40%" width="50%">
+ <p>Team Participants Tab</p>
+ </p>
+
+
+<p>
+ <img src="https://user-images.githubusercontent.com/43745008/125172007-d0f58600-e1d4-11eb-9bf0-5ed85fe1f47e.png" height="40%" width="50%">
+ <p>Personal Chitchat section</p>
+ </p>
+
+<p>
+ <img src="https://user-images.githubusercontent.com/43745008/125172033-eff41800-e1d4-11eb-9250-559edd46b8ac.png" height="40%" width="50%">
+ <p>Incoming Call Modal</p>
+ </p>
+
+
+<p>
+ <img src="https://user-images.githubusercontent.com/43745008/125185928-10f45180-e245-11eb-844d-0f50c0831242.png" height="40%" width="80%">
+ <p>Email Reminder Mail</p>
+ </p>
+ 
+ <p>
+ 
+ <img src="https://user-images.githubusercontent.com/43745008/125192432-7821fe00-e265-11eb-9c2c-8cde5eb1d823.png" height="40%" width="50%">
+ <p>View Magnified Image Modal</p>
+ </p>
+
+
 
 
 
