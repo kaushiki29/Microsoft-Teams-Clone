@@ -28,7 +28,7 @@ For working prototype of the product, please visit https://msteams.games/
 
 
 ## Instructions to Install and Setup
-Install redis and run it on it's default port
+Install redis and run it on it's default port <br />
 Install celery
 
 ### Setup and run django server - 
