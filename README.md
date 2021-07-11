@@ -58,9 +58,11 @@ Install celery
 1. Navigate to /frontend
 2. npm install
 3. Run -> REACT_APP_DJANGO_URL={YOUR_DJANGO_URL} REACT_APP_SOCKET_URL={YOUR_SOCKET_URL} npm start
-4. here insert your local django url and socket url, for example ->
-5. REACT_APP_DJANGO_URL=https://localhost:9000/ REACT_APP_SOCKET_URL=https://localhost:5000 npm start
-6. This shall run the react server on localhost:3000.
+4. In place of {YOUR_DJANGO_URL} insert your local django url and in place of {YOUR_SOCKET_URL} insert your local socket io url.
+5. For example -> REACT_APP_DJANGO_URL=https://localhost:9000/ REACT_APP_SOCKET_URL=https://localhost:5000 npm start
+6. This shall run the react server on https://localhost:3000.
+7. You can visit https://localhost:3000 on your browser to see the website in action.
+8. Note - please allow the website to show notifications which is by default off in most of the broswers.
 
 
 ## Screenshots
