@@ -687,7 +687,7 @@ export default function TeamsNav(props) {
 
             {/* General Tab */}
 
-            <TabPanel value={value} index={1} className={classes.tabPanel}>
+            <TabPanel value={value} index={1} className={classes.tabPanel} style={{ paddingTop: "91px" }}>
                 {props.allCalls.length > 0 && props.allCalls.map(i =>
                     <GeneralCard call={i} />
                 )}
@@ -702,11 +702,11 @@ export default function TeamsNav(props) {
 
             {/* Call Logs Tab */}
 
-            <TabPanel value={value} index={2} className={classes.tabPanel}>
+            <TabPanel value={value} index={2} className={classes.tabPanel} style={{ paddingTop: "91px" }}>
                 {oldCalls.map(i => <OldCalls call={i} scheduleVal={scheduleVal} setScheduleVal={setScheduleVal} />)}
                 {oldCalls.length == 0 &&
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                        <img src="https://envoy.com/wp-content/uploads/2020/01/USED-FOR_-_4-Ways-to-Improve-Conference-Room-Experience_-SEO-21_17.-video-conferencing_v1-1200x630.png" style={{ width: "210px" }} />
+                        <img src="https://www.kindpng.com/picc/m/58-585203_graphic-with-table-and-four-people-sitting-around.png" style={{ width: "210px" }} />
                         <div style={{ paddingTop: "2%", color: "gray" }}>No Old meeting!</div>
                     </div>
                 }
@@ -715,11 +715,11 @@ export default function TeamsNav(props) {
 
             {/* Scheduled Calls Tab */}
 
-            <TabPanel value={value} index={3} className={classes.tabPanel}>
+            <TabPanel value={value} index={3} className={classes.tabPanel} style={{ paddingTop: "91px" }}>
                 {scheduledCalls.map(i => <ScheduledCalls call={i} scheduleVal={scheduleVal} setScheduleVal={setScheduleVal} />)}
                 {scheduledCalls.length == 0 &&
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                        <img src="https://envoy.com/wp-content/uploads/2020/01/USED-FOR_-_4-Ways-to-Improve-Conference-Room-Experience_-SEO-21_17.-video-conferencing_v1-1200x630.png" style={{ width: "210px" }} />
+                        <img src="https://uiillustrations.net/wp-content/uploads/2020/11/Screenshot-371-1024x792.png" style={{ width: "231px" }} />
                         <div style={{ paddingTop: "2%", color: "gray" }}>No scheduled meeting!</div>
                     </div>
                 }
@@ -729,7 +729,7 @@ export default function TeamsNav(props) {
             {/* Tasks tab */}
 
 
-            <TabPanel value={value} index={4} className={classes.tabPanel}>
+            <TabPanel value={value} index={4} className={classes.tabPanel} style={{ paddingTop: "91px" }}>
                 <div style={{ display: "flex", flexDirection: "column", width: "100%", }}>
                     <div style={{ backgroundColor: "white", borderRadius: "2%", paddingBottom: "4%" }}>
                         <TodoList allUsers={allUsers} team_slug={props.team_slug} />
@@ -741,7 +741,7 @@ export default function TeamsNav(props) {
             {/* Team Participants tab */}
 
 
-            <TabPanel value={value} index={5} className={classes.tabPanel}>
+            <TabPanel value={value} index={5} className={classes.tabPanel} style={{ paddingTop: "91px" }}>
                 <Invite team_slug={props.team_slug} allUsers={allUsers} reloadValue={reloadValue} isAdmin={props.isAdmin} uniqueCode={props.uniqueCode} />
             </TabPanel>
 

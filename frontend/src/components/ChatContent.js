@@ -6,7 +6,7 @@ import ChatItem from "./ChatItem";
 import SendIcon from '@material-ui/icons/Send';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-import { api } from "../screen/Helper";
+import { api, socketUrl } from "../screen/Helper";
 import { useHistory } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import { io } from "socket.io-client";
@@ -38,7 +38,7 @@ export default function ChatContent(props) {
   const dropRef = useRef();
   const [tabActive, setTabActive] = useState(true);
   const chatItms = props.chatItms;
-  const socket = io("https://msteams.games:5000");
+  const socket = io(socketUrl);
 
 
   // Render chat items
@@ -373,7 +373,7 @@ export default function ChatContent(props) {
 
 
   return (
-    <div style={{ paddingLeft: isMobile ? '10px' : '20px' }} className="main__chatcontent" >
+    <div style={{ overflowX: "hidden", padding: isMobile ? "10px" : "20px 40px" }} className="main__chatcontent" >
       <div className="content__header">
         <div className="blocks">
           <div className="current-chatting-user">

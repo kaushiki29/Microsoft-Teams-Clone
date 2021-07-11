@@ -15,7 +15,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import SendIcon from '@material-ui/icons/Send';
 import { io } from "socket.io-client";
 import axios from 'axios';
-import { api } from '../../screen/Helper'
+import { api, socketUrl } from '../../screen/Helper'
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 
@@ -36,7 +36,7 @@ const Room = ({ roomName, room, handleLogout }) => {
   const [allMsg, setAllMsg] = useState([]);
   const [msg, setMsg] = useState('');
   const msgs = [];
-  const socket = io("https://msteams.games:5000");
+  const socket = io(socketUrl);
   const [sharing, setSharing] = useState(false);
 
 

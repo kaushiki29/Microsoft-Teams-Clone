@@ -34,7 +34,7 @@ function LoginComp(props) {
     const history = useHistory();
     const [token, setToken] = useState();
     const [isTokenFound, setTokenFound] = useState();
-    const [isVerified, setVerified] = useState(false);
+    const [isVerified, setVerified] = useState(process.env.REACT_APP_DJANGO_URL?true:false);
     const [email, setEmail] = useState({
         value: "",
         error: false,
@@ -53,7 +53,6 @@ function LoginComp(props) {
 
     useEffect(() => {
         setToken(localStorage.getItem("token"));
-
     }, [])
 
 
@@ -120,7 +119,7 @@ function LoginComp(props) {
                 }
             })
                 .then(res => {
-                    console.log(res.data)
+                    console.log(res)
                     if (res.data.token) {
                         localStorage.setItem("token", res.data.token);
                         props.refreshToken();
@@ -198,11 +197,12 @@ function LoginComp(props) {
                             helperText={password.helperText}
                             onChange={handlePassword}
                         />
+                        {!process.env.REACT_APP_DJANGO_URL &&
                         <ReCAPTCHA
                             sitekey="6Leib2QbAAAAAECYwqLcdJ2SEhQFE4KSfRORWIA2"
                             onChange={handleCaptcha}
                         />
-
+                        }
                         <Button variant="contained" color="primary" onClick={handleLogin} disabled={!isVerified}>
                             Sign-In
                         </Button>

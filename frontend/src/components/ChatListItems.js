@@ -42,7 +42,6 @@ export default function ChatListItems(props) {
           <p>{props.name}</p>
           {props.unseenMsgCount > 0 && <div style={{ marginLeft: 7, width: 15, height: 15, backgroundColor: 'red', borderRadius: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><p style={{ margin: 0, color: 'white', fontSize: 10 }}>{props.unseenMsgCount > 99 ? '99+' : props.unseenMsgCount}</p></div>}
         </div>
-        {/* <span className="activeTime">32 mins ago</span> */}
       </div>
     </div>
   );

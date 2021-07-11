@@ -6,7 +6,7 @@ import ChatItemTeam from "./ChatItemTeam";
 import SendIcon from '@material-ui/icons/Send';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-import { api } from "../screen/Helper";
+import { api, socketUrl } from "../screen/Helper";
 import { useHistory, useParams } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import { io } from "socket.io-client";
@@ -20,11 +20,19 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 const useStyles = makeStyles({
   input: {
     display: "none"
+  },
+  contentBody: {
+    // '@media(max-height: 740px)': {
+    //   maxHeight: "calc(100vh - calc(95vh / 2))",
+    //   minHeight: "calc(110vh - calc(95vh / 2))",
+    //   overflow: "auto",
+    // }
   }
 })
 
 
 export default function ChatContent(props) {
+  // const classes = useStyles()
   const { team_slug } = useParams();
   const history = useHistory();
   const isMobile = useMediaQuery('(max-width:600px)')
@@ -37,7 +45,7 @@ export default function ChatContent(props) {
   const [imgFile, setImgFile] = useState();
   const dropRef = useRef();
   const [tabActive, setTabActive] = useState(true);
-  const socket = io("https://msteams.games:5000");
+  const socket = io(socketUrl);
   const chatItms = [];
 
 
@@ -335,8 +343,8 @@ export default function ChatContent(props) {
 
   return (
     <div style={{ paddingLeft: isMobile ? '10px' : '20px', paddingBottom: 0, padding: 0 }} className="main__chatcontent">
-      <div className="content__body" >
-        <div className="chat__items" >
+      <div className="content__body" className={classes.contentBody}>
+        <div className="chat__items" style={{ paddingTop: "58px" }} >
 
           {/* Rendering new chat message */}
 
@@ -365,7 +373,7 @@ export default function ChatContent(props) {
       {/* Send Message Input modal */}
 
 
-      <div className="content__footer" style={{ position: "sticky", bottom: "92px" }}>
+      <div className="content__footer" style={{ position: "sticky", bottom: "92px", paddingTop: 0 }}>
         <div className="sendNewMessage" onPaste={handlePaste} ref={dropRef}>
           <button className="addFiles" onClick={openModal}>
             <AddIcon style={{ color: "white" }} />

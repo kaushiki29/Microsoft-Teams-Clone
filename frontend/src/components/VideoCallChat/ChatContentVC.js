@@ -4,7 +4,7 @@ import AddIcon from '@material-ui/icons/Add';
 import SendIcon from '@material-ui/icons/Send';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-import { api } from "../../screen/Helper";
+import { api, socketUrl } from "../../screen/Helper";
 import { useHistory, useParams } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import { io } from "socket.io-client";
@@ -42,7 +42,7 @@ export default function ChatContentVC(props) {
   }]);
   const dropRef = useRef();
   const [tabActive, setTabActive] = useState(true);
-  const socket = io("https://msteams.games:5000");
+  const socket = io(socketUrl);
   const [openError, setOpenError] = useState(false);
   const [error, setError] = useState(true);
   const [errorMsg, setErrorMsg] = useState();
