@@ -124,8 +124,8 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "rgb(245, 245, 245)",
         paddingLeft: "10%",
         paddingRight: "10%",
-        marginTop: "108px",
-        // paddingTop: "100px",
+        // marginTop: "108px",
+        paddingTop: "31px",
         marginBottom: "91px",
         // paddingBottom: "6%",
         '@media(max-width: 550px)': {
