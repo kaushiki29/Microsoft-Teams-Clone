@@ -14,7 +14,7 @@ import axios from 'axios';
 import { api } from './Helper';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { messaging } from '../components/Firebase';
-import CallerTune from '../static/telephone-ring-02.mp3';
+import CallerTune from '../static/ringtone.mp3';
 import CallModal from '../components/CallModal';
 
 

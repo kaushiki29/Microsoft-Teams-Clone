@@ -8,7 +8,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { api } from '../screen/Helper';
 import { messaging } from './Firebase';
-import CallerTune from '../static/telephone-ring-02.mp3';
+import CallerTune from '../static/ringtone.mp3';
 import CallModal from './CallModal';
 
 

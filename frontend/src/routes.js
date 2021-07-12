@@ -13,7 +13,7 @@ import WarningModal from '../src/components/WarningModal';
 import CallModal from '../src/components/CallModal';
 import axios from 'axios';
 import { api } from '../src/screen/Helper';
-import CallerTune from '../src/static/telephone-ring-02.mp3';
+import CallerTune from '../src/static/ringtone.mp3';
 import { withRouter } from 'react-router-dom';
 import Tasks from '../src/screen/Tasks'
 import VideoCallChat from '../src/screen/VideoCallChat';
