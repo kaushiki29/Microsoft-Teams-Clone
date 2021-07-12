@@ -678,7 +678,7 @@ const Room = ({ roomName, room, handleLogout }) => {
         <button onClick={handleShowChat} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer" }}>
           <ChatIcon style={{ fontSize: "20px" }} /> <div style={{ fontSize: "10px" }}>Chat</div>
         </button>
-        <button onClick={handleShare} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer", }}>
+        <button onClick={handleShare} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer", display: isMobile ? "none" : "" }}>
           {!sharing ? <ScreenShareIcon style={{ fontSize: "20px" }} /> : <StopScreenShareIcon style={{ fontSize: "20px" }} />} <div style={{ fontSize: "10px" }}>ScreenShare</div>
         </button>
         <button onClick={handleLogout} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white" }}>

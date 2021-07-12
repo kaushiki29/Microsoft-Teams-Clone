@@ -18,6 +18,7 @@ import axios from 'axios';
 import { api, socketUrl } from '../../screen/Helper'
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 
 
@@ -38,6 +39,7 @@ const Room = ({ roomName, room, handleLogout }) => {
   const msgs = [];
   const socket = io(socketUrl);
   const [sharing, setSharing] = useState(false);
+  const isMobile = useMediaQuery('(max-width:600px)')
 
 
 
@@ -109,6 +111,8 @@ const Room = ({ roomName, room, handleLogout }) => {
     return () => socket.disconnect();
   }, [])
 
+  // Handling participant connected, disconnected
+
   useEffect(() => {
     const participantConnected = (participant) => {
       setParticipants((prevParticipants) => [...prevParticipants, participant]);
@@ -116,7 +120,7 @@ const Room = ({ roomName, room, handleLogout }) => {
 
 
 
-    // Handling participant connected, disconnected
+
 
 
     const participantDisconnected = (participant) => {
@@ -187,7 +191,10 @@ const Room = ({ roomName, room, handleLogout }) => {
         publication.track.stop();
         publication.unpublish();
       });
-      setSharing(!sharing);
+      // setSharing(!sharing);
+      if (sharing) {
+        setSharing(false);
+      }
     }
     else {
 
@@ -570,24 +577,25 @@ const Room = ({ roomName, room, handleLogout }) => {
       </div>
 
       {/* List of feature buttons in the video call */}
+
       <div style={{ backgroundColor: "#f1f1f1", left: 0, position: "fixed", bottom: 0, height: "65px", width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <button onClick={handleAudio} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white" }}>
-          {isMuted ? <MicOffIcon /> : <MicIcon />}
+        <button onClick={handleAudio} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white" }}>
+          {isMuted ? <MicOffIcon style={{ fontSize: "20px" }} /> : <MicIcon style={{ fontSize: "20px" }} />} <div style={{ fontSize: "10px" }}>Mic</div>
         </button>
-        <button onClick={handleVideo} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white" }}>
-          {isVideo ? <VideocamIcon /> : <VideocamOffIcon />}
+        <button onClick={handleVideo} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white" }}>
+          {isVideo ? <VideocamIcon style={{ fontSize: "20px" }} /> : <VideocamOffIcon style={{ fontSize: "20px" }} />} <div style={{ fontSize: "10px" }}>Video</div>
         </button>
-        <button onClick={handleShowParticipants} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer" }}>
-          <PeopleIcon />
+        <button onClick={handleShowParticipants} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer" }}>
+          <PeopleIcon style={{ fontSize: "20px" }} /><div style={{ fontSize: "10px" }}>Participants</div>
         </button>
-        <button onClick={handleShowChat} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer" }}>
-          <ChatIcon />
+        <button onClick={handleShowChat} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer" }}>
+          <ChatIcon style={{ fontSize: "20px" }} /><div style={{ fontSize: "10px" }}>Chat</div>
         </button>
-        <button onClick={handleShare} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer" }}>
-          {!sharing ? <ScreenShareIcon /> : <StopScreenShareIcon />}
+        <button onClick={handleShare} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white", cursor: "pointer", display: isMobile ? "none" : "" }}>
+          {!sharing ? <ScreenShareIcon style={{ fontSize: "20px" }} /> : <StopScreenShareIcon style={{ fontSize: "20px" }} />}<div style={{ fontSize: "10px" }}>ScreenShare</div>
         </button>
-        <button onClick={handleLogout} style={{ height: "50px", width: "50px", borderRadius: "50%", marginLeft: "1%", backgroundColor: "white" }}>
-          <ExitToAppIcon />
+        <button onClick={handleLogout} style={{ height: "50px", width: "63px", borderRadius: "30%", marginLeft: "1%", backgroundColor: "white" }}>
+          <ExitToAppIcon style={{ fontSize: "20px" }} /><div style={{ fontSize: "10px" }}>Leave</div>
         </button>
       </div>
       {imgUploadModal()}

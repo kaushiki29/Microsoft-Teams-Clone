@@ -127,7 +127,7 @@ Install celery
 
 <p>
  <img src="https://user-images.githubusercontent.com/43745008/125185928-10f45180-e245-11eb-844d-0f50c0831242.png" height="40%" width="80%">
- <p>Email Reminder Mail</p>
+ <p>Email Reminder </p>
  </p>
  
  <p>
