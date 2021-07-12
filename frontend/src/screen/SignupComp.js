@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 function SignupComp(props) {
     const classes = useStyles();
     const history = useHistory();
-    const [isVerified, setVerified] = useState(process.env.REACT_APP_DJANGO_URL?true:false);
+    const [isVerified, setVerified] = useState(process.env.REACT_APP_DJANGO_URL ? true : false);
     const [firstName, setFirstName] = useState({
         value: "",
         error: false,
@@ -237,7 +237,7 @@ function SignupComp(props) {
                         localStorage.setItem("token", res.data.token);
                         console.log("Signup success")
                         props.refreshToken();
-                        history.push('/chat/all-conversations');
+                        history.push('/home');
                     }
                 })
                 .catch(err => {
@@ -310,10 +310,10 @@ function SignupComp(props) {
                         error={confirmPass.error}
                         helperText={confirmPass.helperText} />
                     {!process.env.REACT_APP_DJANGO_URL &&
-                    <ReCAPTCHA
-                        sitekey="6Leib2QbAAAAAECYwqLcdJ2SEhQFE4KSfRORWIA2"
-                        onChange={handleCaptcha}
-                    />
+                        <ReCAPTCHA
+                            sitekey="6Leib2QbAAAAAECYwqLcdJ2SEhQFE4KSfRORWIA2"
+                            onChange={handleCaptcha}
+                        />
                     }
                     <Button variant="contained" color="primary" onClick={handleSubmit} disabled={!isVerified}>
                         Sign-Up

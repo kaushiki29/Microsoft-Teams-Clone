@@ -14,26 +14,71 @@ const useStyles = makeStyles((theme) => ({
     minHeight: "252px",
     marginBottom: "2%",
     minWidth: "260px",
-    '@media(max-width: 925px)': {
-      minHeight: "240px",
-      minWidth: "240px",
-      maxWidth: "250px"
+
+    '@media(max-width: 1209px)': {
+      minWidth: "320px",
+      maxWidth: "320px"
     },
-    '@media(max-width: 855px)': {
-      minHeight: "220px",
-      minWidth: "220px",
-      maxWidth: "230px"
+    '@media(max-width: 1150px)': {
+      minWidth: "300px",
+      maxWidth: "300px"
     },
-    '@media(max-width: 533px)': {
-      minHeight: "200px",
-      minWidth: "200px",
-      maxWidth: "210px"
+    '@media(max-width: 1099px)': {
+      minWidth: "280px",
+      maxWidth: "280px"
     },
-    '@media(max-width: 483px)': {
-      minHeight: "230px",
-      minWidth: "230px",
-      maxWidth: "240px"
-    }
+    '@media(max-width: 1077px)': {
+      minWidth: "260px",
+      maxWidth: "280px"
+    },
+    '@media(max-width: 934px)': {
+      minWidth: "350px",
+      maxWidth: "350px"
+    },
+    '@media(max-width: 831px)': {
+      minWidth: "320px",
+      maxWidth: "320px"
+    },
+    '@media(max-width: 798px)': {
+      minWidth: "300px",
+      maxWidth: "300px"
+    },
+    '@media(max-width: 741px)': {
+      minWidth: "280px",
+      maxWidth: "280px"
+    },
+    '@media(max-width: 720px)': {
+      minWidth: "260px",
+      maxWidth: "260px"
+    },
+    '@media(max-width: 645px)': {
+      minWidth: "320px",
+      maxWidth: "260px"
+    },
+    '@media(max-width: 424px)': {
+      minWidth: "280px",
+      maxWidth: "280px"
+    },
+    // '@media(max-width: 925px)': {
+    //   minHeight: "240px",
+    //   minWidth: "240px",
+    //   maxWidth: "250px"
+    // },
+    // '@media(max-width: 855px)': {
+    //   minHeight: "220px",
+    //   minWidth: "220px",
+    //   maxWidth: "230px"
+    // },
+    // '@media(max-width: 533px)': {
+    //   minHeight: "200px",
+    //   minWidth: "200px",
+    //   maxWidth: "210px"
+    // },
+    // '@media(max-width: 483px)': {
+    //   minHeight: "230px",
+    //   minWidth: "230px",
+    //   maxWidth: "240px"
+    // }
   },
   cardActionArea: {
     height: "100%",
@@ -51,14 +96,14 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    '@media(max-width: 483px)': {
-      height: "85px",
-      width: "105px",
-    },
-    '@media(max-width: 533px)': {
-      width: "100px",
-      height: "72px"
-    },
+    // '@media(max-width: 483px)': {
+    //   height: "85px",
+    //   width: "105px",
+    // },
+    // '@media(max-width: 533px)': {
+    //   width: "100px",
+    //   height: "72px"
+    // },
   },
   typo: {
     textAlign: "center",
@@ -69,12 +114,12 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
     padding: 0,
     fontSize: "xxx-large",
-    '@media(max-width: 483px)': {
-      fontSize: "xx-large"
-    },
-    '@media(max-width: 533px)': {
-      fontSize: "xx-large"
-    },
+    // '@media(max-width: 483px)': {
+    //   fontSize: "xx-large"
+    // },
+    // '@media(max-width: 533px)': {
+    //   fontSize: "xx-large"
+    // },
   }
 }));
 

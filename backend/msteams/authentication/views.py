@@ -102,16 +102,6 @@ def signup(request):
     first_name = request.data.get('first_name')
     last_name = request.data.get('last_name')
     password = request.data.get('password')
-    response = requests.get("https://emailvalidation.abstractapi.com/v1/?api_key=f1e531e417d24f13a53ce89631f28edf&email="+email)
-    deliverability = response.json().get('deliverability')
-    is_valid_format = response.json().get('is_valid_format')
-    is_role_email = response.json().get('is_role_email')
-
-    if deliverability!='DELIVERABLE' or is_valid_format==False or is_role_email==True:
-        return Response({
-            'error':True,
-            'message':"Enter a valid email address"
-        })
     user_present = User.objects.filter(email = email)
     if user_present:
         return Response({
