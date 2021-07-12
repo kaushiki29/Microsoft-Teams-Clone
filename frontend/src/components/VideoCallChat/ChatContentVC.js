@@ -50,7 +50,6 @@ export default function ChatContentVC(props) {
 
 
 
-
   useEffect(() => {
     console.log(props.name);
   }, [props.name])
@@ -386,7 +385,7 @@ export default function ChatContentVC(props) {
       {/* <div><Button variant="outlined" color="primary" onClick={handleGoBack} style={{ height: 33 }}>Go back</Button></div> */}
       {/* <div><OldCalls call={{}}  /></div> */}
       <div style={{ justifyContent: "center", alignItems: "center", height: "160px", textAlign: "center", position: "sticky", top: "56px", fontSize: "24px", zIndex: 1000 }}>
-        <ScheduledCalls call={call} style={{ height: "150px", marginBottom: 0, marginTop: 0, padding: "10px", justifyContent: "center" }} team_slug={team_slug} back_option={true} />
+        <ScheduledCalls call={call} style={{ height: "150px", marginBottom: 0, marginTop: 0, padding: "10px", justifyContent: "center" }} team_slug={team_slug} back_option={true} vc={true} />
       </div>
       {!error &&
         <React.Fragment>

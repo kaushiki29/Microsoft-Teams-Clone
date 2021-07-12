@@ -119,7 +119,7 @@ function ScheduledCalls(props) {
     }
 
     const handleGoBack = () => {
-        history.push("/teams/" + props.team_slug)
+        history.push("/teams/" + props.team_slug + "#old_calls")
     }
 
 
@@ -139,9 +139,16 @@ function ScheduledCalls(props) {
                 <Divider className={classes.divider} />
             </CardContent>
             <CardActions style={{ justifyContent: props.style ? props.style.justifyContent : "" }}>
-                <Button size="small" className={classes.button} onClick={handleDelete} style={{ marginTop: props.style ? props.style.marginTop : "" }}>Delete call</Button>
+                {props.vc ?
+                    <Button size="small" className={classes.button} onClick={handleGoBack} style={{ height: 35, marginTop: props.style ? props.style.marginTop : "" }}>Go back</Button> :
+                    <div>
+                        <Button size="small" className={classes.button} onClick={handleDelete} style={{ marginTop: props.style ? props.style.marginTop : "" }}>Delete call</Button>
+                        <Button size="small" className={classes.button} style={{ width: 125, marginTop: props.style ? props.style.marginTop : "" }} onClick={handleChat} >Conversation </Button>
+                    </div>
+                }
+                {/* <Button size="small" className={classes.button} onClick={handleDelete} style={{ marginTop: props.style ? props.style.marginTop : "" }}>Delete call</Button>
                 <Button size="small" className={classes.button} style={{ width: 125, marginTop: props.style ? props.style.marginTop : "" }} onClick={handleChat} >Conversation </Button>
-                {props.back_option && <Button size="small" className={classes.button} onClick={handleGoBack} style={{ height: 35, marginTop: props.style ? props.style.marginTop : "" }}>Go back</Button>}
+                // {props.back_option && <Button size="small" className={classes.button} onClick={handleGoBack} style={{ height: 35, marginTop: props.style ? props.style.marginTop : "" }}>Go back</Button>} */}
             </CardActions>
         </Card>
 
