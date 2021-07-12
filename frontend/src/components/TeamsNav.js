@@ -135,13 +135,18 @@ const useStyles = makeStyles((theme) => ({
     },
     tab: {
         fontWeight: "bolder",
-        '@media(max-width: 1030px)': {
+        paddingLeft: 0,
+        minWidth: "140px",
+        '@media(max-width: 1227px)': {
             minWidth: "120px"
         },
-        '@media(max-width: 931px)': {
+        '@media(max-width: 1143px)': {
             minWidth: "90px"
         },
-        '@media(max-width: 556px)': {
+        '@media(max-width: 1048px)': {
+            minWidth: "50px"
+        },
+        '@media(max-width: 987px)': {
             minWidth: "30px"
         }
     },
@@ -667,10 +672,10 @@ export default function TeamsNav(props) {
                 >
                     <Tab label="Conversation" className={classes.tab} />
                     <Tab label="General" className={classes.tab} />
-                    <Tab label="Call Log" className={classes.tab} />
-                    <Tab label="Scheduled Calls" className={classes.tab} />
+                    <Tab label="Call-Log" className={classes.tab} />
+                    <Tab label="Scheduled-Calls" className={classes.tab} />
                     <Tab label="Tasks" className={classes.tab} />
-                    <Tab label="Team Participants" className={classes.tab} />
+                    <Tab label="Team-Participants" className={classes.tab} />
 
                 </Tabs>
             </AppBar>
@@ -706,7 +711,7 @@ export default function TeamsNav(props) {
                 {oldCalls.map(i => <OldCalls call={i} scheduleVal={scheduleVal} setScheduleVal={setScheduleVal} />)}
                 {oldCalls.length == 0 &&
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                        <img src="https://www.kindpng.com/picc/m/58-585203_graphic-with-table-and-four-people-sitting-around.png" style={{ width: "210px" }} />
+                        <img src="https://www.kindpng.com/picc/m/58-585203_graphic-with-table-and-four-people-sitting-around.png" style={{ height: "200px" }} />
                         <div style={{ paddingTop: "2%", color: "gray" }}>No Old meeting!</div>
                     </div>
                 }
@@ -719,7 +724,7 @@ export default function TeamsNav(props) {
                 {scheduledCalls.map(i => <ScheduledCalls call={i} scheduleVal={scheduleVal} setScheduleVal={setScheduleVal} />)}
                 {scheduledCalls.length == 0 &&
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                        <img src="https://uiillustrations.net/wp-content/uploads/2020/11/Screenshot-371-1024x792.png" style={{ width: "231px" }} />
+                        <img src="https://uiillustrations.net/wp-content/uploads/2020/11/Screenshot-371-1024x792.png" style={{ height: "200px", borderRadius: "5%" }} />
                         <div style={{ paddingTop: "2%", color: "gray" }}>No scheduled meeting!</div>
                     </div>
                 }

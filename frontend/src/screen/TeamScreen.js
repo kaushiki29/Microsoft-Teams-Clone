@@ -40,11 +40,20 @@ const useStyles = makeStyles((theme) => ({
         position: "fixed",
         display: "flex",
         height: "100vh",
-        '@media(max-width: 931px)': {
+        '@media(max-width: 990px)': {
+            width: "270px"
+        },
+        '@media(max-width: 930px)': {
             width: "250px"
         },
-        '@media(max-width: 800px)': {
-            width: "220px"
+        '@media(max-width: 910px)': {
+            width: "210px"
+        },
+        '@media(max-width: 870px)': {
+            width: "180px"
+        },
+        '@media(max-width: 840px)': {
+            width: "150px"
         },
         '@media(max-width: 770px)': {
             display: "none",
@@ -131,11 +140,20 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         width: '100%',
         marginLeft: "388px",
-        '@media(max-width: 931px)': {
+        '@media(max-width: 990px)': {
+            marginLeft: "338px"
+        },
+        '@media(max-width: 930px)': {
             marginLeft: "318px"
         },
-        '@media(max-width: 800px)': {
-            marginLeft: "289px"
+        '@media(max-width: 910px)': {
+            marginLeft: "278px"
+        },
+        '@media(max-width: 870px)': {
+            marginLeft: "248px"
+        },
+        '@media(max-width: 840px)': {
+            marginLeft: "218px"
         },
         '@media(max-width: 770px)': {
             marginLeft: "68px",

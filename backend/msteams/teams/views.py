@@ -209,7 +209,7 @@ def get_todos_teams(request):
                 'assigned_to':todo.assigned_to.first_name+" "+todo.assigned_to.last_name,
                 'expected_time':todo.expected_completion_unix_time
             }
-            completed_todos.append(temp)
+            completed_todos.insert(0,temp)
     return Response({
         'pending_todos':pending_todos,
         'completed_todos': completed_todos

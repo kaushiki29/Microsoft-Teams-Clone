@@ -349,6 +349,17 @@ export default function ChatContent(props) {
           {/* Rendering new chat message */}
 
 
+          {chat.length === 0 &&
+            <div style={{ paddingTop: "5%", paddingBottom: "5%", textAlign: "center", }}>
+              <img
+                src="https://thumbs.dreamstime.com/b/home-video-call-online-work-conference-virtual-class-team-remote-meeting-digital-business-chat-internet-education-vector-193808545.jpg"
+                height="200px"
+                style={{ borderRadius: "5%" }}
+              />
+              <div style={{ paddingTop: "2%", color: "gray" }}>Don't keep your thoughts in your mind. <br /> Share it with your team here.</div>
+            </div>}
+
+
           {chat.map((itm, index) => {
             return (
               <ChatItemTeam
@@ -380,7 +391,7 @@ export default function ChatContent(props) {
           </button>
           <input
             type="text"
-            placeholder="Type a message here"
+            placeholder="Something in mind? Share here."
             onChange={onStateChange}
             onKeyDown={handleKeyDown}
             value={msg}
