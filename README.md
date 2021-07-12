@@ -25,7 +25,6 @@ For working prototype of the product, please visit https://msteams.games/
 4. Socket.io
 5. Firebase Cloud Messaging
 6. Twilio Video SDK
-7. Abstract API (***only for email deliverability check***)
 
 
 ## Instructions to Install and Setup
