@@ -551,7 +551,7 @@ const Room = ({ roomName, room, handleLogout }) => {
         <h2>Room: {roomName}</h2>
       </div>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', padding: 30, justifyContent: 'center' }}>
+        <div style={{ display: isMobile && (showPart || showChat) ? 'none' : 'flex', flexWrap: 'wrap', padding: 30, justifyContent: 'center' }}>
           <div className="local-participant" style={{ marginTop: "0px" }}>
             {room ? (
               <Participant
