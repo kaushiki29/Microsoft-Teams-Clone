@@ -38,17 +38,19 @@ def clear_video_calls():
 
 @app.task
 def meeting_reminder():
-    calls = Videocall.objects.filter(is_scheduled= True, schedule_time__lt = time.time()*1000 + 1800000)
+    calls = Videocall.objects.filter(is_scheduled= True, schedule_time__lt = time.time()*1000 + 900000, reminder=False)
     teams = []
     for c in calls:
         team = c.team_associated
+        c.reminder = True
+        c.save()
         teams.append(team)
     for t in teams:
         participants = TeamParticipants.objects.filter(team = t)
         for p in participants:
             email = p.user.email
-            send_mail('Meeting reminder',
-            'Hello '+p.user.first_name+' '+p.user.last_name+', you have a meeting scheduled in 30 minutes in your team named '+p.team.team_name+'.',
+            send_mail('Meeting reminder!',
+            'Hello '+p.user.first_name+' '+p.user.last_name+', you have a meeting scheduled in less than 15 minutes in your team named '+p.team.team_name+'. Please be on time',
             'msteamsclone@gmail.com',
             [email],
             fail_silently=False
@@ -71,13 +73,15 @@ def start_meeting():
 
 @app.task
 def task_reminder():
-    tasks = TeamTodo.objects.filter(is_completed=False, expected_completion_unix_time__lt = time.time()*1000+43200000)
+    tasks = TeamTodo.objects.filter(is_completed=False, expected_completion_unix_time__lt = time.time()*1000+43200000, reminder=False)
     for t in tasks:
         email = t.assigned_to.email
         team = t.associated_team.team_name
+        t.reminder = True
+        t.save()
         created_by = t.created_by.first_name+" "+t.created_by.last_name
-        send_mail('Task Deadline Approaching',
-            'Hello '+t.assigned_to.first_name+' '+t.assigned_to.last_name+', this is a gentle reminder of the task deadline created by '+created_by+' in the team named '+team+'. Your task deadline is in 12 hours.',
+        send_mail('Task Deadline Approaching!',
+            'Hello '+t.assigned_to.first_name+' '+t.assigned_to.last_name+', this is a gentle reminder of the task deadline created by '+created_by+' in the team named '+team+'. Your task deadline is in less than 12 hours.',
             'msteamsclone@gmail.com',
             [email],
             fail_silently=False

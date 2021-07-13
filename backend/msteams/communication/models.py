@@ -42,6 +42,7 @@ class Videocall(models.Model):
     team_associated = models.ForeignKey(Teams, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     is_active = models.BooleanField(default=False)
+    reminder = models.BooleanField(default=False)
     started_at = models.BigIntegerField()
     is_scheduled = models.BooleanField(default=False)
     schedule_time = models.BigIntegerField()

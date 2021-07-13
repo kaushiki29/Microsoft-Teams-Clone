@@ -50,6 +50,7 @@ export default function WarningModal(props) {
 
     }
     const handleDecline = () => {
+        console.log("Declined")
         props.handleClose();
     }
     return (

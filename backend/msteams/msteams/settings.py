@@ -182,7 +182,7 @@ CELERY_BEAT_SCHEDULE = {
 
     'meeting_reminder':{
         'task':'teams.tasks.meeting_reminder',
-        'schedule': timedelta(seconds=1800),
+        'schedule': timedelta(seconds=300),
         'args' : ()
     },
 
@@ -194,7 +194,7 @@ CELERY_BEAT_SCHEDULE = {
 
     'task_reminder':{
         'task':'teams.tasks.task_reminder',
-        'schedule':timedelta(seconds=43200000),
+        'schedule':timedelta(seconds=21600000),
         'args':()
     }
 }

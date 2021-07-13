@@ -23,6 +23,7 @@ class TeamTodo(models.Model):
     todo_item = models.CharField(max_length=500)
     created_by = models.ForeignKey(User,on_delete=models.CASCADE, related_name="created_by")
     expected_completion_unix_time = models.BigIntegerField()
+    reminder = models.BooleanField(default=False)
     associated_team = models.ForeignKey(Teams,on_delete=models.CASCADE)
     is_completed = models.BooleanField(default=False)
     assigned_to = models.ForeignKey(User,on_delete=models.CASCADE,null=True,related_name="assigned_to")
